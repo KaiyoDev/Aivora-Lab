@@ -1,96 +1,95 @@
 /* ==========================================================================
    Aivora Lab - Application Logic
    Handles: tab switching, RQ accordion, scroll reveal
-   Uses safe DOM APIs (no innerHTML for content)
+   Uses safe DOM APIs (no innerHTML for user content)
    ========================================================================== */
 
 (function () {
   'use strict';
 
-  // ── Safe HTML renderer (minimal, no execScript) ────────────────────────
+  // ── Safe HTML renderer ─────────────────────────────────────────────────
   function el(tag, attrs, children) {
-    const node = document.createElement(tag);
-    for (const [k, v] of Object.entries(attrs || {})) {
+    var node = document.createElement(tag);
+    var keys = Object.keys(attrs || {});
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      var v = attrs[k];
       if (k === 'className') node.className = v;
       else if (k === 'dataset') Object.assign(node.dataset, v);
       else node.setAttribute(k, v);
     }
-    for (const child of (children || [])) {
-      if (typeof child === 'string') node.appendChild(document.createTextNode(child));
-      else if (child instanceof Node) node.appendChild(child);
+    var ch = children || [];
+    for (var j = 0; j < ch.length; j++) {
+      if (typeof ch[j] === 'string') node.appendChild(document.createTextNode(ch[j]));
+      else if (ch[j] instanceof Node) node.appendChild(ch[j]);
     }
     return node;
   }
 
   // ── Scroll Reveal ──────────────────────────────────────────────────────
   function initReveal() {
-    const items = document.querySelectorAll('.reveal');
+    var items = document.querySelectorAll('.reveal');
     if (!items.length) return;
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
-      items.forEach(el => el.classList.add('visible'));
+      for (var i = 0; i < items.length; i++) items[i].classList.add('visible');
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+    var observer = new IntersectionObserver(
+      function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting) {
+            entries[i].target.classList.add('visible');
+            observer.unobserve(entries[i].target);
           }
-        });
+        }
       },
       { threshold: 0.06, rootMargin: '0px 0px -40px 0px' }
     );
-    items.forEach(item => observer.observe(item));
+    for (var k = 0; k < items.length; k++) observer.observe(items[k]);
   }
 
   // ── Chart Tab Switching ────────────────────────────────────────────────
   function initChartTabs() {
-    const btns = document.querySelectorAll('.tab-btn[data-chart]');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.chart;
-        document.querySelectorAll('.chart-panel').forEach(p => p.classList.add('hidden'));
-        const panel = document.getElementById('panel-' + target);
+    var btns = document.querySelectorAll('.tab-btn[data-chart]');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        var target = this.dataset.chart;
+        var panels = document.querySelectorAll('.chart-panel');
+        for (var j = 0; j < panels.length; j++) panels[j].classList.add('hidden');
+        var panel = document.getElementById('panel-' + target);
         if (panel) panel.classList.remove('hidden');
-        btns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        for (var k = 0; k < btns.length; k++) btns[k].classList.remove('active');
+        this.classList.add('active');
       });
-    });
+    }
   }
 
   // ── RQ Accordion ───────────────────────────────────────────────────────
-  const RQ_CATEGORIES = {
-    Char: 'Character Modeling',
-    Soc:  'Social Intelligence',
-    Tech: 'Technical Foundation',
-    Eval: 'Evaluation'
-  };
-
   function renderRQs(filter) {
-    const container = document.getElementById('rq-container');
+    var container = document.getElementById('rq-container');
     if (!container) return;
-    container.innerHTML = ''; // clear existing
+    container.innerHTML = '';
 
-    const filtered = filter === 'all' ? RQ_DATA : RQ_DATA.filter(r => r.cl === filter);
+    var filtered = filter === 'all' ? RQ_DATA : RQ_DATA.filter(function (r) { return r.cl === filter; });
 
-    filtered.forEach((r, idx) => {
-      const item = el('div', {
+    for (var i = 0; i < filtered.length; i++) {
+      var r = filtered[i];
+      var item = el('div', {
         className: 'rq-item reveal',
         dataset: { cl: r.cl }
       });
 
-      // Header
-      const header = el('div', { className: 'rq-header' });
+      // Header row
+      var header = el('div', { className: 'rq-header' });
       header.appendChild(el('span', { className: 'rq-badge ' + r.cl }, r.id));
 
-      const qDiv = el('div', { className: 'rq-question' }, r.q);
+      var qDiv = el('div', { className: 'rq-question' }, r.q);
       header.appendChild(qDiv);
 
-      const chevron = el('svg', {
+      var chevron = el('svg', {
         className: 'rq-chevron',
         width: '12', height: '12',
         viewBox: '0 0 12 12',
@@ -103,14 +102,14 @@
       header.appendChild(chevron);
       item.appendChild(header);
 
-      // Body
-      const body = el('div', { className: 'rq-body' });
-      const bodyInner = el('div', { className: 'rq-body-inner' });
+      // Body (hidden by default)
+      var body = el('div', { className: 'rq-body' });
+      var bodyInner = el('div', { className: 'rq-body-inner' });
 
-      const answer = el('p', { className: 'rq-answer' }, r.a);
+      var answer = el('p', { className: 'rq-answer' }, r.a);
       bodyInner.appendChild(answer);
 
-      const example = el('p', { className: 'rq-example' });
+      var example = el('p', { className: 'rq-example' });
       example.appendChild(el('strong', {}, 'Example: '));
       example.appendChild(document.createTextNode(r.e));
       bodyInner.appendChild(example);
@@ -118,44 +117,49 @@
       body.appendChild(bodyInner);
       item.appendChild(body);
 
-      // Click handler
-      item.addEventListener('click', () => {
-        const wasOpen = item.classList.contains('open');
-        document.querySelectorAll('.rq-item.open').forEach(i => i.classList.remove('open'));
-        if (!wasOpen) item.classList.add('open');
+      // Click to toggle
+      item.addEventListener('click', function () {
+        var wasOpen = this.classList.contains('open');
+        var openItems = document.querySelectorAll('.rq-item.open');
+        for (var j = 0; j < openItems.length; j++) openItems[j].classList.remove('open');
+        if (!wasOpen) this.classList.add('open');
       });
 
       container.appendChild(item);
-    });
+    }
 
-    // Observe new reveal items
-    setTimeout(() => {
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const newItems = container.querySelectorAll('.reveal');
+    // Re-observe new reveal items
+    setTimeout(function () {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var newItems = container.querySelectorAll('.reveal');
       if (prefersReduced) {
-        newItems.forEach(e => e.classList.add('visible'));
+        for (var k = 0; k < newItems.length; k++) newItems[k].classList.add('visible');
         return;
       }
-      const obs = new IntersectionObserver(
-        entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+      var obs = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+          });
+        },
         { threshold: 0.05, rootMargin: '0px 0px -20px 0px' }
       );
-      newItems.forEach(item => obs.observe(item));
-    }, 10);
+      for (var m = 0; m < newItems.length; m++) obs.observe(newItems[m]);
+    }, 50);
   }
 
   function initRQFilters() {
-    const btns = document.querySelectorAll('.rq-filter-btn');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderRQs(btn.dataset.filter);
+    var btns = document.querySelectorAll('.rq-filter');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function () {
+        for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+        this.classList.add('active');
+        renderRQs(this.dataset.filter);
       });
-    });
+    }
   }
 
-  // ── Init on DOM Ready ──────────────────────────────────────────────────
+  // ── Init ───────────────────────────────────────────────────────────────
   function init() {
     initReveal();
     initChartTabs();
