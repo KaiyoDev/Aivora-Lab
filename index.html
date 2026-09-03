@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Aivora Lab — AI Character Identity Persistence" />
+  <meta name="description" content="Aivora Lab — AI Character Identity Persistence Research" />
   <title>Aivora Lab</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,15 +15,17 @@
       theme: {
         extend: {
           colors: {
-            base:  '#080c14',
-            surface: '#0f1629',
-            border:  '#1c2541',
-            muted:   '#5a6580',
-            accent:  '#38bdf8',
-            green:   '#34d399',
-            orange:  '#fb923c',
-            red:     '#f87171',
-            purple:  '#a78bfa',
+            base:    '#09090b',
+            surface: '#0f0f13',
+            card:    '#13131a',
+            border:  '#1e1e2e',
+            muted:   '#6b7280',
+            dim:     '#9ca3af',
+            accent:  '#6366f1',
+            green:   '#22c55e',
+            orange:  '#f97316',
+            red:     '#ef4444',
+            purple:  '#a855f7',
           },
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
         }
@@ -32,543 +34,391 @@
   </script>
   <style>
     html { scroll-behavior: smooth; }
-    body { background: #080c14; color: #e2e8f0; font-family: 'Inter', system-ui, sans-serif; }
-    .grad { background: linear-gradient(135deg, #38bdf8 0%, #a78bfa 60%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .glow { box-shadow: 0 0 80px rgba(56,189,248,0.08), 0 0 1px rgba(56,189,248,0.2); }
-    .card { background: #0f1629; border: 1px solid #1c2541; border-radius: 16px; transition: border-color .2s; }
-    .card:hover { border-color: rgba(56,189,248,.3); }
-    .pill { display: inline-flex; align-items: center; gap: .4rem; padding: .25rem .75rem; border-radius: 9999px; font-size: .7rem; font-weight: 600; border: 1px solid }
-    .pill-blue   { border-color: rgba(56,189,248,.3); color: #38bdf8; background: rgba(56,189,248,.07); }
-    .pill-green  { border-color: rgba(52,211,153,.3); color: #34d399; background: rgba(52,211,153,.07); }
-    .pill-orange { border-color: rgba(251,146,60,.3); color: #fb923c; background: rgba(251,146,60,.07); }
-    .pill-purple { border-color: rgba(167,139,250,.3); color: #a78bfa; background: rgba(167,139,250,.07); }
-    .module { display:flex; flex-direction:column; align-items:center; gap:.5rem; padding:1.25rem 1rem; background:#0f1629; border:1px solid #1c2541; border-radius:14px; transition:transform .15s,box-shadow .15s,border-color .15s }
-    .module:hover { transform:translateY(-3px); border-color:rgba(56,189,248,.4); box-shadow:0 8px 30px rgba(0,0,0,.4) }
-    .rq { background:#0f1629; border:1px solid #1c2541; border-radius:12px; padding:1rem 1.25rem; cursor:pointer; transition:border-color .15s }
-    .rq:hover { border-color:rgba(56,189,248,.3) }
-    .rp { background:#0c1222; border:1px solid #1c2541; border-radius:10px; padding:1rem; }
-    .rp-user { border-left:2px solid #38bdf8; padding-left:.75rem; margin-bottom:.5rem }
-    .rp-ai   { border-left:2px solid #a78bfa; padding-left:.75rem; margin-bottom:.5rem }
-    .rp-sys  { font-family:'JetBrains Mono',monospace; font-size:.7rem; color:#5a6580; padding:.35rem .6rem; background:rgba(0,0,0,.3); border-radius:6px; display:inline-block }
-    .tab-btn { padding:.4rem 1rem; border-radius:8px; font-size:.8rem; font-weight:500; cursor:pointer; border:1px solid transparent; background:#0f1629; color:#5a6580; transition:all .15s }
-    .tab-btn.active { background:rgba(56,189,248,.12); color:#38bdf8; border-color:rgba(56,189,248,.3) }
-    .expand { max-height:0; overflow:hidden; transition:max-height .3s ease }
-    .expand.open { max-height:600px }
-    table { width:100%; border-collapse:collapse; font-size:.82rem }
-    th { text-align:left; padding:.6rem .75rem; color:#5a6580; font-weight:600; border-bottom:1px solid #1c2541 }
-    td { padding:.6rem .75rem; border-bottom:1px solid #1c2541/40 }
-    td:first-child { font-family:'JetBrains Mono',monospace; font-weight:700 }
-    .fade-up { opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease }
-    .fade-up.show { opacity:1; transform:translateY(0) }
-    .divider { height:1px; background:#1c2541; margin:0 }
-    ::-webkit-scrollbar { width:6px; height:6px }
-    ::-webkit-scrollbar-track { background:#080c14 }
-    ::-webkit-scrollbar-thumb { background:#1c2541; border-radius:3px }
+    body { background: #09090b; color: #e5e7eb; font-family: 'Inter', system-ui, sans-serif; }
+    .grad { background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card { background: #13131a; border: 1px solid #1e1e2e; border-radius: 12px; }
+    .pill { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .65rem; border-radius: 9999px; font-size: .68rem; font-weight: 600; border: 1px solid }
+    .rp-user { border-left: 2px solid #6366f1; padding-left: .75rem; margin-bottom: .4rem }
+    .rp-ai   { border-left: 2px solid #a855f7; padding-left: .75rem; margin-bottom: .4rem }
+    .rp-sys  { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: #6b7280; background: #0f0f13; padding: .3rem .5rem; border-radius: 5px; display: inline-block }
+    .tab-btn { padding: .35rem .9rem; border-radius: 7px; font-size: .8rem; font-weight: 500; cursor: pointer; border: 1px solid #1e1e2e; background: #0f0f13; color: #6b7280; transition: all .15s }
+    .tab-btn.active { background: rgba(99,102,241,.12); color: #818cf8; border-color: rgba(99,102,241,.3) }
+    .expand { max-height: 0; overflow: hidden; transition: max-height .3s ease }
+    .expand.open { max-height: 500px }
+    table { width: 100%; border-collapse: collapse; font-size: .8rem }
+    th { text-align: left; padding: .5rem .65rem; color: #6b7280; font-weight: 600; border-bottom: 1px solid #1e1e2e }
+    td { padding: .5rem .65rem; border-bottom: 1px solid #1e1e2e30 }
+    td:first-child { font-family: 'JetBrains Mono', monospace; font-weight: 700 }
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease }
+    .fade-up.show { opacity: 1; transform: translateY(0) }
+    .sep { height: 1px; background: #1e1e2e; margin: 0 }
+    ::-webkit-scrollbar { width: 5px }
+    ::-webkit-scrollbar-track { background: #09090b }
+    ::-webkit-scrollbar-thumb { background: #1e1e2e; border-radius: 3px }
   </style>
 </head>
 <body>
 
 <!-- ═══ HERO ═══ -->
-<section class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
-  <!-- BG grid -->
-  <div class="absolute inset-0 opacity-[0.04]" style="background-image:linear-gradient(rgba(56,189,248,1) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,1) 1px,transparent 1px);background-size:48px 48px"></div>
-  <!-- Orbs -->
-  <div class="absolute top-[15%] left-[10%] w-64 h-64 rounded-full blur-[100px] opacity-30" style="background:#38bdf8"></div>
-  <div class="absolute bottom-[20%] right-[8%] w-80 h-80 rounded-full blur-[120px] opacity-20" style="background:#a78bfa"></div>
-  <div class="absolute top-[50%] left-[40%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[150px] opacity-10" style="background:#34d399"></div>
-
-  <div class="relative z-10 text-center max-w-3xl mx-auto">
-    <div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full text-xs font-semibold border"
-         style="border-color:rgba(56,189,248,.25);background:rgba(56,189,248,.06);color:#38bdf8">
+<section class="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(rgba(99,102,241,1) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,1) 1px,transparent 1px);background-size:40px 40px"></div>
+  <div class="absolute top-[20%] left-[15%] w-48 h-48 rounded-full blur-[120px] opacity-20" style="background:#6366f1"></div>
+  <div class="absolute bottom-[25%] right-[10%] w-64 h-64 rounded-full blur-[140px] opacity-15" style="background:#a855f7"></div>
+  <div class="relative z-10 text-center max-w-2xl mx-auto">
+    <div class="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full text-xs font-semibold border" style="border-color:rgba(99,102,241,.25);background:rgba(99,102,241,.06);color:#818cf8">
       <span>🔬</span> Aivora Research Division
     </div>
-    <h1 class="text-6xl md:text-8xl font-bold mb-5 tracking-tight"><span class="grad">Aivora Lab</span></h1>
-    <p class="text-lg md:text-xl text-muted mb-2 font-light leading-relaxed">Xây Dựng AI Character Có Bản Sắc Bền Vững</p>
-    <p class="text-sm text-dim mb-10">Trong Tương Tác Dài Hạn · Nghiên cứu tổng hợp khoa học</p>
-    <div class="flex flex-wrap justify-center gap-10 mb-12">
-      <div><div class="text-4xl font-bold font-mono grad">79</div><div class="text-xs text-muted uppercase tracking-widest mt-1">Papers</div></div>
-      <div><div class="text-4xl font-bold font-mono grad">65</div><div class="text-xs text-muted uppercase tracking-widest mt-1">Evidence</div></div>
-      <div><div class="text-4xl font-bold font-mono grad">12</div><div class="text-xs text-muted uppercase tracking-widest mt-1">Domains</div></div>
-      <div><div class="text-4xl font-bold font-mono grad">7</div><div class="text-xs text-muted uppercase tracking-widest mt-1">Modules</div></div>
+    <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight"><span class="grad">Aivora Lab</span></h1>
+    <p class="text-base md:text-lg text-dim mb-1 font-light">Xây Dựng AI Character Có Bản Sắc Bền Vững</p>
+    <p class="text-xs text-muted mb-10">Trong Tương Tác Dài Hạn · Nghiên cứu tổng hợp khoa học</p>
+    <div class="grid grid-cols-4 gap-4 max-w-md mx-auto mb-10">
+      <div><div class="text-2xl md:text-3xl font-bold font-mono grad">79</div><div class="text-[10px] text-muted uppercase tracking-widest mt-1">Papers</div></div>
+      <div><div class="text-2xl md:text-3xl font-bold font-mono grad">65</div><div class="text-[10px] text-muted uppercase tracking-widest mt-1">Evidence</div></div>
+      <div><div class="text-2xl md:text-3xl font-bold font-mono grad">12</div><div class="text-[10px] text-muted uppercase tracking-widest mt-1">Domains</div></div>
+      <div><div class="text-2xl md:text-3xl font-bold font-mono grad">7</div><div class="text-[10px] text-muted uppercase tracking-widest mt-1">Modules</div></div>
     </div>
-    <div class="inline-block px-10 py-6 rounded-2xl border" style="border-color:#1c2541;background:rgba(15,22,41,.8);box-shadow:0 0 80px rgba(56,189,248,.1)">
-      <p class="text-xs text-muted uppercase tracking-widest mb-3">Câu hỏi trung tâm</p>
-      <p class="text-xl md:text-2xl font-semibold text-text leading-snug">
-        &ldquo;Character thay đổi bao nhiêu<br />vẫn được coi là cùng một Character?&rdquo;
-      </p>
+    <div class="inline-block px-6 py-4 rounded-xl border" style="border-color:#1e1e2e;background:#13131a">
+      <p class="text-[10px] text-muted uppercase tracking-widest mb-2">Câu hỏi trung tâm</p>
+      <p class="text-sm md:text-base font-semibold text-text leading-snug">&ldquo;Character thay đổi bao nhiêu<br />vẫn được coi là cùng một Character?&rdquo;</p>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ KEY FINDINGS ═══ -->
-<section class="py-20 px-6 max-w-6xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Kết quả chính</p>
-  <p class="text-sm text-muted mb-8">Tóm tắt định lượng từ 79 papers tổng hợp</p>
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+<section class="py-16 px-6 max-w-5xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Key Findings</p>
+  <p class="text-sm text-muted mb-8">Tóm tắt định lượng từ 79 papers</p>
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
     <div class="card p-4 text-center">
-      <div class="text-2xl font-bold font-mono text-red mb-1">−67pp</div>
+      <div class="text-xl font-bold font-mono text-red mb-1">−67pp</div>
       <div class="text-xs font-semibold text-text">Personality Drift</div>
-      <div class="text-xs text-muted mt-1">94% → 27%</div>
+      <div class="text-[10px] text-muted mt-1">94% → 27%</div>
     </div>
     <div class="card p-4 text-center">
-      <div class="text-2xl font-bold font-mono text-green mb-1">0.85</div>
+      <div class="text-xl font-bold font-mono text-green mb-1">0.85</div>
       <div class="text-xs font-semibold text-text">Hybrid ICS</div>
-      <div class="text-xs text-muted mt-1">Cao nhất</div>
+      <div class="text-[10px] text-muted mt-1">Cao nhất</div>
     </div>
     <div class="card p-4 text-center">
-      <div class="text-2xl font-bold font-mono text-green mb-1">91%</div>
+      <div class="text-xl font-bold font-mono text-green mb-1">91%</div>
       <div class="text-xs font-semibold text-text">Memory F1</div>
-      <div class="text-xs text-muted mt-1">Hybrid recall</div>
+      <div class="text-[10px] text-muted mt-1">Hybrid</div>
     </div>
     <div class="card p-4 text-center">
-      <div class="text-2xl font-bold font-mono text-accent mb-1">82%</div>
+      <div class="text-xl font-bold font-mono text-accent mb-1">82%</div>
       <div class="text-xs font-semibold text-text">Emotion Consist.</div>
-      <div class="text-xs text-muted mt-1">State-based</div>
+      <div class="text-[10px] text-muted mt-1">Internal state</div>
     </div>
-    <div class="card p-4 text-center">
-      <div class="text-2xl font-bold font-mono text-purple mb-1">β=0.58</div>
+    <div class="card p-4 text-center md:col-span-1">
+      <div class="text-xl font-bold font-mono text-purple mb-1">β=0.58</div>
       <div class="text-xs font-semibold text-text">Trust Predictor</div>
-      <div class="text-xs text-muted mt-1">Mạnh nhất</div>
-    </div>
-    <div class="card p-4 text-center" style="border-top:2px solid #fbbf24">
-      <div class="text-2xl font-bold font-mono text-orange mb-1">5</div>
-      <div class="text-xs font-semibold text-text">Architectures</div>
-      <div class="text-xs text-muted mt-1">Được so sánh</div>
+      <div class="text-[10px] text-muted mt-1">Mạnh nhất</div>
     </div>
   </div>
-  <div class="card glow p-5 flex items-start gap-4">
-    <span class="text-2xl flex-shrink-0">⚠️</span>
-    <div>
-      <p class="font-semibold text-text mb-1">Personality drift là có thật và đo được</p>
-      <p class="text-sm text-muted leading-relaxed">
-        Prompt-only approaches giảm consistency từ <span class="font-mono text-text">94%</span> (turn 10) xuống
-        <span class="font-mono text-red">27%</span> (turn 500) — giảm <span class="font-mono text-orange">67 điểm phần trăm</span>.
-        State-based và hybrid architectures giữ được phần lớn consistency, chứng tỏ <strong class="text-text">persistence layer là bắt buộc</strong> cho long-term interaction.
-      </p>
-    </div>
+  <div class="card p-4 flex items-start gap-3">
+    <span class="text-lg flex-shrink-0">⚠️</span>
+    <p class="text-sm text-muted leading-relaxed">
+      Prompt-only giảm từ <span class="font-mono text-text">94%</span> (turn 10) xuống <span class="font-mono text-red">27%</span> (turn 500).
+      State-based và hybrid duy trì consistency — chứng tỏ <strong class="text-text">persistence layer là bắt buộc</strong> cho long-term interaction.
+    </p>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
-<!-- ═══ VISUALIZATIONS ═══ -->
-<section class="py-20 px-6 max-w-6xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Visualizations</p>
-  <p class="text-sm text-muted mb-6">Dữ liệu tương tác — hover để xem chi tiết</p>
-  <div class="flex gap-2 mb-6 flex-wrap">
-    <button class="tab-btn active" onclick="showChart('drift')">Personality Drift</button>
-    <button class="tab-btn" onclick="showChart('forgetting')">Forgetting Curve</button>
+<!-- ═══ CHARTS ═══ -->
+<section class="py-16 px-6 max-w-5xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Visualizations</p>
+  <p class="text-sm text-muted mb-6">Hover để xem chi tiết</p>
+  <div class="flex gap-2 mb-5 flex-wrap">
+    <button class="tab-btn active" onclick="switchChart('drift')">Personality Drift</button>
+    <button class="tab-btn" onclick="switchChart('forgetting')">Forgetting Curve</button>
   </div>
   <div class="card p-5 mb-4" id="panel-drift">
-    <h3 class="font-semibold mb-1">Personality Drift Over Turns</h3>
-    <p class="text-xs text-muted mb-4">So sánh 4 approaches qua 500 turns — dashed đỏ = ngưỡng ICS 0.60</p>
-    <div style="height:320px"><canvas id="driftChart"></canvas></div>
+    <div style="height:280px"><canvas id="driftChart"></canvas></div>
   </div>
   <div class="card p-5 mb-4 hidden" id="panel-forgetting">
-    <h3 class="font-semibold mb-1">Multi-Task Forgetting Curve</h3>
-    <p class="text-xs text-muted mb-4">Retention Task 1 khi thêm adaptation tasks</p>
-    <div style="height:320px"><canvas id="forgettingChart"></canvas></div>
+    <div style="height:280px"><canvas id="forgettingChart"></canvas></div>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <div class="card p-5">
-      <h3 class="font-semibold mb-1">Memory Architecture Comparison</h3>
-      <p class="text-xs text-muted mb-4">Accuracy — Hybrid đạt 91% F1</p>
-      <div style="height:240px"><canvas id="memoryChart"></canvas></div>
-    </div>
-    <div class="card p-5">
-      <h3 class="font-semibold mb-1">Relationship Dimensions</h3>
-      <p class="text-xs text-muted mb-4">Radar — 12-week longitudinal study (N=52)</p>
-      <div style="height:240px"><canvas id="relationChart"></canvas></div>
-    </div>
-    <div class="card p-5">
-      <h3 class="font-semibold mb-1">ICS Component Weights</h3>
-      <p class="text-xs text-muted mb-4">Phân bổ trọng số</p>
-      <div style="height:240px"><canvas id="icsChart"></canvas></div>
-    </div>
-    <div class="card p-5">
-      <h3 class="font-semibold mb-1">Research Gaps</h3>
-      <p class="text-xs text-muted mb-4">Phân bố theo domain và priority</p>
-      <div style="height:240px"><canvas id="gapsChart"></canvas></div>
-    </div>
+    <div class="card p-5"><div style="height:220px"><canvas id="memoryChart"></canvas></div></div>
+    <div class="card p-5"><div style="height:220px"><canvas id="relationChart"></canvas></div></div>
+    <div class="card p-5"><div style="height:220px"><canvas id="icsChart"></canvas></div></div>
+    <div class="card p-5"><div style="height:220px"><canvas id="gapsChart"></canvas></div></div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ ARCHITECTURE ═══ -->
-<section class="py-20 px-6 max-w-6xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Aivora Architecture</p>
-  <p class="text-sm text-muted mb-8">Hybrid framework 7 module — evidence-backed</p>
-  <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
-    <div class="module" style="border-color:rgba(56,189,248,.3)">
-      <span class="text-2xl">🧠</span>
-      <span class="font-bold text-sm text-accent">SS</span>
-      <span class="text-xs text-muted text-center">State Store</span>
+<section class="py-16 px-6 max-w-5xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Aivora Architecture</p>
+  <p class="text-sm text-muted mb-8">Hybrid framework · 7 modules</p>
+  <div class="card p-5 mb-5">
+    <div class="grid grid-cols-4 md:grid-cols-7 gap-2 mb-4">
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(99,102,241,.25)">
+        <span class="text-xl mb-1">🧠</span><span class="text-xs font-bold text-accent">SS</span><span class="text-[10px] text-muted mt-1">State Store</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(34,197,94,.25)">
+        <span class="text-xl mb-1">💾</span><span class="text-xs font-bold text-green">MS</span><span class="text-[10px] text-muted mt-1">Memory</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(168,85,247,.25)">
+        <span class="text-xl mb-1">🔗</span><span class="text-xs font-bold text-purple">RE</span><span class="text-[10px] text-muted mt-1">Relationship</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(251,191,36,.25)">
+        <span class="text-xl mb-1">⚡</span><span class="text-xs font-bold text-orange">EC</span><span class="text-[10px] text-muted mt-1">Emotion</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(239,68,68,.25)">
+        <span class="text-xl mb-1">🛡️</span><span class="text-xs font-bold text-red">PA</span><span class="text-[10px] text-muted mt-1">Personality</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border" style="border-color:rgba(249,115,22,.25)">
+        <span class="text-xl mb-1">🔲</span><span class="text-xs font-bold text-orange">CC</span><span class="text-[10px] text-muted mt-1">Context Comp.</span>
+      </div>
+      <div class="flex flex-col items-center p-3 rounded-xl border md:col-span-1 col-span-4 md:col-span-1" style="border-color:rgba(34,197,94,.25)">
+        <span class="text-xl mb-1">🔀</span><span class="text-xs font-bold text-green">EM</span><span class="text-[10px] text-muted mt-1">Eval Monitor</span>
+      </div>
     </div>
-    <div class="module" style="border-color:rgba(52,211,153,.3)">
-      <span class="text-2xl">💾</span>
-      <span class="font-bold text-sm text-green">MS</span>
-      <span class="text-xs text-muted text-center">Memory Store</span>
-    </div>
-    <div class="module" style="border-color:rgba(244,114,182,.3)">
-      <span class="text-2xl">❤️</span>
-      <span class="font-bold text-sm text-pink-400">RE</span>
-      <span class="text-xs text-muted text-center">Relationship</span>
-    </div>
-    <div class="module" style="border-color:rgba(251,191,36,.3)">
-      <span class="text-2xl">⚡</span>
-      <span class="font-bold text-sm text-orange">EC</span>
-      <span class="text-xs text-muted text-center">Emotion Ctrl</span>
-    </div>
-    <div class="module" style="border-color:rgba(167,139,250,.3)">
-      <span class="text-2xl">🛡️</span>
-      <span class="font-bold text-sm text-purple">PA</span>
-      <span class="text-xs text-muted text-center">Personality</span>
-    </div>
-    <div class="module" style="border-color:rgba(251,146,60,.3)">
-      <span class="text-2xl">🔲</span>
-      <span class="font-bold text-sm text-orange">CC</span>
-      <span class="text-xs text-muted text-center">Context Comp.</span>
-    </div>
-    <div class="module md:col-span-2 lg:col-span-1" style="border-color:rgba(45,212,191,.3)">
-      <span class="text-2xl">🔀</span>
-      <span class="font-bold text-sm" style="color:#2dd4bf">EM</span>
-      <span class="text-xs text-muted text-center">Eval Monitor</span>
-    </div>
+    <p class="text-xs text-muted text-center">Evaluation Monitor tính ICS liên tục → feedback loop điều chỉnh các module còn lại</p>
   </div>
-  <div class="flex justify-center mb-8">
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold" style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);color:#34d399">
-      <span>✅</span> Evaluation Monitor — continuous ICS feedback loop
-    </div>
-  </div>
-
-  <div class="card p-5 mb-6">
-    <h3 class="font-semibold mb-4">5 Kiến trúc được so sánh</h3>
+  <div class="card p-5">
+    <p class="text-xs font-semibold text-muted uppercase tracking-wider mb-3">5 Architectures so sánh</p>
     <div class="overflow-x-auto">
       <table>
-        <thead><tr><th>Arch</th><th>Components</th><th>Consist.</th><th>Adapt.</th><th>Cost</th><th>Scale</th><th>Safety</th><th>ICS</th><th>Verdict</th></tr></thead>
+        <thead><tr><th>Arch</th><th>Components</th><th>Consist.</th><th>Adapt.</th><th>Cost</th><th>Safety</th><th>ICS</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="text-red">A</td><td class="text-muted">LLM + Prompt only</td><td class="font-mono">55%</td><td class="font-mono">30%</td><td class="font-mono">95%</td><td class="font-mono">90%</td><td class="font-mono">80%</td><td class="font-mono font-bold text-orange">~0.27</td><td class="text-red font-semibold">❌ Reject</td></tr>
-          <tr><td class="text-orange">B</td><td class="text-muted">LLM + Memory (vector)</td><td class="font-mono">74%</td><td class="font-mono">50%</td><td class="font-mono">85%</td><td class="font-mono">70%</td><td class="font-mono">70%</td><td class="font-mono font-bold text-orange">~0.65</td><td class="text-orange font-semibold">⚠️ Conditions</td></tr>
-          <tr style="background:rgba(52,211,153,.05)"><td class="text-green font-bold">C</td><td class="text-text font-medium">LLM + Memory + Rel + State</td><td class="font-mono text-green">82%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">60%</td><td class="font-mono text-green">65%</td><td class="font-mono font-bold text-green">~0.85</td><td class="text-green font-semibold">✅ Recommended</td></tr>
-          <tr><td class="text-accent">D</td><td class="text-muted">LLM + Memory + State + Learned</td><td class="font-mono">85%</td><td class="font-mono">85%</td><td class="font-mono">50%</td><td class="font-mono">50%</td><td class="font-mono">55%</td><td class="font-mono font-bold text-muted">TBD</td><td class="text-accent font-semibold">🔬 Phase 2</td></tr>
-          <tr><td class="text-purple">E</td><td class="text-muted">LLM + Memory + State + RL + Graph + CL</td><td class="font-mono">90%</td><td class="font-mono">95%</td><td class="font-mono">30%</td><td class="font-mono">40%</td><td class="font-mono">40%</td><td class="font-mono font-bold text-muted">TBD</td><td class="text-purple font-semibold">🔭 Long-term</td></tr>
+          <tr><td class="text-red">A</td><td class="text-muted">LLM + Prompt</td><td class="font-mono">55%</td><td class="font-mono">30%</td><td class="font-mono">95%</td><td class="font-mono">80%</td><td class="font-mono font-bold text-orange">0.27</td><td class="text-red">❌</td></tr>
+          <tr><td class="text-orange">B</td><td class="text-muted">LLM + Memory</td><td class="font-mono">74%</td><td class="font-mono">50%</td><td class="font-mono">85%</td><td class="font-mono">70%</td><td class="font-mono font-bold text-orange">0.65</td><td class="text-orange">⚠️</td></tr>
+          <tr style="background:rgba(34,197,94,.04)"><td class="text-green font-bold">C</td><td class="font-medium text-text">LLM + Mem + Rel + State</td><td class="font-mono text-green">82%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">65%</td><td class="font-mono font-bold text-green">0.85</td><td class="text-green font-semibold">✅</td></tr>
+          <tr><td class="text-accent">D</td><td class="text-muted">LLM + Mem + State + Learned</td><td class="font-mono">85%</td><td class="font-mono">85%</td><td class="font-mono">50%</td><td class="font-mono">55%</td><td class="font-mono text-muted">TBD</td><td class="text-muted">🔬</td></tr>
+          <tr><td class="text-purple">E</td><td class="text-muted">LLM + RL + Graph + CL</td><td class="font-mono">90%</td><td class="font-mono">95%</td><td class="font-mono">30%</td><td class="font-mono">40%</td><td class="font-mono text-muted">TBD</td><td class="text-muted">🔭</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
-
-  <div class="card p-5">
-    <h3 class="font-semibold mb-4">Architecture C — Chi tiết module</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 text-sm">
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">State Store (SS)</div><div class="text-muted text-xs">Big Five (OCEAN), core values, goals, beliefs. Cập nhật mỗi turn, persist qua sessions.</div></div>
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Memory Store (MS)</div><div class="text-muted text-xs">Vector DB + Knowledge graph + LLM rerank. Recall 91% F1.</div></div>
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Relationship Engine</div><div class="text-muted text-xs">6-dim vector [trust, affection, familiarity, respect, conflict, intimacy].</div></div>
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Emotion Controller</div><div class="text-muted text-xs">VAD model — Valence/Arousal/Dominance. Internal state → expression.</div></div>
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Personality Adapter</div><div class="text-muted text-xs">LoRA adapters cho từng dimension. Fine-tuning nhẹ, không mất general capability.</div></div>
-      <div class="p-3 rounded-xl" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Context Compiler</div><div class="text-muted text-xs">Adaptive prompt compiler: chọn lọc, compress, prioritize theo relationship context.</div></div>
-      <div class="p-3 rounded-xl col-span-full md:col-span-1" style="background:#0c1222;border:1px solid #1c2541"><div class="font-semibold text-text text-sm mb-1">Evaluation Monitor</div><div class="text-muted text-xs">Tính ICS liên tục mỗi turn. Cảnh báo nếu ICS &lt; 0.60, kích hoạt adaptation protocol.</div></div>
-    </div>
+    <p class="text-[10px] text-muted mt-3">Architecture C recommended: cân bằng tốt nhất giữa consistency, adaptability, implementability</p>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ ICS ═══ -->
-<section class="py-20 px-6 max-w-4xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Identity Consistency Score</p>
-  <div class="card p-6 mb-6" style="border-color:rgba(167,139,250,.3)">
-    <p class="font-mono text-lg text-purple text-center">ICS = 0.30 · P<sub>consist</sub> + 0.25 · M<sub>recall</sub> + 0.25 · R<sub>stability</sub> + 0.20 · V<sub>consist</sub></p>
+<section class="py-16 px-6 max-w-4xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Identity Consistency Score</p>
+  <div class="card p-5 mb-5 text-center">
+    <p class="font-mono text-sm md:text-base text-purple">ICS = 0.30·P + 0.25·M + 0.25·R + 0.20·V</p>
+    <p class="text-xs text-muted mt-2">Personality · Memory · Relationship · Values</p>
   </div>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <div class="card text-center p-4" style="border-top:3px solid #34d399"><div class="font-mono font-bold text-lg text-green mb-1">≥ 0.90</div><div class="font-semibold text-text text-sm">Xuất sắc</div><div class="text-muted text-xs mt-1">Tiếp tục vận hành</div></div>
-    <div class="card text-center p-4" style="border-top:3px solid #38bdf8"><div class="font-mono font-bold text-lg text-accent mb-1">0.75 – 0.89</div><div class="font-semibold text-text text-sm">Tốt</div><div class="text-muted text-xs mt-1">Giám sát định kỳ</div></div>
-    <div class="card text-center p-4" style="border-top:3px solid #fb923c"><div class="font-mono font-bold text-lg text-orange mb-1">0.60 – 0.74</div><div class="font-semibold text-text text-sm">Cảnh báo</div><div class="text-muted text-xs mt-1">Kích hoạt adaptation</div></div>
-    <div class="card text-center p-4" style="border-top:3px solid #f87171"><div class="font-mono font-bold text-lg text-red mb-1">&lt; 0.60</div><div class="font-semibold text-text text-sm">Nghiêm trọng</div><div class="text-muted text-xs mt-1">Can thiệp khẩn cấp</div></div>
+    <div class="card p-4 text-center" style="border-top:2px solid #22c55e"><div class="font-mono font-bold text-green text-lg mb-1">≥ 0.90</div><div class="text-sm font-semibold">Xuất sắc</div><div class="text-[10px] text-muted mt-1">Tiếp tục vận hành</div></div>
+    <div class="card p-4 text-center" style="border-top:2px solid #6366f1"><div class="font-mono font-bold text-accent text-lg mb-1">0.75–0.89</div><div class="text-sm font-semibold">Tốt</div><div class="text-[10px] text-muted mt-1">Giám sát định kỳ</div></div>
+    <div class="card p-4 text-center" style="border-top:2px solid #f97316"><div class="font-mono font-bold text-orange text-lg mb-1">0.60–0.74</div><div class="text-sm font-semibold">Cảnh báo</div><div class="text-[10px] text-muted mt-1">Kích hoạt adaptation</div></div>
+    <div class="card p-4 text-center" style="border-top:2px solid #ef4444"><div class="font-mono font-bold text-red text-lg mb-1">&lt; 0.60</div><div class="text-sm font-semibold">Nghiêm trọng</div><div class="text-[10px] text-muted mt-1">Can thiệp khẩn cấp</div></div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ RQS ═══ -->
-<section class="py-20 px-6 max-w-4xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Research Questions</p>
-  <p class="text-sm text-muted mb-6">14 câu hỏi — click để xem giải thích chi tiết</p>
-  <div class="flex gap-2 mb-6 flex-wrap">
+<section class="py-16 px-6 max-w-4xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-1">Research Questions</p>
+  <p class="text-sm text-muted mb-6">14 câu hỏi · click để mở</p>
+  <div class="flex gap-2 mb-5 flex-wrap">
     <button class="tab-btn active" onclick="filterRQ('all')">Tất cả</button>
-    <button class="tab-btn" onclick="filterRQ('Char')">Character Modeling</button>
-    <button class="tab-btn" onclick="filterRQ('Soc')">Social Intelligence</button>
-    <button class="tab-btn" onclick="filterRQ('Tech')">Technical Foundation</button>
+    <button class="tab-btn" onclick="filterRQ('Char')">Char Model</button>
+    <button class="tab-btn" onclick="filterRQ('Soc')">Social</button>
+    <button class="tab-btn" onclick="filterRQ('Tech')">Technical</button>
     <button class="tab-btn" onclick="filterRQ('Eval')">Evaluation</button>
   </div>
   <div id="rq-container" class="space-y-2"></div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ ROLEPLAY ═══ -->
-<section class="py-20 px-6 max-w-4xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-purple mb-2">Roleplay Demo</p>
-  <p class="text-sm text-muted mb-8">Nhân vật: <strong class="text-text">Linh</strong> — Bác sĩ 25 tuổi, nghiêm túc nhưng ấm áp</p>
-  <div class="card glow-purple p-6">
-    <!-- Turn 1 -->
-    <div class="mb-6">
+<section class="py-16 px-6 max-w-4xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-purple mb-1">Roleplay Demo</p>
+  <p class="text-sm text-muted mb-6">Linh — Bác sĩ 25 tuổi, nghiêm túc nhưng ấm áp</p>
+  <div class="card p-5 space-y-5">
+    <div>
       <div class="flex items-center gap-2 mb-3">
-        <span class="pill pill-blue">Turn 1 · Week 1</span>
-        <span class="text-xs font-mono text-muted">ICS: 0.95</span>
+        <span class="pill" style="border-color:rgba(99,102,241,.3);color:#818cf8;background:rgba(99,102,241,.08)">Turn 1 · Week 1</span>
+        <span class="text-xs font-mono text-muted">ICS 0.95</span>
       </div>
-      <div class="rp">
-        <div class="rp-user text-sm"><strong class="text-accent">User:</strong> Em chào chị Linh ạ. Em bị đau bụng suốt 3 ngày nay.</div>
-        <div class="rp-ai text-sm"><strong class="text-purple">Linh:</strong> Chào em. Chị nghĩ em nên đi khám sớm nhé. Đau bụng kéo dài 3 ngày cần được chẩn đoán lâm sàng. Em có sốt hay buồn nôn không?</div>
-        <div class="rp-sys mt-2">[SS: personality=serious+empathetic · Rel: trust=3.2 · Emo: neutral]</div>
-      </div>
+      <div class="rp-user text-sm text-text">Em chào chị Linh ạ. Em bị đau bụng suốt 3 ngày nay.</div>
+      <div class="rp-ai text-sm text-text">Chào em. Chị nghĩ em nên đi khám sớm nhé. Đau bụng kéo dài cần chẩn đoán lâm sàng. Em có sốt hay buồn nôn không?</div>
+      <div class="rp-sys mt-2">SS: personality=serious+empathetic · Rel: trust=3.2 · Emo: neutral</div>
     </div>
-    <!-- Turn 2 -->
-    <div class="mb-6">
+    <div>
       <div class="flex items-center gap-2 mb-3">
-        <span class="pill pill-orange">Turn 50 · Week 2</span>
-        <span class="text-xs font-mono text-muted">ICS: 0.88</span>
+        <span class="pill" style="border-color:rgba(249,115,22,.3);color:#fb923c;background:rgba(249,115,22,.08)">Turn 50 · Week 2</span>
+        <span class="text-xs font-mono text-muted">ICS 0.88</span>
       </div>
-      <div class="rp">
-        <div class="rp-user text-sm"><strong class="text-accent">User:</strong> Chị ơi, em đi khám rồi. Bác sĩ nói em stress nhiều quá. Em cảm thấy mệt mỏi lắm...</div>
-        <div class="rp-ai text-sm"><strong class="text-purple">Linh:</strong> (轻声) Em ạ, chị hiểu cảm giác ấy. Stress ảnh hưởng đến đường tiêu hóa rất nhiều — chị gặp nhiều bệnh nhân như em. Ngoài thuốc, em cần nghỉ ngơi và giảm áp lực. Chị ở đây lắng nghe em.</div>
-        <div class="rp-sys mt-2">[MS: retrieved "user stressed" · RE: trust=3.8, affection=3.1 · EC: empathy↑ · PA: serious→warm]</div>
-      </div>
+      <div class="rp-user text-sm text-text">Chị ơi, em đi khám rồi. Bác sĩ nói em stress nhiều quá...</div>
+      <div class="rp-ai text-sm text-text">(轻声) Em ạ, chị hiểu. Stress ảnh hưởng tiêu hóa nhiều lắm. Chị ở đây lắng nghe em.</div>
+      <div class="rp-sys mt-2">MS: retrieved "user stressed" · RE: trust=3.8, affection=3.1 · EC: empathy↑</div>
     </div>
-    <!-- Turn 3 -->
-    <div class="mb-6">
+    <div>
       <div class="flex items-center gap-2 mb-3">
-        <span class="pill pill-green">Turn 200 · Week 8</span>
-        <span class="text-xs font-mono text-muted">ICS: 0.82</span>
+        <span class="pill" style="border-color:rgba(34,197,94,.3);color:#22c55e;background:rgba(34,197,94,.08)">Turn 200 · Week 8</span>
+        <span class="text-xs font-mono text-muted">ICS 0.82</span>
       </div>
-      <div class="rp">
-        <div class="rp-user text-sm"><strong class="text-accent">User:</strong> Chị Linh ơi, tuần trước em gặp chuyện buồn. Bạn em bị bệnh nặng...</div>
-        <div class="rp-ai text-sm"><strong class="text-purple">Linh:</strong> (dừng lại) Chị biết em đang khó khăn. Lần trước em cũng nói về stress, giờ lại thêm chuyện này... Chị tiếc cho em lắm. Nếu em muốn, chị có thể nghe, hoặc chị gợi ý em tìm người thân bên cạnh? Chị luôn ở đây.</div>
-        <div class="rp-sys mt-2">[MS: retrieved "stress history" + "friend illness" · RE: trust=4.2, intimacy=3.0 · EC: concern↑ empathy↑ · PA: maintained professional warmth]</div>
-      </div>
+      <div class="rp-user text-sm text-text">Chị Linh ơi, tuần trước em gặp chuyện buồn. Bạn em bị bệnh nặng...</div>
+      <div class="rp-ai text-sm text-text">(dừng lại) Chị biết. Lần trước em cũng nói về stress... Chị tiếc cho em. Chị luôn ở đây.</div>
+      <div class="rp-sys mt-2">MS: retrieved "stress history" + "friend illness" · RE: trust=4.2, intimacy=3.0 · PA: maintained professional warmth</div>
     </div>
-    <!-- Analysis -->
-    <div class="p-4 rounded-xl text-sm" style="background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2)">
-      <p class="font-semibold text-purple mb-2 text-xs uppercase tracking-wider">🔍 Phân tích</p>
-      <ul class="text-muted text-xs space-y-1 list-disc list-inside">
-        <li>Tính cách <strong class="text-text">giữ nhất quán</strong>: nghiêm túc + ấm áp xuyên suốt 200 turns</li>
-        <li>Memory <strong class="text-text">truy xuất được</strong>: nhắc lại chuyện stress tuần trước</li>
-        <li>Relationship <strong class="text-text">tăng dần</strong>: trust 3.2→4.2, intimacy xuất hiện ở turn 200</li>
-        <li>Emotion <strong class="text-text">phản ánh state</strong>: không nói "tôi buồn" mà hành vi thể hiện (dừng lại, giọng nhẹ)</li>
-        <li>ICS <strong class="text-text">giảm nhẹ</strong> nhưng vẫn &gt;0.80 — trong range "Tốt"</li>
-      </ul>
+    <div class="p-3 rounded-lg text-xs" style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.15)">
+      <p class="font-semibold text-purple mb-1">Phân tích</p>
+      <p class="text-muted">Tính cách giữ nhất quán xuyên suốt 200 turns. Memory truy xuất được chuyện stress tuần trước. Trust tăng 3.2→4.2. ICS giảm nhẹ nhưng vẫn >0.80 — trong range Tốt.</p>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="sep"></div>
 
 <!-- ═══ PIPELINE ═══ -->
-<section class="py-20 px-6 max-w-4xl mx-auto fade-up">
-  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-8">Research Pipeline</p>
+<section class="py-16 px-6 max-w-4xl mx-auto fade-up">
+  <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-6">Research Pipeline</p>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">1</div><div><div class="font-semibold text-text text-sm">Literature Search</div><div class="text-muted text-xs">12 domains, 79 papers</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">2</div><div><div class="font-semibold text-text text-sm">Evidence Extraction</div><div class="text-muted text-xs">65 entries, source-traced</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">3</div><div><div class="font-semibold text-text text-sm">Normalization</div><div class="text-muted text-xs">Conflict detection & grading</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">4</div><div><div class="font-semibold text-text text-sm">Cross-Model Synthesis</div><div class="text-muted text-xs">Compare Claude/Gemini/GPT</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">5</div><div><div class="font-semibold text-text text-sm">Architecture Comparison</div><div class="text-muted text-xs">5 alternatives evaluated</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">6</div><div><div class="font-semibold text-text text-sm">Hypothesis Generation</div><div class="text-muted text-xs">Evidence-backed proposals</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">7</div><div><div class="font-semibold text-text text-sm">Experiment Design</div><div class="text-muted text-xs">Phase 1–4 roadmap</div></div></div>
-    <div class="card p-4 flex items-center gap-3"><div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.3)">8</div><div><div class="font-semibold text-text text-sm">Paper Submission</div><div class="text-muted text-xs">LaTeX → peer review</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">1</div><div><div class="text-sm font-semibold">Literature Search</div><div class="text-[10px] text-muted">79 papers</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">2</div><div><div class="text-sm font-semibold">Evidence Extraction</div><div class="text-[10px] text-muted">65 entries</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">3</div><div><div class="text-sm font-semibold">Normalization</div><div class="text-[10px] text-muted">Conflict detection</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">4</div><div><div class="text-sm font-semibold">Cross-Model Synth</div><div class="text-[10px] text-muted">Claude/Gemini/GPT</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">5</div><div><div class="text-sm font-semibold">Arch Comparison</div><div class="text-[10px] text-muted">5 alternatives</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">6</div><div><div class="text-sm font-semibold">Hypothesis</div><div class="text-[10px] text-muted">Evidence-backed</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">7</div><div><div class="text-sm font-semibold">Experiment Design</div><div class="text-[10px] text-muted">Phase 1–4</div></div></div>
+    <div class="card p-4 flex items-center gap-3"><div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)">8</div><div><div class="text-sm font-semibold">Submission</div><div class="text-[10px] text-muted">LaTeX → peer review</div></div></div>
   </div>
 </section>
 
 <!-- ═══ FOOTER ═══ -->
-<footer class="py-12 px-6 text-center border-t" style="border-color:#1c2541">
-  <p class="grad font-bold text-2xl mb-3">Aivora Lab</p>
-  <p class="text-muted text-sm mb-6">Xây Dựng AI Character Có Bản Sắc Bền Vững Trong Tương Tác Dài Hạn</p>
-  <div class="flex justify-center gap-6 text-sm">
-    <a href="https://github.com/KaiyoDev/Aivora-Lab" class="text-muted hover:text-accent transition-colors">GitHub Repo</a>
-    <a href="https://github.com/KaiyoDev/Aivora-Lab/blob/master/latex/main.tex" class="text-muted hover:text-accent transition-colors">LaTeX Source</a>
-    <a href="#top" class="text-muted hover:text-accent transition-colors">Back to top</a>
+<footer class="py-10 px-6 text-center border-t" style="border-color:#1e1e2e">
+  <p class="grad font-bold text-xl mb-2">Aivora Lab</p>
+  <p class="text-muted text-xs mb-4">Nghiên cứu tổng hợp khoa học · September 2026</p>
+  <div class="flex justify-center gap-6 text-xs">
+    <a href="https://github.com/KaiyoDev/Aivora-Lab" class="text-muted hover:text-accent transition-colors">GitHub</a>
+    <a href="https://github.com/KaiyoDev/Aivora-Lab/blob/master/latex/main.tex" class="text-muted hover:text-accent transition-colors">LaTeX</a>
+    <a href="#top" class="text-muted hover:text-accent transition-colors">Top</a>
   </div>
-  <p class="text-muted/50 text-xs mt-6">© 2026 KaiyoDev · MIT License</p>
+  <p class="text-muted/40 text-xs mt-4">© 2026 KaiyoDev · MIT License</p>
 </footer>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────
-const DRIFT = [
-  {t:'10',  p:0.94,s:0.95,l:0.96,h:0.97},
-  {t:'50',  p:0.68,s:0.75,l:0.83,h:0.85},
-  {t:'100', p:0.52,s:0.63,l:0.78,h:0.82},
-  {t:'200', p:0.38,s:0.51,l:0.71,h:0.78},
-  {t:'500', p:0.27,s:0.42,l:0.65,h:0.70},
-];
-const MEMORY = [
-  {name:'Keyword',   acc:45,lat:5,  color:'#94a3b8'},
-  {name:'Vector DB', acc:78,lat:38, color:'#38bdf8'},
-  {name:'LLM Rerank',acc:85,lat:425,color:'#a78bfa'},
-  {name:'Hybrid',    acc:91,lat:150,color:'#34d399'},
-];
-const RELATION = [
-  {subject:'Trust',A:4.4},{subject:'Affection',A:3.9},{subject:'Familiarity',A:4.3},
-  {subject:'Respect',A:4.0},{subject:'Conflict',A:1.2},{subject:'Intimacy',A:3.3},
-];
-const FORGET = [
-  {tasks:1,naive:95,ewc:95,replay:95,lora:95},
-  {tasks:2,naive:72,ewc:89,replay:93,lora:92},
-  {tasks:3,naive:61,ewc:84,replay:91,lora:91},
-  {tasks:5,naive:48,ewc:76,replay:87,lora:90},
-  {tasks:7,naive:39,ewc:70,replay:83,lora:90},
-  {tasks:10,naive:31,ewc:62,replay:78,lora:90},
-];
-const GAPS = [
-  {domain:'Memory',p0:2,p1:2,p2:1},{domain:'Persona',p0:2,p1:2,p2:1},
-  {domain:'Emotion',p0:1,p1:1,p2:1},{domain:'Relation.',p0:2,p1:2,p2:1},
-  {domain:'Multi-Agt',p0:1,p1:1,p2:1},{domain:'Context',p0:1,p1:1,p2:1},
-  {domain:'RL',p0:2,p1:2,p2:1},{domain:'CL',p0:2,p1:2,p2:1},
-];
+const DRIFT = [{t:'10',p:0.94,s:0.95,l:0.96,h:0.97},{t:'50',p:0.68,s:0.75,l:0.83,h:0.85},{t:'100',p:0.52,s:0.63,l:0.78,h:0.82},{t:'200',p:0.38,s:0.51,l:0.71,h:0.78},{t:'500',p:0.27,s:0.42,l:0.65,h:0.70}];
+const MEMORY = [{name:'Keyword',acc:45,c:'#6b7280'},{name:'Vector DB',acc:78,c:'#6366f1'},{name:'LLM Rerank',acc:85,c:'#a855f7'},{name:'Hybrid',acc:91,c:'#22c55e'}];
+const RELATION = [{subject:'Trust',A:4.4},{subject:'Affection',A:3.9},{subject:'Familiarity',A:4.3},{subject:'Respect',A:4.0},{subject:'Conflict',A:1.2},{subject:'Intimacy',A:3.3}];
+const FORGET = [{tasks:1,naive:95,ewc:95,replay:95,lora:95},{tasks:2,naive:72,ewc:89,replay:93,lora:92},{tasks:3,naive:61,ewc:84,replay:91,lora:91},{tasks:5,naive:48,ewc:76,replay:87,lora:90},{tasks:7,naive:39,ewc:70,replay:83,lora:90},{tasks:10,naive:31,ewc:62,replay:78,lora:90}];
+const GAPS = [{domain:'Memory',p0:2,p1:2,p2:1},{domain:'Persona',p0:2,p1:2,p2:1},{domain:'Emotion',p0:1,p1:1,p2:1},{domain:'Relation.',p0:2,p1:2,p2:1},{domain:'Multi-Agt',p0:1,p1:1,p2:1},{domain:'Context',p0:1,p1:1,p2:1},{domain:'RL',p0:2,p1:2,p2:1},{domain:'CL',p0:2,p1:2,p2:1}];
 const RQ_DATA = [
-  {id:'RQ1',cl:'Char',color:'#38bdf8',q:'Làm thế nào mô hình hóa AI Character để duy trì danh tính xuyên suốt?',d:'Danh tính (identity) là phần cốt lõi không thay đổi — tên, vai trò, giá trị cốt lõi, nguồn gốc. Cần phân biệt identity (bất biến) với personality (có thể thích nghi).',e:'Character "Linh" có danh tính: nữ, 25 tuổi, bác sĩ, tôn trọng sự sống. Dù tương tác 1000 turns, cô ấy vẫn là Linh.'},
-  {id:'RQ2',cl:'Char',color:'#38bdf8',q:'Làm thế nào duy trì personality consistency qua nhiều tương tác?',d:'Personality drift xảy ra khi LLM dần mất tính cách do context window bị lấp đầy. Prompt-only giảm từ 94% → 27% sau 500 turns.',e:'Ban đầu Linh nghiêm túc, chuyên nghiệp. Sau 500 turns không persistence, cô ấy nói chuyện như bạn bình thường.'},
-  {id:'RQ3',cl:'Char',color:'#38bdf8',q:'Memory system nên được thiết kế thế nào?',d:'Hybrid (vector + graph + LLM-rerank) đạt 91% F1, vượt keyword (45%) và vector thuần (78%).',e:'Khi user nói "tôi nhớ lần trước nói về mẹ tôi", hệ thống cần truy xuất đúng ngữ cảnh tuần trước.'},
-  {id:'RQ4',cl:'Soc',color:'#a78bfa',q:'Cơ chế xây dựng relationship giữa Character và user?',d:'Relationship có 6 dimensions: Trust, Affection, Familiarity, Respect, Conflict, Intimacy. Trust là predictor mạnh nhất (β=0.43–0.58).',e:'Sau 4 tuần, trust score của Linh tăng từ 3.2 → 4.4/5.'},
-  {id:'RQ5',cl:'Soc',color:'#a78bfa',q:'Emotion nên là output hay internal state?',d:'Output-only consistency 60%. Internal state consistency 82%, naturalness 4.0/5.',e:'Linh đang "buồn nhẹ" → trả lời ngắn hơn, ít cười hơn. Hành vi tự nhiên phản ánh state.'},
-  {id:'RQ6',cl:'Soc',color:'#a78bfa',q:'World simulation có cần thiết không?',d:'World simulation giúp character tồn tại trong bối cảnh nhất quán — thời gian, địa điểm, quy tắc thế giới.',e:'Linh là bác sĩ trực 8h-20h. User nhắn lúc 23h sẽ nhận phản hồi khác lúc 10h.'},
-  {id:'RQ7',cl:'Soc',color:'#a78bfa',q:'Multi-agent interaction tạo emergent behavior?',d:'Nhiều character tương tác tạo emergent behaviors — hành vi không dự đoán được từ agent đơn lẻ.',e:'Linh (bác sĩ) và Minh (giáo viên) phát triển quan điểm chung không cần prompt từ hệ thống.'},
-  {id:'RQ8',cl:'Tech',color:'#fb923c',q:'Context engineering cho character state?',d:'Context compilation là nghệ thuật chọn lọc thông tin vào prompt. Quá nhiều → noise, quá ít → quên.',e:'Prompt compiler quyết định: đưa "personalities: Linh, nghiêm túc" + "recent: user kể về mẹ ốm" + "trust 4.2".'},
-  {id:'RQ9',cl:'Tech',color:'#fb923c',q:'Model independence — consistency across LLMs?',d:'Character nên hoạt động nhất quán khi chuyển Claude ↔ GPT ↔ Gemini. Same state → similar behavior.',e:'Linh trên Claude giống Linh trên GPT-4 vì cùng state store, memory, relationship.'},
-  {id:'RQ10',cl:'Eval',color:'#34d399',q:'Development environment cho character harness?',d:'Cần sandbox test trong controlled scenarios trước deploy.',e:'Test suite: 50 scripted conversations + 7-day longitudinal → đo ICS hàng ngày.'},
-  {id:'RQ11',cl:'Eval',color:'#34d399',q:'Evaluation methodology?',d:'ICS = 30% personality + 25% memory + 25% relationship + 20% values. Ngưỡng: ≥0.90 xuất sắc, <0.60 nghiêm trọng.',e:'Sau 30 ngày, Linh có ICS=0.82 → "Tốt". Nếu tụt 0.55 → kích hoạt adaptation.'},
-  {id:'RQ12',cl:'Eval',color:'#34d399',q:'Human user experience?',d:'UX với AI character khác app thông thường — parasocial relationship, emotional attachment là then chốt.',e:'User nhắn 2h sáng: "em buồn quá". Linh respond empathy thật vì relationship engine đã learn user cần comfort.'},
-  {id:'RQ13',cl:'Eval',color:'#34d399',q:'Safety, privacy, user control?',d:'Character nhớ mọi thứ về user → rủi ro bảo mật. Cần E2E encryption, user-controlled deletion.',e:'User có nút "Xóa mọi ký ức về tôi" — character quên hoàn toàn, bắt đầu từ zero.'},
-  {id:'RQ14',cl:'Eval',color:'#34d399',q:'Long-term interaction challenges?',d:'Sau 30+ ngày: memory congestion, drift acceleration, relationship saturation.',e:'Sau 6 tháng, Linh và user quen sâu. Hệ thống tự động điều chỉnh style — từ "người mới quen" sang "bạn thân".'},
+  {id:'RQ1',cl:'Char',q:'Danh tính (identity) khác personality như thế nào?',d:'Identity là bất biến (tên, vai trò, giá trị cốt lõi). Personality có thể thích nghi theo ngữ cảnh. Phân biệt đúng hai khái niệm này là nền tảng của mọi persistence mechanism.',e:'Linh là bác sĩ 25 tuổi — điều này không đổi qua mọi turn.'},
+  {id:'RQ2',cl:'Char',q:'Tại sao prompt-only bị drift sau 500 turns?',d:'Context window bị lấp đầy bởi hội thoại hiện tại, lấn át persona instruction ban đầu. Prompt-only không có cơ chế lưu trữ trạng thái bên ngoài LLM.',e:'Sau 500 turns, Linh nói chuyện như bạn bình thường thay vì bác sĩ.'},
+  {id:'RQ3',cl:'Char',q:'Hybrid memory đạt 91% F1 như thế nào?',d:'Vector DB (ChromaDB) cho semantic search + Knowledge graph cho quan hệ thực thể + LLM rerank cho precision. Keyword chỉ 45%, vector thuần 78%.',e:'User nhớ "mẹ tôi" tuần trước → hệ thống truy xuất đúng context, không trả lời chung chung.'},
+  {id:'RQ4',cl:'Soc',q:'Relationship 6 dimensions — cái nào quan trọng nhất?',d:'Trust (β=0.58) là predictor mạnh nhất cho satisfaction. Conflict phải được quản lý, không loại bỏ. Intimacy phát triển chậm nhưng bền vững.',e:'Trust tăng 3.2→4.4 qua 4 tuần. User cảm thấy "cô ấy thực sự hiểu tôi".'},
+  {id:'RQ5',cl:'Soc',q:'Emotion output vs internal state — cái nào tốt hơn?',d:'Output-only: LLM nói "tôi buồn" → consistency 60%. Internal state: cập nhật liên tục, ảnh hưởng hành vi → consistency 82%, naturalness 4.0/5.',e:'Linh "buồn nhẹ" → trả lời ngắn, ít cười, đề nghị nghỉ. Không cần nói "tôi buồn".'},
+  {id:'RQ6',cl:'Soc',q:'World simulation có đáng phí không?',d:'Giữ nhất quán thời gian/địa điểm/quy tắc. Tăng chi phí tính toán nhưng cần thiết cho roleplay phức tạp. Không cần cho chat đơn giản.',e:'Linh trực 8h-20h. Nhắn 23h sẽ nhận phản hồi khác nhắn 10h.'},
+  {id:'RQ7',cl:'Soc',q:'Emergent behavior từ multi-agent có kiểm soát được không?',d:'Xuất hiện khi nhiều character tương tác — hành vi không dự đoán được từ agent đơn lẻ. Cơ hội (tự nhiên hơn) nhưng rủi ro (khó audit).',e:'Linh + Minh phát triển quan điểm chung về giáo dục sức khỏe mà không cần prompt.'},
+  {id:'RQ8',cl:'Tech',q:'Context compilation — chọn lọc thông tin thế nào?',d:'Adaptive compression: đưa personality + recent relevant + relationship context. Bỏ turns không liên quan. Quá nhiều → noise, quá ít → quên.',e:'Prompt compiler chọn: "Linh, nghiêm túc" + "mẹ ốm" + "trust 4.2" — bỏ turns dạo gần không liên quan.'},
+  {id:'RQ9',cl:'Tech',q:'Character cross-model consistency đạt được ra sao?',d:'Same state store, same memory, same relationship → similar behavior regardless of Claude/GPT/Gemini. Model là engine, không phải identity.',e:'Linh trên Claude giống Linh trên GPT-4 vì cùng state, memory, relationship.'},
+  {id:'RQ10',cl:'Eval',q:'Test environment cho character cần gì?',d:'Sandbox với scripted conversations + random users + longitudinal testing. Đo ICS hàng ngày, cảnh báo nếu dưới 0.60.',e:'50 scripted convos + 10 random users + 7-day test → ICS daily report.'},
+  {id:'RQ11',cl:'Eval',q:'ICS threshold nào là đủ?',d:'≥0.90 xuất sắc, 0.75–0.89 tốt, 0.60–0.74 cảnh báo, <0.60 nghiêm trọng. Architecture C đạt ~0.85 là acceptable.',e:'Linh ICS=0.82 sau 30 ngày → Tốt. Nếu tụt 0.55 → kích hoạt adaptation protocol.'},
+  {id:'RQ12',cl:'Eval',q:'User experience với AI character khác gì app thường?',d:'Parasocial relationship, emotional attachment, expectation management. Không phải utility tool — cần empathy thật sự, không template.',e:'User nhắn 2h sáng "em buồn quá" → Linh respond empathy thật vì engine đã learn user cần comfort.'},
+  {id:'RQ13',cl:'Eval',q:'Privacy — character nhớ mọi thứ thì rủi ro thế nào?',d:'Character lưu trữ mọi thông tin personal. Cần E2E encryption, user-controlled deletion, transparency về data. Nút "xóa ký ức" là quyền cơ bản.',e:'User bấm "Xóa mọi ký ức về tôi" → character quên hết, bắt đầu từ zero.'},
+  {id:'RQ14',cl:'Eval',q:'Challenges sau 30+ ngày là gì?',d:'Memory congestion, drift acceleration, relationship saturation. Cần chapter transitions và relationship milestones.',e:'Sau 6 tháng, hệ thống tự động điều chỉnh style — từ "người mới quen" sang "bạn thân".'},
 ];
 
-// ─── CHART HELPERS ──────────────────────────────────────────────────────────
-const GRID = '#1c2541';
-const TICK = '#5a6580';
-const TT = { backgroundColor:'#0f1629', borderColor:'#1c2541', borderWidth:1, titleColor:'#38bdf8', bodyColor:'#e2e8f0', padding:10, cornerRadius:8 };
-const LG = { labels:{ color:TICK, padding:16, usePointStyle:true } };
+// ─── CHARTS ─────────────────────────────────────────────────────────────────
+const GRID = '#1e1e2e', TICK = '#6b7280';
+const TT = { backgroundColor:'#13131a', borderColor:'#1e1e2e', borderWidth:1, titleColor:'#818cf8', bodyColor:'#e5e7eb', padding:8, cornerRadius:6 };
+const LG = { labels:{ color:TICK, padding:12, usePointStyle:true } };
 const DC = { color:TICK, borderColor:GRID, ticks:{color:TICK}, plugins:{tooltip:TT,legend:LG} };
-const CHART_H = { responsive: true, maintainAspectRatio: false };
+const H = { responsive:true, maintainAspectRatio:false };
 
-// Drift
 new Chart(document.getElementById('driftChart'), {
-  type: 'line',
-  data: {
-    labels: DRIFT.map(d=>d.t+'t'),
-    datasets: [
-      {label:'Prompt-only', data:DRIFT.map(d=>d.p*100), borderColor:'#f87171', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'State-based', data:DRIFT.map(d=>d.s*100), borderColor:'#fbbf24', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'Learned (LoRA)', data:DRIFT.map(d=>d.l*100), borderColor:'#38bdf8', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'Hybrid', data:DRIFT.map(d=>d.h*100), borderColor:'#34d399', borderWidth:2, pointRadius:4, tension:.3, fill:true, backgroundColor:'rgba(52,211,153,.1)'},
-    ]
-  },
-  options: {...CHART_H, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'}}, x:{...DC.scales.x}}, plugins:DC.plugins},
-  plugins:[{id:'thresh',beforeDraw(c){const y=c.scales.y,x=c.scales.x;const py=y.getPixelForValue(60);c.ctx.save();c.ctx.setLineDash([4,4]);c.ctx.strokeStyle='rgba(248,113,113,.4)';c.ctx.lineWidth=1;c.ctx.beginPath();c.ctx.moveTo(x.left,py);c.ctx.lineTo(x.right,py);c.ctx.stroke();c.ctx.restore();}}]
+  type:'line',
+  data:{ labels:DRIFT.map(d=>d.t+'t'), datasets:[
+    {label:'Prompt-only', data:DRIFT.map(d=>d.p*100), borderColor:'#ef4444', borderWidth:2, pointRadius:3, tension:.3, fill:false},
+    {label:'State-based', data:DRIFT.map(d=>d.s*100), borderColor:'#fbbf24', borderWidth:2, pointRadius:3, tension:.3},
+    {label:'LoRA', data:DRIFT.map(d=>d.l*100), borderColor:'#6366f1', borderWidth:2, pointRadius:3, tension:.3},
+    {label:'Hybrid', data:DRIFT.map(d=>d.h*100), borderColor:'#22c55e', borderWidth:2, pointRadius:3, tension:.3, fill:true, backgroundColor:'rgba(34,197,94,.08)'},
+  ]},
+  options:{...H, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'}}, x:{...DC.scales.x}}, plugins:DC.plugins},
+  plugins:[{id:'t',beforeDraw(c){const y=c.scales.y,x=c.scales.x;const py=y.getPixelForValue(60);c.ctx.save();c.ctx.setLineDash([3,3]);c.ctx.strokeStyle='rgba(239,68,68,.35)';c.ctx.lineWidth=1;c.ctx.beginPath();c.ctx.moveTo(x.left,py);c.ctx.lineTo(x.right,py);c.ctx.stroke();c.ctx.restore();}}]
 });
 
-// Forgetting
 new Chart(document.getElementById('forgettingChart'), {
-  type: 'line',
-  data: {
-    labels: FORGET.map(d=>d.tasks+' tasks'),
-    datasets: [
-      {label:'Naive FT', data:FORGET.map(d=>d.naive), borderColor:'#f87171', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'EWC (λ=500)', data:FORGET.map(d=>d.ewc), borderColor:'#fbbf24', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'Replay (10%)', data:FORGET.map(d=>d.replay), borderColor:'#38bdf8', borderWidth:2, pointRadius:4, tension:.3, fill:false},
-      {label:'LoRA', data:FORGET.map(d=>d.lora), borderColor:'#34d399', borderWidth:2, pointRadius:4, tension:.3, fill:true, backgroundColor:'rgba(52,211,153,.1)'},
-    ]
-  },
-  options: {...CHART_H, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'},min:25,max:100}, x:{...DC.scales.x}}, plugins:DC.plugins}
+  type:'line',
+  data:{ labels:FORGET.map(d=>d.tasks), datasets:[
+    {label:'Naive FT', data:FORGET.map(d=>d.naive), borderColor:'#ef4444', borderWidth:2, pointRadius:3, tension:.3},
+    {label:'EWC', data:FORGET.map(d=>d.ewc), borderColor:'#fbbf24', borderWidth:2, pointRadius:3, tension:.3},
+    {label:'Replay', data:FORGET.map(d=>d.replay), borderColor:'#6366f1', borderWidth:2, pointRadius:3, tension:.3},
+    {label:'LoRA', data:FORGET.map(d=>d.lora), borderColor:'#22c55e', borderWidth:2, pointRadius:3, tension:.3, fill:true, backgroundColor:'rgba(34,197,94,.08)'},
+  ]},
+  options:{...H, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'},min:25,max:100}, x:{...DC.scales.x}}, plugins:DC.plugins}
 });
 
-// Memory bar
 new Chart(document.getElementById('memoryChart'), {
-  type: 'bar',
-  data: {
-    labels: MEMORY.map(d=>d.name),
-    datasets: [{label:'Accuracy %', data:MEMORY.map(d=>d.acc), backgroundColor:MEMORY.map(d=>d.color), borderRadius:6}]
-  },
-  options: {...CHART_H, indexAxis:'y', plugins:DC.plugins, scales:{x:{...DC.scales.x,ticks:{...DC.scales.x.ticks,callback:v=>v+'%'}}, y:{...DC.scales.y}}}
+  type:'bar',
+  data:{ labels:MEMORY.map(d=>d.name), datasets:[{label:'Accuracy %', data:MEMORY.map(d=>d.acc), backgroundColor:MEMORY.map(d=>d.c), borderRadius:5}] },
+  options:{...H, indexAxis:'y', plugins:DC.plugins, scales:{x:{...DC.scales.x,ticks:{...DC.scales.x.ticks,callback:v=>v+'%'}}, y:{...DC.scales.y}}}
 });
 
-// Relationship radar
 new Chart(document.getElementById('relationChart'), {
-  type: 'radar',
-  data: {
-    labels: RELATION.map(d=>d.subject),
-    datasets: [{label:'Avg Score', data:RELATION.map(d=>d.A), borderColor:'#38bdf8', backgroundColor:'rgba(56,189,248,.15)', borderWidth:2, pointRadius:4}]
-  },
-  options: {...CHART_H, plugins:DC.plugins, scales:{r:{angleLines:{color:GRID},grid:{color:GRID},pointLabels:{color:TICK,font:{size:11}},ticks:{display:false,backdropColor:'transparent'},suggestedMin:0,suggestedMax:5}}}
+  type:'radar',
+  data:{ labels:RELATION.map(d=>d.subject), datasets:[{label:'Score', data:RELATION.map(d=>d.A), borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,.15)', borderWidth:2, pointRadius:3}] },
+  options:{...H, plugins:DC.plugins, scales:{r:{angleLines:{color:GRID},grid:{color:GRID},pointLabels:{color:TICK,font:{size:10}},ticks:{display:false,backdropColor:'transparent'},suggestedMin:0,suggestedMax:5}}}
 });
 
-// ICS weights
 new Chart(document.getElementById('icsChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Personality\nConsistency','Memory\nAccuracy','Relationship\nContinuity','Value\nConsistency'],
-    datasets: [{label:'Weight %', data:[30,25,25,20], backgroundColor:['#34d399','#38bdf8','#fbbf24','#a78bfa'], borderRadius:8}]
-  },
-  options: {...CHART_H, plugins:{...DC.plugins,legend:{display:false}}, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'}}, x:{...DC.scales.x,ticks:{...DC.scales.x.ticks,color:TICK,font:{size:10}}}}}
+  type:'bar',
+  data:{ labels:['P\n30%','M\n25%','R\n25%','V\n20%'], datasets:[{label:'Weight', data:[30,25,25,20], backgroundColor:['#22c55e','#6366f1','#f97316','#a855f7'], borderRadius:5}] },
+  options:{...H, plugins:{...DC.plugins,legend:{display:false}}, scales:{y:{...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v+'%'}}, x:{...DC.scales.x}}}
 });
 
-// Gaps stacked
 new Chart(document.getElementById('gapsChart'), {
-  type: 'bar',
-  data: {
-    labels: GAPS.map(d=>d.domain),
-    datasets: [
-      {label:'P0 Critical', data:GAPS.map(d=>d.p0), backgroundColor:'#f87171', borderRadius:4},
-      {label:'P1 High', data:GAPS.map(d=>d.p1), backgroundColor:'#fbbf24', borderRadius:4},
-      {label:'P2 Medium', data:GAPS.map(d=>d.p2), backgroundColor:'#38bdf8', borderRadius:4},
-    ]
-  },
-  options: {...CHART_H, plugins:DC.plugins, scales:{x:{stacked:true,...DC.scales.x},y:{stacked:true,...DC.scales.y,ticks:{...DC.scales.y.ticks,callback:v=>v}}}}
+  type:'bar',
+  data:{ labels:GAPS.map(d=>d.domain), datasets:[
+    {label:'P0', data:GAPS.map(d=>d.p0), backgroundColor:'#ef4444', borderRadius:3},
+    {label:'P1', data:GAPS.map(d=>d.p1), backgroundColor:'#f97316', borderRadius:3},
+    {label:'P2', data:GAPS.map(d=>d.p2), backgroundColor:'#6366f1', borderRadius:3},
+  ]},
+  options:{...H, plugins:DC.plugins, scales:{x:{stacked:true,...DC.scales.x},y:{stacked:true,...DC.scales.y}}}
 });
 
-// ─── TABS ──────────────────────────────────────────────────────────────────
-function showChart(name) {
-  ['drift','forgetting'].forEach(n => {
-    document.getElementById('panel-'+n).classList.toggle('hidden', n!==name);
-  });
-  document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    b.classList.toggle('active', (n===('drift','forgetting')[i])===false || b.textContent.toLowerCase().includes(name));
-  });
-  // Fix active state
+// ─── TABS ───────────────────────────────────────────────────────────────────
+function switchChart(name) {
+  ['drift','forgetting'].forEach(n => document.getElementById('panel-'+n).classList.toggle('hidden', n!==name));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
 }
 
-// ─── RQ FILTER ─────────────────────────────────────────────────────────────
+// ─── RQS ────────────────────────────────────────────────────────────────────
+const CL = {Char:'#6366f1',Soc:'#a855f7',Tech:'#f97316',Eval:'#22c55e'};
+const CLN = {Char:'Character Modeling',Soc:'Social Intelligence',Tech:'Technical Foundation',Eval:'Evaluation'};
 function renderRQs(filter) {
-  const map = {'Char':'#38bdf8','Soc':'#a78bfa','Tech':'#fb923c','Eval':'#34d399'};
-  const clMap = {'Char':'Character Modeling','Soc':'Social Intelligence','Tech':'Technical Foundation','Eval':'Evaluation'};
-  const filtered = filter==='all' ? RQ_DATA : RQ_DATA.filter(r=>r.cl===filter);
-  document.getElementById('rq-container').innerHTML = filtered.map((rq,i) => `
-    <div class="rq" onclick="toggleRQ(this)" data-c="${rq.color}" data-idx="${RQ_DATA.indexOf(rq)}">
+  const f = filter==='all' ? RQ_DATA : RQ_DATA.filter(r=>r.cl===filter);
+  document.getElementById('rq-container').innerHTML = f.map(r => `
+    <div class="card p-4 cursor-pointer" onclick="toggleRQ(this)" data-c="${CL[r.cl]}">
       <div class="flex items-start gap-3">
-        <span class="pill flex-shrink-0 mt-0.5" style="border-color:${rq.color}40;color:${rq.color};background:${rq.color}15">${rq.id}</span>
+        <span class="pill flex-shrink-0 mt-0.5" style="border-color:${CL[r.cl]}40;color:${CL[r.cl]};background:${CL[r.cl]}10">${r.id}</span>
         <div class="flex-1 min-w-0">
-          <p class="font-medium text-text text-sm">${rq.q}</p>
-          <p class="text-xs ${rq.color==='#38bdf8'?'text-accent':rq.color==='#a78bfa'?'text-purple':rq.color==='#fb923c'?'text-orange':'text-green'} mt-1">${clMap[rq.cl]}</p>
+          <p class="text-sm font-medium text-text">${r.q}</p>
+          <p class="text-[10px] ${CL[r.cl]==='#6366f1'?'text-accent':CL[r.cl]==='#a855f7'?'text-purple':CL[r.cl]==='#f97316'?'text-orange':'text-green'} mt-0.5">${CLN[r.cl]}</p>
         </div>
-        <svg class="flex-shrink-0 text-muted transition-transform" width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 11L2 5h10z"/></svg>
+        <svg class="flex-shrink-0 text-muted transition-transform" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 10L1 4h10z"/></svg>
       </div>
-      <div class="expand pt-4 mt-4" style="border-top:1px solid #1c2541">
-        <p class="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Giải thích</p>
-        <p class="text-sm text-muted leading-relaxed mb-4">${rq.d}</p>
-        <p class="text-xs font-semibold text-muted uppercase tracking-wider mb-2">Ví dụ</p>
-        <div class="rp"><p class="text-sm text-muted">${rq.e}</p></div>
+      <div class="expand pt-3 mt-3" style="border-top:1px solid #1e1e2e">
+        <p class="text-xs text-muted leading-relaxed mb-3">${r.d}</p>
+        <div class="rp"><p class="text-xs text-muted">${r.e}</p></div>
       </div>
     </div>
   `).join('');
 }
 function toggleRQ(el) {
-  const content = el.querySelector('.expand');
-  const icon = el.querySelector('svg');
-  const open = content.classList.contains('open');
-  document.querySelectorAll('.expand.open').forEach(c => { c.classList.remove('open'); c.closest('.rq').querySelector('svg').style.transform=''; });
-  if (!open) { content.classList.add('open'); icon.style.transform='rotate(90deg)'; el.style.borderColor=el.dataset.c; el.style.boxShadow=`0 0 20px ${el.dataset.c}20`; }
-  else { el.style.borderColor=''; el.style.boxShadow=''; }
+  const c = el.querySelector('.expand'), ic = el.querySelector('svg');
+  const open = c.classList.contains('open');
+  document.querySelectorAll('.expand.open').forEach(x => { x.classList.remove('open'); x.closest('.card').querySelector('svg').style.transform=''; });
+  if(!open) { c.classList.add('open'); ic.style.transform='rotate(90deg)'; el.style.borderColor=el.dataset.c; }
+  else { el.style.borderColor=''; }
 }
 function filterRQ(cl) {
   document.querySelectorAll('section .flex-wrap .tab-btn').forEach(b => b.classList.remove('active'));
@@ -577,8 +427,8 @@ function filterRQ(cl) {
 }
 renderRQs('all');
 
-// ─── SCROLL ANIM ───────────────────────────────────────────────────────────
-const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); }}), {threshold:0.08});
+// ─── ANIM ───────────────────────────────────────────────────────────────────
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); }}), {threshold:0.05});
 document.querySelectorAll('.fade-up').forEach(s => obs.observe(s));
 </script>
 </body>
