@@ -1,0 +1,59 @@
+\section{Mô hình trạng thái Character}
+
+\subsection{Phân loại Components}
+
+Chúng tôi phân loại các components của Character State theo tính biến đổi:
+
+\begin{table}[H]
+\centering
+\caption{Phân loại Components Character State}
+\label{tab:state-components}
+\begin{tabular}{llll}
+\toprule
+\textbf{Category} & \textbf{Components} & \textbf{Change Rate} & \textbf{Examples} \\
+\midrule
+Immutable & Identity core, Core values & Gần như không đổi & Tên, tuổi, sự kiện sinh học \\
+Slowly Changing & Personality traits, Beliefs, Values & 5--10\%/tháng & Big Five, nguyên tắc đạo đức \\
+Dynamic & Emotion, Goals, Motivation, WorldState & Theo tương tác & Tâm trạng hiện tại, goals đang hoạt động \\
+Learned & Memory, Knowledge, Habits, Preferences & Liên tục & Episodic memories, skills \\
+User Controlled & Memory importance, Relationship level & Theo yêu cầu & Pin memories, adjust closeness \\
+System Controlled & Forgetting, Consolidation, Conflict resolution & Tự động & Daily consolidation cycle \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Identity Consistency Score (ICS)}
+
+Chúng tôi đề xuất ICS làm metric tổng hợp:
+
+\begin{equation}
+\text{ICS} = 0.30 \times \text{PersonalityConsistency} + 0.25 \times \text{MemoryAccuracy} + 0.25 \times \text{RelationshipContinuity} + 0.20 \times \text{ValueConsistency}
+\end{equation}
+
+\textbf{Thresholds:}
+
+\begin{table}[H]
+\centering
+\caption{Các ngưỡng ICS và Hành động}
+\label{tab:ics-thresholds}
+\begin{tabular}{lll}
+\toprule
+\textbf{Phạm vi ICS} & \textbf{Trạng thái} & \textbf{Hành động} \\
+\midrule
+0.90--1.00 & Xuất sắc & Duy trì kiến trúc hiện tại \\
+0.75--0.89 & Tốt & Giám sát chặt chẽ \\
+0.60--0.74 & Cảnh báo & Điều tra nguyên nhân drift \\
+$<$0.60 & Nghiêm trọng & Cần intervention \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/fig04-ics-pie.pdf}
+\caption{Trọng số components ICS --- Personality Consistency (30\%), Memory Accuracy (25\%), Relationship Continuity (25\%), Value Consistency (20\%)}
+\label{fig:ics-weights}
+\end{figure}
+
+% =============================================================================
+% 7. PERSONALITY

@@ -1,0 +1,65 @@
+\section{Nhân cách}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Personality nên là prompt, state, learned representation, policy hay combination?}
+
+\subsection{Tóm tắt Evidence}
+
+\begin{table}[H]
+\centering
+\caption{So sánh các Approach Personality}
+\label{tab:personality-approaches}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Approach} & \textbf{Consistency (r)} & \textbf{Naturalness (1-5)} & \textbf{Chi phí} & \textbf{Implementation} \\
+\midrule
+Prompt-only & 0.55 & 4.5 & Miễn phí & Dễ \\
+State-based & 0.74 & 4.0 & Thấp & Trung bình \\
+Learned (LoRA) & 0.81 & 3.8 & Cao & Phức tạp \\
+\textbf{Hybrid} & \textbf{0.85} & \textbf{4.2} & \textbf{Trung bình} & \textbf{Trung bình} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Phân tích Drift}
+
+Personality drift được quantified qua cross-turn consistency:
+
+\begin{table}[H]
+\centering
+\caption{Personality Consistency Qua Các Turns}
+\label{tab:personality-drift}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Turns} & \textbf{Prompt-only} & \textbf{State-based} & \textbf{Learned} & \textbf{Hybrid} \\
+\midrule
+10 & 0.94 & 0.95 & 0.96 & 0.97 \\
+50 & 0.68 & 0.75 & 0.83 & 0.85 \\
+100 & 0.52 & 0.63 & 0.78 & 0.82 \\
+200 & 0.38 & 0.51 & 0.71 & 0.78 \\
+500 & 0.27 & 0.42 & 0.65 & 0.65+ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Drift rate}: Prompt: $-0.13$\%/turn, State: $-0.07$\%/turn, Learned: $-0.06$\%/turn
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig01-personality-drift.pdf}
+\caption{Personality drift qua turns --- hybrid approach đạt consistency cao nhất ($r>0.70$ tại 500 turns)}
+\label{fig:personality-drift}
+\end{figure}
+
+\subsection{Khuyến nghị}
+
+\textbf{Hybrid approach} là optimal cho production:
+\begin{itemize}
+    \item Phase 1 (Tháng 1--2): Prompt + lightweight state $\to$ consistency $>$ 0.65
+    \item Phase 2 (Tháng 3--4): Evaluate learned adapter cho top personas $\to$ consistency $>$ 0.75
+    \item Phase 3 (Tháng 5--6): Full hybrid framework $\to$ consistency $>$ 0.85
+\end{itemize}
+
+% =============================================================================
+% 8. MEMORY

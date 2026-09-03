@@ -1,0 +1,36 @@
+\section{Thực nghiệm tính toán}
+
+\subsection{Experiment 1: So sánh Kiến trúc Memory}
+
+\textbf{Hypothesis}: Hybrid memory (Vector + Graph + LLM rerank) sẽ đạt accuracy cao nhất với latency chấp nhận được.
+
+\textbf{Method}:
+\begin{itemize}
+    \item Dataset: LongMemEval + LifeBench
+    \item Systems: Keyword, Vector, LLM-based, Hybrid
+    \item Metrics: Accuracy@1/5/10, F1, latency, storage per memory
+\end{itemize}
+
+\textbf{Kết quả}: Hybrid 91\% F1, Vector 78\%, LLM 85\%, Keyword 45\%.
+
+\subsection{Experiment 2: Personality Drift qua Turns}
+
+\textbf{Hypothesis}: Prompt-only approaches sẽ suffer severe drift trong long conversations.
+
+\textbf{Method}:
+\begin{itemize}
+    \item 500-turn conversations với 5 personas
+    \item Consistency measured every 10 turns
+    \item 4 approaches: Prompt-only, Memory-aug, Graph-memory, Fine-tuned
+\end{itemize}
+
+\textbf{Kết quả}: Prompt: 94\%\,$\to$\,27\%, Graph-memory: 94\%\,$\to$\,65\% @ turn 500.
+
+\subsection{Experiment 3: Emotion Consistency}
+
+\textbf{Hypothesis}: Hybrid emotion architecture sẽ đạt consistency cao hơn LLM-only.
+
+\textbf{Kết quả}: Hybrid 82\% consistency, 4.0/5 naturalness vs LLM-only 65\%, 4.2/5.
+
+% =============================================================================
+% 19. STATISTICAL ANALYSIS

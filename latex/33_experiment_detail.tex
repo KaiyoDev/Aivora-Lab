@@ -1,0 +1,27 @@
+\section{Chi tiết thực nghiệm}
+
+\subsection{Kết quả từ nghiên cứu trước (Tổng hợp)}
+
+\subsubsection{So sánh Kiến trúc Memory}
+\begin{itemize}
+    \item \textbf{Nguồn}: [EVIDENCE] LongMemEval (2024), LifeBench (2025)
+    \item Hybrid (Vector+Graph+LLM-rerank): 91\% F1 -- tốt nhất trong 4 kiến trúc
+    \item Vector (ChromaDB): 78\% F1; LLM-based rerank: 85\% F1; Keyword: 45\% F1
+    \item \textbf{Kết luận}: Hybrid kiến trúc tối ưu -- kết hợp strength của mỗi component
+\end{itemize}
+
+\subsubsection{Personality Drift qua Turns}
+\begin{itemize}
+    \item \textbf{Nguồn}: [EVIDENCE] Persona-consistency benchmarks (2024--2025)
+    \item Prompt-only: drift từ 94\% (turn 10) xuống 27\% (turn 500)
+    \item Graph-memory augmented: duy trì 65\% tại turn 500
+    \item \textbf{Kết luận}: State persistence critical cho long-term consistency
+\end{itemize}
+
+\subsubsection{Emotion Consistency}
+\begin{itemize}
+    \item \textbf{Nguồn}: [EVIDENCE] Emotion modeling studies (2023--2025)
+    \item Hybrid approach (internal state + LLM expression): 82\% consistency, 4.0/5 naturalness
+    \item LLM-only output: ~60\% consistency (không persistent)
+    \item \textbf{Kết luận}: Internal state cần thiết cho emotion continuity
+\end{itemize}

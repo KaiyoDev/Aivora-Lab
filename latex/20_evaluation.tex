@@ -1,0 +1,51 @@
+\section{Đánh giá}
+
+\subsection{So sánh Benchmarks}
+
+\begin{table}[H]
+\centering
+\caption{Các Benchmark Đánh giá}
+\label{tab:benchmarks}
+\begin{tabular}{llll}
+\toprule
+\textbf{Benchmark} & \textbf{Trọng tâm} & \textbf{Điểm mạnh} & \textbf{Giới hạn} \\
+\midrule
+PersonaBench & Personality consistency & Benchmark đầu tiên & Chỉ conversations ngắn \\
+LongMemEval & Memory trong long context & Setting interactive thực tế & Lớn oracle-online gap \\
+LifeBench & Generalization & Out-of-distribution test & 34pp generalization gap \\
+RoleBench & Role-playing & Comprehensive metrics & Giới hạn 45 turns avg \\
+RMTBench & Multi-turn & Standard human evaluation & 16--23\% human disagreement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Đề xuất Khung Evaluation}
+
+\textbf{Ba lớp evaluation}:
+\begin{enumerate}
+    \item \textbf{Automated} (65--75\% accuracy, \$0.01/eval): Fast screening
+    \item \textbf{Human} (85--92\% accuracy, \$2.50/eval): Ground truth
+    \item \textbf{Hybrid} (80--88\% accuracy, \$0.80/eval): Best ROI (2.5x)
+\end{enumerate}
+
+\subsection{Protocol Longitudinal}
+
+\begin{table}[H]
+\centering
+\caption{Lịch trình Evaluation Longitudinal}
+\label{tab:longitudinal-protocol}
+\begin{tabular}{lll}
+\toprule
+\textbf{Timepoint} & \textbf{Metrics} & \textbf{Mục đích} \\
+\midrule
+Day 1 & Baseline ICS, Personality, Memory & Thiết lập baseline \\
+Day 7 & Short-term stability & Phát hiện early drift \\
+Day 30 & Medium-term adaptation & Đánh giá learning \\
+Day 90 & Long-term drift & Đo accumulation \\
+Day 180+ & Maturity assessment & Đánh giá cuối \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% 21. HUMAN STUDIES

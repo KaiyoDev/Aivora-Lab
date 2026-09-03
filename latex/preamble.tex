@@ -1,0 +1,65 @@
+% =============================================================================
+% AIVORA LAB RESEARCH PAPER — LATEX SOURCE
+% Title: Xây Dựng AI Character Có Bản Sắc Bền Vững Trong Tương Tác Dài Hạn
+% Language: Vietnamese
+% =============================================================================
+
+\documentclass[10pt,leqno]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{url}
+\usepackage{cleveref}
+\usepackage{mathtools}
+\usepackage{enumitem}
+
+% Geometry: textwidth=32cc≈112mm, textheight=20cm
+\geometry{
+  textwidth=112mm,
+  textheight=20cm,
+  left=25mm,
+  right=25mm,
+  top=20mm,
+  bottom=20mm,
+  headheight=12pt
+}
+\setlength{\baselineskip}{16pt}
+
+% Disable automatic section numbering for amsart style
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+
+% Hyperref settings
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% Custom commands
+\newcommand{\ICS}{\texttt{ICS}}
+\newcommand{\LLM}{\texttt{LLM}}
+\newcommand{\DB}{\texttt{DB}}
+\newcommand{\RQ}{\texttt{RQ}}
+\newcommand{\EVIDENCE}{\texttt{[EVIDENCE]}}
+\newcommand{\CALCULATED}{\texttt{[CALCULATED]}}
+
+% Title information
+\title{\textbf{Xây Dựng AI Character Có Bản Sắc Bền Vững Trong Tương Tác Dài Hạn:}\\ Nghiên Cứu Tổng Hợp Và Đề Xuất Kiến Trúc}
+\author{Aivora Lab Research Team}
+\date{September 2026}
+
+\begin{document}

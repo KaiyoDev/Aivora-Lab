@@ -1,0 +1,34 @@
+\section{Bộ nhớ}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Memory có nên chỉ là database hay nên trở thành một learning system?}
+
+\subsection{Key Findings}
+
+\begin{enumerate}
+    \item \textbf{Hybrid approach đạt 91\% F1} --- kết hợp vector retrieval + LLM reranking
+    \item \textbf{Memory decay là exponential} --- 1.3pp/day giảm accuracy
+    \item \textbf{Generalization gap lớn} --- MemOS: 90\% trên LoCoMo $\to$ 55\% trên LifeBench ($-34.78$pp)
+    \item \textbf{Forgetting mechanisms cần thiết} --- FactConsolidation chỉ đạt 54\% single-hop accuracy
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig02-memory-comparison.pdf}
+\caption{So sánh kiến trúc Memory --- Hybrid (vector + graph + LLM rerank) đạt accuracy cao nhất (91\% F1) với latency chấp nhận được}
+\label{fig:memory-comparison}
+\end{figure}
+
+\subsection{Khuyến nghị}
+
+Memory nên là \textbf{learning system} với các components:
+\begin{itemize}
+    \item \textbf{Vector DB} (ChromaDB/Pinecone) cho episodic memories
+    \item \textbf{Graph DB} (Neo4j) cho semantic relationships
+    \item \textbf{Consolidation pipeline} cho periodic summary generation
+    \item \textbf{Forgetting curve} cho automatic pruning
+\end{itemize}
+
+% =============================================================================
+% 9. RELATIONSHIP

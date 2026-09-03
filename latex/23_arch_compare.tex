@@ -1,0 +1,43 @@
+\section{So sánh kiến trúc}
+
+\subsection{Năm Lựa chọn Kiến trúc}
+
+\begin{table}[H]
+\centering
+\caption{So sánh Kiến trúc}
+\label{tab:arch-comparison}
+\begin{tabular}{lp{3.5cm}lp{1.5cm}p{2cm}c}
+\toprule
+\textbf{Kiến trúc} & \textbf{Components} & \textbf{ICS Potential} & \textbf{Chi phí} & \textbf{Phức tạp} & \textbf{Kết luận} \\
+\midrule
+A: LLM + Prompt & Prompt only & 0.55 & \$0 & Thấp & $\times$ Không justified \\
+B: LLM + Memory & + Vector DB & 0.74 & Thấp & Trung bình & $\triangle$ Dùng có điều kiện \\
+C: LLM + Memory + Relationship + State & + Relationship engine & 0.82 & Trung bình & Cao & $\checkmark$ Dùng \\
+D: LLM + Memory + State + Learned & + Adapters, learners & 0.85+ & Cao & Rất cao & $\triangle$ Dùng có điều kiện \\
+E: LLM + Memory + State + RL + Graph + CL & + RL, GNN, CL & Unknown & Rất cao & Research & $\odot$ Experiment trước \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig05-arch-heatmap.pdf}
+\caption{Heatmap so sánh kiến trúc --- Kiến trúc C (hybrid) đạt cân bằng tốt nhất giữa ICS potential, chi phí và complexity}
+\label{fig:arch-heatmap}
+\end{figure}
+
+\subsection{Khuyến nghị Dựa trên Evidence}
+
+\textbf{Bắt đầu với Kiến trúc C, evolve toward D.}
+
+\textbf{Lý do:}
+\begin{itemize}
+    \item Kiến trúc A: Drift quá lớn (94\%\,$\to$\,27\% @500 turns)
+    \item Kiến trúc B: Thiếu relationship và emotion modules
+    \item Kiến trúc C: Balanced, evidence-backed, implementable
+    \item Kiến trúc D: Metrics tốt nhất nhưng high complexity
+    \item Kiến trúc E: Quá sớm, cần thêm research
+\end{itemize}
+
+% =============================================================================
+% 24. PROPOSED FRAMEWORK

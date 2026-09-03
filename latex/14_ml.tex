@@ -1,0 +1,32 @@
+\section{Học máy và Học sâu}
+
+\subsection{Vị trí ML cần thiết}
+
+\begin{table}[H]
+\centering
+\caption{Yêu cầu ML Components}
+\label{tab:ml-requirements}
+\begin{tabular}{lll}
+\toprule
+\textbf{Component} & \textbf{Cần ML?} & \textbf{Lý do} \\
+\midrule
+Memory retrieval & Có & Embedding học + xếp hạng \\
+Personality adaptation & Có & Học sở thích \\
+Emotion modeling & Tùy chọn & Quy tắc có thể đủ \\
+Relationship prediction & Có & Mô hình chuỗi \\
+World simulation & Không & Biểu diễn có cấu trúc là đủ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Các Kỹ thuật DL Liên quan}
+
+\begin{enumerate}
+    \item \textbf{Transformers}: Foundation cho tất cả LLM-based approaches
+    \item \textbf{Sequence models (BiLSTM, etc.)}: Cho emotion/relationship trajectory prediction
+    \item \textbf{Graph Neural Networks}: Cho relationship graph reasoning
+    \item \textbf{Contrastive learning}: Cho personality preservation (Persona-Aware Contrastive Learning, ACL 2025)
+\end{enumerate}
+
+% =============================================================================
+% 15. REINFORCEMENT LEARNING

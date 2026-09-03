@@ -1,0 +1,30 @@
+\section{Kết luận}
+
+Bài báo này trình bày nghiên cứu tổng hợp về việc xây dựng AI Character có bản sắc bền vững trong tương tác dài hạn. Từ 79 papers trong 12 domains, chúng tôi rút ra các kết luận chính:
+
+\begin{enumerate}
+    \item \textbf{Hybrid architecture là optimal} --- kết hợp prompt-based baseline với state-based persistence và learned adaptation đạt consistency cao nhất ($\text{ICS}=0.85$).
+
+    \item \textbf{Personality drift là có thật và measurable} --- prompt-only approaches giảm từ 94\% xuống 27\% consistency sau 500 turns. Memory augmentation giúp nhưng chưa đủ (65\% với graph-memory).
+
+    \item \textbf{Memory cần là learning system} --- hybrid vector+graph đạt 91\% F1, nhưng generalization gap (34pp) và forgetting mechanisms là challenges chưa được giải quyết.
+
+    \item \textbf{Relationship có thể model hóa} --- 6 dimensions (Trust, Affection, Familiarity, Respect, Conflict, Intimacy) với Trust là predictor mạnh nhất ($\beta=0.43$--$0.58$).
+
+    \item \textbf{Evaluation là weak point} --- thiếu longitudinal studies, standardized benchmarks, và cross-cultural research.
+\end{enumerate}
+
+Chúng tôi đề xuất Aivora Architecture --- một hybrid framework với 7 modules --- và roadmap 4 phases để implement. Research agenda với 58 gaps được phân loại theo priority cung cấp directional guide cho community.
+
+\textbf{Bottom line}: Character có thể maintain identity trong 180 ngày nếu ICS $>$ 0.80 được maintain qua monitoring, personality drift $<$ 5\%/tháng, memory accuracy $>$ 85\%, và relationship continuity $>$ 0.70.
+
+% =============================================================================
+% REFERENCES
+% =============================================================================
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+% =============================================================================
+% APPENDICES
+% =============================================================================

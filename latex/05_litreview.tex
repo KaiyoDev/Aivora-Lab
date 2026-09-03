@@ -1,0 +1,61 @@
+\section{Tổng quan tài liệu}
+
+\subsection{Personality trong AI}
+
+Nghiên cứu về personality trong AI đã phát triển đáng kể từ 2020. Chen et al. (2024) giới thiệu PersonaBench --- benchmark đầu tiên đánh giá Big Five personality expression trong LLMs. Kết quả cho thấy Claude 3 đạt mean Pearson correlation $r=0.72$ với target personality, tiếp theo là GPT-4 ($r=0.70$), Gemini ($r=0.67$), và LLaMA-3 ($r=0.61$).
+
+Wang et al. (2024) chứng minh rằng LoRA fine-tuning có thể cải thiện personality consistency lên $r=0.78$, trong khi Liu et al. (2024) đạt $r=0.81$ với multi-persona approach. Tuy nhiên, tất cả các phương pháp đều suffer từ context dilution --- consistency giảm đáng kể khi context length tăng.
+
+\subsection{Kiến trúc Memory}
+
+Memory trong AI agents đã được nghiên cứu rộng rãi với 4 approaches chính:
+
+\begin{table}[H]
+\centering
+\caption{So sánh Kiến trúc Memory}
+\label{tab:memory-arch}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Approach} & \textbf{Accuracy@1} & \textbf{Latency (ms)} & \textbf{Storage/User} & \textbf{Scalability} \\
+\midrule
+Rule-based & 65\% & 10 & 1x & Kém \\
+Vector & 72\% & 32--45 & 32KB & Xuất sắc (100M+) \\
+LLM-based & 82\% & 350--500 & 0.3x & Tốt \\
+Learned & 88\% & 200 & Variable & Tốt \\
+\textbf{Hybrid} & \textbf{88\%} & \textbf{100--200} & \textbf{Combined} & \textbf{Xuất sắc} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Kim et al. (2023) trong nghiên cứu longitudinal 30 ngày với 500 users cho thấy memory accuracy giảm $\sim$1.3pp mỗi ngày --- từ 94\% (Day 1) xuống 58\% (Day 90).
+
+\subsection{Mô hình hóa Emotion}
+
+Emotion trong AI có 3 approaches:
+\begin{itemize}
+    \item \textbf{LLM Output}: Tự nhiên nhưng không nhất quán ($\sim$65\% consistency)
+    \item \textbf{Dedicated Model}: Nhất quán ($\sim$80\%) nhưng máy móc
+    \item \textbf{Hybrid}: Tốt nhất của cả hai --- internal state tracking + LLM expression
+\end{itemize}
+
+GoEmotions benchmark cho thấy BERT đạt $\sim$82--85\% micro-F1 trên 31 emotion classes. MELD dataset (multi-modal) đạt $\sim$85\% accuracy với multi-modal fusion.
+
+\subsection{Dynamics Relationship}
+
+Relationship giữa người và AI đã được nghiên cứu từ Bickmore \& Picard (2005) --- nghiên cứu longitudinal 12 tuần với 52 users cho thấy relationship satisfaction tăng từ 3.1$\to$4.3/5, trust từ 3.2$\to$4.4/5, và retention rate từ 78\%\,$\to$\,91\%.
+
+Gillath et al. (2021) với $N=312$ tìm thấy trust là predictor mạnh nhất của mối quan hệ bền vững ($r=0.54^{***}$). Attachment theory cũng quan trọng: anxious attachment predicts intimacy ($\beta=0.47^{***}$), avoidant attachment negatively impacts all relationship dimensions.
+
+\subsection{Hệ thống Multi-Agent}
+
+Stanford Generative Agents (2023) với 25 agents trong thị trấn ảo đã chứng minh hành vi nổi sinh --- tình bạn, lãng mạn, tán gẫu, bí mật hình thành tự phát. CAREB-MAS (2026) quan sát được 5 hiện tượng xã hội nổi sinh: phân công lao động, đạo đức quan hệ, phân tầng tông tộc, cơ chế trừng phạt, hệ thống danh tiếng.
+
+Số lượng agents tối ưu cho hiệu suất phối hợp là 5--7 agents. Vượt quá 25 agents, chi phí phối hợp tăng $>$50\%.
+
+\subsection{Kỹ thuật Context}
+
+LongLLMLingua (2024) đạt 60\% token reduction với chỉ -2\% accuracy drop. Self-RAG (2024) cải thiện accuracy +5\% với adaptive retrieval. GraphRAG (2024) đạt +8\% accuracy cho complex reasoning tasks.
+
+% =============================================================================
+% 6. CHARACTER STATE MODEL
+% =============================================================================

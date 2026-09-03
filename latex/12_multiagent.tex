@@ -1,0 +1,43 @@
+\section{Đa agent}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Khi nhiều Character sống trong cùng một world, interaction có tạo ra emergent behavior không?}
+
+\subsection{Bằng chứng cho Emergence}
+
+\textbf{CÓ} --- bằng chứng mạnh từ:
+\begin{itemize}
+    \item Stanford Generative Agents (2023): 25 agents, 5 emergent phenomena
+    \item CAREB-MAS (2026): Labor specialization, guanxi ethics, clan stratification
+\end{itemize}
+
+\subsection{Kết quả Scaling}
+
+\begin{table}[H]
+\centering
+\caption{Multi-Agent Scaling}
+\label{tab:multi-agent-scale}
+\begin{tabular}{lll}
+\toprule
+\textbf{Agent Count} & \textbf{Coordination Overhead} & \textbf{Qualitative Shift} \\
+\midrule
+5 & Thấp & Không có \\
+7 & Trung bình & Không có \\
+25 & Trung bình-cao & Emergence bắt đầu \\
+100+ & Cao ($>$50\%) & Cấu trúc xã hội mới \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Khuyến nghị Kiến trúc}
+
+\textbf{Hybrid}: Orchestrator + decentralized clusters
+\begin{itemize}
+    \item Central orchestrator handles cross-cluster communication
+    \item Decentralized clusters handle local interactions
+    \item Communication protocol: structured messages + natural language
+\end{itemize}
+
+% =============================================================================
+% 13. CONTEXT ENGINEERING

@@ -1,0 +1,33 @@
+\section{Kỹ thuật context}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Làm thế nào biến Character State + Memory + Relationship + World + Scenario thành context tối ưu cho LLM?}
+
+\subsection{So sánh Methods}
+
+\begin{table}[H]
+\centering
+\caption{Các Phương pháp Context Engineering}
+\label{tab:context-methods}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Method} & \textbf{Token Reduction} & \textbf{Accuracy} & \textbf{Latency} & \textbf{Use Case} \\
+\midrule
+Naive concatenation & 0\% & Baseline & Baseline & Trường hợp đơn giản \\
+LongLLMLingua & 60\% & $-2\%$ & $+20\%$ & Token-constrained \\
+Self-RAG & 40\% & $+5\%$ & $+50\%$ & Retrieval-needed \\
+GraphRAG & 50\% & $+8\%$ & $+80\%$ & Complex reasoning \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Chiến lược Compilation}
+
+\textbf{Thứ tự ưu tiên}: Identity $>$ Personality $>$ Memory $>$ Relationship $>$ World $>$ Scenario
+
+\textbf{Nén}: Kiểu LongLLMLingua cho components ưu tiên thấp
+\textbf{Giữ nguyên}: Chi tiết đầy đủ cho Identity và Personality
+
+% =============================================================================
+% 14. MACHINE LEARNING \& DEEP LEARNING

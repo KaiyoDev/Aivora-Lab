@@ -1,0 +1,37 @@
+\section{Giới thiệu}
+
+\subsection{Bối cảnh}
+
+Sự phát triển của Large Language Models (LLMs) như GPT-4, Claude, và Gemini đã mở ra khả năng tạo ra các AI characters --- những nhân vật ảo có tính cách, bộ nhớ, và khả năng tương tác tự nhiên với con người. Các hệ thống như Character.AI, Replika, và nhiều AI companions khác đang được hàng triệu người dùng trên toàn thế giới sử dụng hàng ngày.
+
+Tuy nhiên, một thách thức cốt lõi vẫn chưa được giải quyết triệt để: \textbf{làm thế nào để duy trì tính nhất quán của character qua thời gian dài?} Khi tương tác kéo dài hàng trăm đến hàng ngàn turns, nhiều hệ thống hiện tại suffers từ personality drift --- character dần mất đi tính cách ban đầu, trở nên "giống hệt" người dùng (mirroring effect), hoặc quên các thông tin quan trọng đã lưu.
+
+\subsection{Vấn đề nghiên cứu}
+
+Bài báo này giải quyết question trung tâm:
+
+\begin{quote}
+\textit{Character thay đổi bao nhiêu vẫn được coi là cùng một Character?}
+\end{quote}
+
+Câu hỏi này đòi hỏi chúng ta phải:
+\begin{enumerate}
+    \item Định nghĩa rõ ràng sự khác biệt giữa \textbf{adaptation} (thay đổi tích cực, experience-based) và \textbf{drift} (thay đổi tiêu cực, unexplained)
+    \item Phát triển các metrics để đo lường và giám sát
+    \item Đề xuất kiến trúc hệ thống có thể maintain identity stability trong khi vẫn cho phép growth
+\end{enumerate}
+
+\subsection{Đóng góp}
+
+Bài báo đóng góp:
+\begin{enumerate}
+    \item \textbf{Research corpus comprehensible} --- tổng hợp 79 papers từ 12 domains, 65 evidence entries
+    \item \textbf{Quantitative baseline} --- các metrics và numbers từ real studies (không synthetic)
+    \item \textbf{Architecture recommendation} --- framework hybrid được evidence-backed
+    \item \textbf{Research agenda} --- 58 gaps được phân loại theo priority (P0/P1/P2)
+    \item \textbf{Evaluation framework} --- ICS (Identity Consistency Score) với thresholds rõ ràng
+\end{enumerate}
+
+% =============================================================================
+% 2. DEFINITION VẤN ĐỀ
+% =============================================================================

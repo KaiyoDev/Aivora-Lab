@@ -1,0 +1,34 @@
+\section{Học liên tục}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Character có thể học trong 180 ngày mà vẫn là cùng một Character?}
+
+\subsection{Trả lời}
+
+\textbf{CÓ}, nếu:
+\begin{itemize}
+    \item ICS maintained $>$ 0.80
+    \item Personality drift $<$ 5\%/tháng
+    \item Memory accuracy $>$ 85\%
+    \item Relationship continuity $>$ 0.70
+\end{itemize}
+
+\subsection{Cơ chế Cần thiết}
+
+\begin{enumerate}
+    \item \textbf{Continual memory consolidation}: Episodic $\to$ Semantic conversion
+    \item \textbf{Drift monitoring}: Regular ICS calculation
+    \item \textbf{Incremental preference learning}: Update mà không overwrite
+    \item \textbf{Identity preservation guardrails}: Hard constraints trên immutable components
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig06-forgetting-curve.pdf}
+\caption{Đường cong forgetting đa task --- Naive FT retention giảm từ 95\% xuống 31\% sau 10 tasks; LoRA duy trì 90\% retention}
+\label{fig:forgetting-curve}
+\end{figure}
+
+% =============================================================================
+% 17. ADAPTATION VS IDENTITY DRIFT

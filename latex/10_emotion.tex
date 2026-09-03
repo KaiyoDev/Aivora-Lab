@@ -1,0 +1,62 @@
+\section{Cảm xúc}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Emotion nên là output của LLM hay một internal state của Character?}
+
+\subsection{So sánh Kiến trúc}
+
+\begin{table}[H]
+\centering
+\caption{So sánh Kiến trúc Emotion}
+\label{tab:emotion-arch}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Approach} & \textbf{Consistency} & \textbf{Naturalness} & \textbf{Complexity} & \textbf{Khuyến nghị} \\
+\midrule
+LLM Output & $\sim$65\% & 4.2/5 & Thấp & Baseline \\
+Dedicated Model & $\sim$80\% & 3.5/5 & Trung bình & Cho tracking \\
+\textbf{Hybrid} & \textbf{$\sim$82\%} & \textbf{4.0/5} & \textbf{Trung bình} & \textbf{Được khuyến nghị} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Benchmarks Emotion Recognition}
+
+\begin{table}[H]
+\centering
+\caption{Hiệu suất Emotion Recognition}
+\label{tab:emotion-bench}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Dataset} & \textbf{Method} & \textbf{Accuracy} & \textbf{F1} & \textbf{Modality} \\
+\midrule
+GoEmotions (31-class) & Fine-tuned BERT & -- & 82--85\% & Text \\
+GoEmotions (6-class) & BERT & $\sim$90\% & -- & Text \\
+MELD & Multi-modal Fusion & $\sim$85\% & $\sim$82\% & Text+Audio+Video \\
+MELD & Text-only BERT & $\sim$78\% & $\sim$75\% & Text \\
+IEMOCAP & CRF + Deep Features & $\sim$72\% & $\sim$70\% & Text+Audio \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Giới hạn Emotion của LLM}
+
+\begin{enumerate}
+    \item \textbf{Positive bias}: LLMs generated emotions are more positive than human counterparts
+    \item \textbf{No persistence}: Mỗi conversation start từ blank emotion state
+    \item \textbf{Context window limit}: Không thể maintain emotion across sessions
+    \item \textbf{Role-play drift}: Emotion consistency degrades over long conversations
+\end{enumerate}
+
+\subsection{Khuyến nghị}
+
+\textbf{Hybrid architecture}:
+\begin{itemize}
+    \item Internal emotion state (valence, arousal, dominance) tracked separately
+    \item LLM responsible for natural language expression
+    \item Dynamics model: accumulation, decay, threshold crossing
+\end{itemize}
+
+% =============================================================================
+% 11. WORLD SIMULATION

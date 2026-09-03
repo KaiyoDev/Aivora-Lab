@@ -1,0 +1,39 @@
+\section{Mô phỏng thế giới}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Character có thể tồn tại trong một world persistent thay vì chỉ phản hồi từng message?}
+
+\subsection{Evidence}
+
+\begin{table}[H]
+\centering
+\caption{So sánh các Hệ thống World Simulation}
+\label{tab:world-sim}
+\begin{tabular}{lllll}
+\toprule
+\textbf{System} & \textbf{Agents} & \textbf{Fidelity} & \textbf{Scalability} & \textbf{Thành tựu chính} \\
+\midrule
+Voyager & 1 & Cao (3.3$\times$ items, 56 skills) & Thấp & Embodied learning \\
+CharacterBox & Variable & Trung bình (78\% consistency @200 turns) & Trung bình & Persistent persona \\
+GenSim & 100,000 & Thấp (depth 3/10) & Xuất sắc & Scale record \\
+CAREB-MAS & Variable & Cao & Trung bình & 5 emergent social phenomena \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tradeoff giữa Scalability và Fidelity}
+
+Hệ scale được (GenSim 100K) thì character nông (depth 3/10). Hệ sâu (Voyager) thì chỉ 1 agent. \textbf{Chưa có solution cân bằng.}
+
+\subsection{Khuyến nghị}
+
+\textbf{Hybrid approach}: Structured core (JSON state) + narrative overlay (text generation). Aivora Lab nên theo hướng này với:
+\begin{itemize}
+    \item External memory store (SQLite)
+    \item Character state serialization
+    \item Spatial partitioning cho multi-agent
+\end{itemize}
+
+% =============================================================================
+% 12. MULTI-AGENT

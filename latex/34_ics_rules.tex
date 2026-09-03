@@ -1,0 +1,26 @@
+\section{Quy tắc tính ICS}
+
+\begin{verbatim}
+def calculate_ics(character_state, memory_system,
+                  relationship_engine, value_store):
+    personality_consistency = measure_big_five_stability(
+        character_state, turns=100)
+    memory_accuracy = measure_recall_accuracy(
+        memory_system, test_set)
+    relationship_continuity = measure_relationship_stability(
+        relationship_engine, period="30d")
+    value_consistency = measure_value_statement_consistency(
+        value_store, turns=50)
+
+    ics = (0.30 * personality_consistency +
+           0.25 * memory_accuracy +
+           0.25 * relationship_continuity +
+           0.20 * value_consistency)
+
+    return ics
+
+def get_status(ics):
+    if ics >= 0.90: return "Xuất sắc"
+    elif ics >= 0.75: return "Tốt"
+    elif ics >= 0.60: return "Cảnh báo"
+    else: return "Nghiêm trọng"

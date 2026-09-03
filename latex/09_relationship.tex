@@ -1,0 +1,76 @@
+\section{Quan hệ}
+
+\subsection{Câu hỏi nghiên cứu}
+
+\textit{Relationship nên được biểu diễn thế nào?}
+
+\subsection{Dimensional Model}
+
+\begin{equation}
+R_t = \{\text{Trust, Affection, Familiarity, Respect, Conflict, Intimacy}\}
+\end{equation}
+
+\subsection{Evidence Summary}
+
+\begin{table}[H]
+\centering
+\caption{Các Predictor của Dimension Relationship}
+\label{tab:relationship-dims}
+\begin{tabular}{lll}
+\toprule
+\textbf{Dimension} & \textbf{Predictor mạnh nhất} & \textbf{Phạm vi Correlation} \\
+\midrule
+Trust & Attachment security & $r=0.43$--$0.58^{***}$ \\
+Affection & Anxious attachment & $\beta=0.47^{***}$ \\
+Familiarity & Interaction frequency & $r=0.61^{***}$ (self-disclosure) \\
+Respect & Reciprocal value alignment & Bằng chứng yếu nhất \\
+Conflict & Error frequency, repair success & $-23$ đến $-37$\% trust per error \\
+Intimacy & Secure attachment + time & $r=0.31$--$0.52^{***}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Dynamic Model}
+
+\begin{equation}
+R_t = f(R_{t-1}, \text{Interaction}_t, \text{Context}_t)
+\end{equation}
+
+với:
+\begin{itemize}
+    \item \textbf{Trust}: Tích lũy chậm, giảm nhanh (asymmetric)
+    \item \textbf{Familiarity}: Tăng nhanh nhất, linear với interaction count
+    \item \textbf{Conflict}: Recovery exponential sau repair attempt
+\end{itemize}
+
+\subsection{Dữ liệu Longitudinal}
+
+Bickmore \& Picard (2005) --- 12 weeks, $N=52$:
+
+\begin{table}[H]
+\centering
+\caption{Kết quả Nghiên cứu Longitudinal 12 Tuần}
+\label{tab:longitudinal-rel}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Tuần} & \textbf{Satisfaction} & \textbf{Trust} & \textbf{Retention} \\
+\midrule
+1 & 3.1/5 & 3.2/5 & 78\% \\
+4 & 3.8/5 & 3.9/5 & 85\% \\
+8 & 4.1/5 & 4.3/5 & 89\% \\
+12 & 4.3/5 & 4.4/5 & 91\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Key insight}: Familiarity increases faster than trust, supporting "familiarity-first" model. 22\% churn trong 2 weeks đầu.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig03-relationship.pdf}
+\caption{Evolution các dimension Relationship --- nghiên cứu longitudinal 12 tuần ($N=52$), trust là dimension tăng chậm nhất nhưng stable nhất}
+\label{fig:relationship-evolution}
+\end{figure}
+
+% =============================================================================
+% 10. EMOTION

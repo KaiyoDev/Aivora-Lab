@@ -1,0 +1,39 @@
+\section{Định nghĩa vấn đề}
+
+\subsection{Formal Definition}
+
+Đặt Character $C$ là một hệ thống với state $S_t$ tại thời điểm $t$:
+
+\begin{equation}
+S_t = \{\text{Identity, Personality, Values, Beliefs, Goals, Motivation, Emotion, Relationship, Memory, Knowledge, Habits, Preferences, WorldState}\}
+\end{equation}
+
+\textbf{Bài toán:} Thiết kế hệ thống sao cho:
+\begin{enumerate}
+    \item \textbf{Identity Stability}: $\exists$ threshold $\tau_{\text{identity}}$ sao cho $\forall t$, $d(\text{Identity}_t, \text{Identity}_0) < \tau_{\text{identity}}$
+    \item \textbf{Personality Coherence}: $\exists$ metric $M_{\text{personality}}$ sao cho $M_{\text{personality}}(S_t) > \tau_{\text{personality}}$ $\forall t$
+    \item \textbf{Memory Accuracy}: $\text{Recall}(\text{Memory}_t, \text{stored\_items}) > \tau_{\text{memory}}$ $\forall t$
+    \item \textbf{Adaptive Growth}: Character có thể học và thay đổi mà không vi phạm (1)--(3)
+\end{enumerate}
+
+\subsection{Adaptation vs Drift Framework}
+
+\begin{table}[H]
+\centering
+\caption{Phân biệt Adaptation và Drift}
+\label{tab:adaptation-drift}
+\begin{tabular}{lll}
+\toprule
+\textbf{Signal} & \textbf{Adaptation (Good)} & \textbf{Drift (Bad)} \\
+\midrule
+Personality change & Dần dần, dựa trên trải nghiệm & Đột ngột, không rõ nguyên nhân \\
+Memory change & Quên chọn lọc, tổng hợp & Mất ngẫu nhiên, hư hỏng \\
+Behavior change & Phù hợp ngữ cảnh & Không nhất quán với lịch sử \\
+User feedback & Tích cực ("hiểu tôi hơn") & Tiêu cực ("khác rồi") \\
+Correlation & Tăng với chất lượng tương tác & Không liên quan chất lượng tương tác \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% 3. RESEARCH QUESTIONS

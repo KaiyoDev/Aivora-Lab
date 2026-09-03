@@ -1,0 +1,70 @@
+\section{Khung đề xuất: Kiến trúc Aivora}
+
+\subsection{Tổng quan}
+
+\begin{figure}[H]
+\centering
+\caption{Sơ đồ Kiến trúc Aivora}
+\label{fig:architecture}
+\begin{tabular}{c}
+\toprule
+\multicolumn{1}{c}{\textbf{LLM Interface}} \\
+\multicolumn{1}{c}{(Claude/GPT/Gemini)} \\
+\midrule
+$\downarrow$ \\
+\multicolumn{1}{c}{\textbf{Context Compiler}} \\
+\multicolumn{1}{c}{(Identity $\to$ Personality $\to$ Memory $\to$ Relationship $\to$ World $\to$ Scenario)} \\
+\midrule
+$\downarrow$ \\
+\multicolumn{1}{c}{\textbf{Character Engine}} \\
+\multicolumn{1}{c}{State Store | Memory Store | Relationship Engine} \\
+\multicolumn{1}{c}{Emotion Controller | Personality Adapter} \\
+\midrule
+$\downarrow$ \\
+\multicolumn{1}{c}{\textbf{Evaluation Monitor}} \\
+\multicolumn{1}{c}{ICS Monitor | Drift Detector | Quality Check} \\
+\bottomrule
+\end{tabular}
+\end{figure}
+
+\subsection{Chi tiết Components}
+
+\begin{table}[H]
+\centering
+\caption{Thông số Components}
+\label{tab:components}
+\begin{tabular}{llll}
+\toprule
+\textbf{Module} & \textbf{Công nghệ} & \textbf{Mục đích} & \textbf{Frequency Update} \\
+\midrule
+State Store & SQLite/JSON & Persist identity, personality, values & Chậm (ngày-tuần) \\
+Memory Store & ChromaDB + Neo4j & Episodic + semantic memory & Liên tục \\
+Relationship Engine & Time-series DB & Track 6 relationship dimensions & Mỗi tương tác \\
+Emotion Controller & State machine + LLM & Internal state + natural expression & Mỗi tương tác \\
+Personality Adapter & LoRA adapter & Fine-tuned persona preservation & Định kỳ (tuần) \\
+Context Compiler & LongLLMLingua-style & Compile state vào optimal context & Mỗi request \\
+Evaluation Monitor & Custom metrics & ICS calculation, drift detection & Every N turns \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Lộ trình Triển khai}
+
+\begin{table}[H]
+\centering
+\caption{Timeline Triển khai}
+\label{tab:roadmap}
+\begin{tabular}{lllc}
+\toprule
+\textbf{Phase} & \textbf{Timeline} & \textbf{Components} & \textbf{Target ICS} \\
+\midrule
+1 & Tháng 1--2 & State Store, Vector Memory, Basic Prompt & $>$0.75 \\
+2 & Tháng 3--4 & Graph Memory, Relationship Engine, Emotion Controller & $>$0.80 \\
+3 & Tháng 5--6 & Personality Adapter, Context Compiler, Evaluation Monitor & $>$0.85 \\
+4 & Tháng 7--12 & RL experiments, Continual Learning, Multi-agent & Research \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% 25. RESEARCH GAPS
