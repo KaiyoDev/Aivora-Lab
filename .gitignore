@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+env/
+.venv/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AI results (internal working drafts — not for public repo)
+ai-results/
+
+# PDF outputs from local builds (generated artifacts)
+pdf_output/
+
+# HTML report (generated)
+research_report.html
+
+# Large binary PDF (report)
+Aivora_Lab_Research_Report_2026.pdf
