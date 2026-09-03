@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aivora Lab — Research Summary</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+      --green: #3fb950; --orange: #d29922; --red: #f85149;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; padding: 2rem; }
+    a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; }
+    header { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    header h1 { font-size: 2rem; margin-bottom: 0.25rem; }
+    header .subtitle { color: var(--muted); font-size: 1.1rem; }
+    .badges { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); background: var(--surface); }
+    .badge.green { border-color: var(--green); color: var(--green); }
+    .badge.blue { border-color: var(--accent); color: var(--accent); }
+    .badge.orange { border-color: var(--orange); color: var(--orange); }
+    section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.4rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 1.1rem; margin: 1.25rem 0 0.5rem; color: var(--accent); }
+    .abstract { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+    .abstract p { margin-bottom: 0.75rem; } .abstract p:last-child { margin-bottom: 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+    th, td { padding: 0.6rem 0.75rem; border: 1px solid var(--border); text-align: left; }
+    th { background: var(--surface); font-weight: 600; }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .num { color: var(--green); font-weight: 700; font-family: monospace; }
+    .arch-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; overflow-x: auto; white-space: pre; line-height: 1.4; color: var(--muted); }
+    .arch-diagram .module { color: var(--accent); } .arch-diagram .em { color: var(--orange); }
+    .figure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1rem 0; }
+    .figure-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
+    .figure-card:hover { border-color: var(--accent); }
+    .figure-card img { width: 100%; height: auto; display: block; }
+    .figure-card .caption { padding: 0.75rem; font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--border); }
+    .figure-card .caption strong { color: var(--text); }
+    .rq-list { list-style: none; }
+    .rq-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+    .rq-list li:last-child { border-bottom: none; }
+    .rq-list .rq-id { display: inline-block; background: var(--accent); color: var(--bg); font-weight: 700; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 4px; margin-right: 0.5rem; vertical-align: middle; }
+    .verdict-ok { color: var(--green); font-weight: 700; }
+    .verdict-warn { color: var(--orange); font-weight: 700; }
+    .verdict-no { color: var(--red); font-weight: 700; }
+    .formula { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; font-family: 'Cambria Math', Georgia, serif; font-size: 1.1rem; text-align: center; margin: 1rem 0; overflow-x: auto; }
+    .pipeline { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
+    .pipeline-step { display: flex; align-items: center; gap: 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 1rem; font-size: 0.9rem; }
+    .pipeline-step .step-num { background: var(--accent); color: var(--bg); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .pipeline-arrow { color: var(--muted); text-align: center; font-size: 1.2rem; }
+    footer { border-top: 1px solid var(--border); padding-top: 1.5rem; color: var(--muted); font-size: 0.85rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    footer a { color: var(--accent); }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-size: 0.85rem; color: var(--muted); overflow-x: auto; }
+    @media (max-width: 600px) { body { padding: 1rem; } header h1 { font-size: 1.5rem; } .figure-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Aivora Lab</h1>
+      <p class="subtitle">
+        Xây Dựng AI Character Có Bản Sắc Bền Vững Trong Tương Tác Dài Hạn<br/>
+        <span style="font-size:0.9rem;">Nghiên cứu tổng hợp khoa học &mdash; Aivora Research Division</span>
+      </p>
+      <div class="badges">
+        <span class="badge blue">LaTeX Paper</span>
+        <span class="badge green">7 Figures</span>
+        <span class="badge orange">12 Domains</span>
+        <span class="badge">MIT License</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>Tóm tắt</h2>
+      <div class="abstract">
+        <p>AI Character đang trở thành một lớp ứng dụng phổ biến (Character.AI, Replika, ...), tuy nhiên vẫn chưa có framework nghiên cứu hệ thống nào trả lời được câu hỏi cốt lõi: <strong>&ldquo;Character thay đổi bao nhiêu vẫn được coi là cùng một Character?&rdquo;</strong></p>
+        <p>Bài báo này tổng hợp <strong>79 paper</strong> từ <strong>12 domain</strong> nghiên cứu, trích xuất <strong>65 evidence entries</strong> và <strong>47 quantitative results</strong>, sau đó đề xuất <strong>Aivora Architecture</strong> &mdash; một hybrid framework 7 module kết hợp prompt-based baseline với state-based persistence và learned adaptation.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kết quả chính</h2>
+      <table>
+        <thead><tr><th>Phát hiện</th><th>Con số</th><th>Nguồn</th></tr></thead>
+        <tbody>
+          <tr><td>Personality drift &mdash; prompt-only giảm sau 500 turns</td><td class="num">94% &rarr; 27% (&minus;67 pp)</td><td>Persona-consistency benchmarks (2024&ndash;2025)</td></tr>
+          <tr><td>Hybrid architecture đạt ICS cao nhất</td><td class="num">ICS = 0.85</td><td>Cross-model synthesis</td></tr>
+          <tr><td>Hybrid memory (vector + graph + LLM-rerank)</td><td class="num">F1 = 91%</td><td>LongMemEval / LifeBench</td></tr>
+          <tr><td>Emotion consistency &mdash; hybrid internal state</td><td class="num">82% / 4.0&#9733;</td><td>Emotion modeling studies</td></tr>
+          <tr><td>Trust &mdash; predictor mạnh nhất Relationship</td><td class="num">&beta; = 0.43&ndash;0.58</td><td>Relationship dynamics papers</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Figures</h2>
+      <div class="figure-grid">
+        <div class="figure-card">
+          <img src="figures/fig01-personality-drift.png" alt="Personality Drift over Turns" loading="lazy"/>
+          <div class="caption"><strong>Fig 1.</strong> Personality drift giảm từ 94% (turn 10) xuống 27% (turn 500) với prompt-only.</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig02-memory-comparison.png" alt="Memory Architecture Comparison" loading="lazy"/>
+          <div class="caption"><strong>Fig 2.</strong> So sánh 4 kiến trúc memory &mdash; Hybrid đạt F1 cao nhất (91%).</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig03-relationship.png" alt="Relationship Dimension Radar" loading="lazy"/>
+          <div class="caption"><strong>Fig 3.</strong> Radar 6 dimensions: Trust, Affection, Familiarity, Respect, Conflict, Intimacy.</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig04-ics-pie.png" alt="ICS Score Distribution" loading="lazy"/>
+          <div class="caption"><strong>Fig 4.</strong> Ph&acirc;n bố ICS score theo kiến tr&uacute;c &mdash; Architecture C nổi bật.</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig05-arch-heatmap.png" alt="Architecture Heatmap" loading="lazy"/>
+          <div class="caption"><strong>Fig 5.</strong> Heatmap 10 ti&ecirc;u ch&iacute; &times; 5 architectures &mdash; Architecture C thắng.</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig06-forgetting-curve.png" alt="Forgetting Curve" loading="lazy"/>
+          <div class="caption"><strong>Fig 6.</strong> Forgetting curve &mdash; memory retention qua thời gian.</div>
+        </div>
+        <div class="figure-card">
+          <img src="figures/fig07-gaps-distribution.png" alt="Research Gaps Distribution" loading="lazy"/>
+          <div class="caption"><strong>Fig 7.</strong> Ph&acirc;n bố research gaps theo priority (P0/P1/P2).</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Aivora Architecture</h2>
+      <div class="arch-diagram"><span class="em">┌──────────────────────────────────────────────────────────────┐</span>
+<span class="em">│</span>                    <span class="module">Aivora Architecture</span>                      <span class="em">│</span>
+<span class="em">├──────────┬──────────┬──────────┬──────────┬──────────┬───────┤</span>
+<span class="em">│</span> <span class="module">State    </span><span class="em">│</span> <span class="module">Memory   </span><span class="em">│</span> <span class="module">Relation </span><span class="em">│</span> <span class="module">Emotion  </span><span class="em">│</span> <span class="module">Person </span> <span class="em">│</span><span class="module">Context</span><span class="em">│</span>
+<span class="em">│</span> <span class="module">Store   </span><span class="em">│</span> <span class="module">Store   </span><span class="em">│</span> <span class="module">Engine  </span><span class="em">│</span> <span class="module">Control </span><span class="em">│</span> <span class="module">ality </span> <span class="em">│</span><span class="module">Comp.</span> <span class="em">│</span>
+<span class="em">│</span>  (SS)    <span class="em">│</span>  (MS)    <span class="em">│</span>  (RE)    <span class="em">│</span>  (EC)    <span class="em">│</span>  (PA)   <span class="em">│</span>  (CC)  <span class="em">│</span>
+<span class="em">├──────────┴──────────┴──────────┴──────────┴──────────┴───────┤</span>
+<span class="em">│</span>           <span class="module">Evaluation Monitor (EM)</span> &mdash; continuous feedback      <span class="em">│</span>
+<span class="em">└──────────────────────────────────────────────────────────────┘</span></div>
+
+      <h3>5 Kiến tr&uacute;ch được so s&aacute;nh</h3>
+      <table>
+        <thead><tr><th>Architecture</th><th>Components</th><th>ICS</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>LLM + Prompt only</td><td class="num" style="color:var(--red)">~0.27</td><td class="verdict-no">&#10060; Reject</td></tr>
+          <tr><td>B</td><td>LLM + Memory (vector)</td><td class="num" style="color:var(--orange)">~0.65</td><td class="verdict-warn">&#9888; Conditions</td></tr>
+          <tr style="background:rgba(56,139,253,0.08)"><td><strong>C</strong></td><td><strong>LLM + Memory + Relationship + State</strong></td><td class="num"><strong>~0.85</strong></td><td class="verdict-ok">&#9989; Recommended</td></tr>
+          <tr><td>D</td><td>LLM + Memory + State + Learned</td><td class="num">TBD</td><td>Phase 2</td></tr>
+          <tr><td>E</td><td>LLM + Memory + State + RL + Graph + CL</td><td class="num">TBD</td><td>Long-term</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Identity Consistency Score (ICS)</h2>
+      <div class="formula">ICS = 0.30 &middot; P<sub>consist</sub> + 0.25 &middot; M<sub>recall</sub> + 0.25 &middot; R<sub>stability</sub> + 0.20 &middot; V<sub>consist</sub></div>
+      <table>
+        <thead><tr><th>ICS Range</th><th>Level</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="num">&#8805; 0.90</td><td>Xuất sắc</td><td>Tiếp tục vận hành</td></tr>
+          <tr><td class="num">0.75 &ndash; 0.89</td><td>Tốt</td><td>Gi&aacute;m s&aacute;t định kỳ</td></tr>
+          <tr><td class="num">0.60 &ndash; 0.74</td><td>C&aacute;nh b&aacute;o</td><td>K&iacute;ch hoạt adaptation</td></tr>
+          <tr><td class="num">&lt; 0.60</td><td>Nghi&ecirc;m trọng</td><td>C&aacute;nh b&aacute;o drift, can thiệp</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>14 Research Questions</h2>
+      <ul class="rq-list">
+        <li><span class="rq-id">RQ1</span> Làm thế nào m&ocirc; h&igrave;nh h&oacute;a AI Character để duy tr&igrave; danh t&iacute;nh xuy&ecirc;n suốt?</li>
+        <li><span class="rq-id">RQ2</span> Làm thế nào duy tr&igrave; personality consistency qua nhiều tương t&aacute;c?</li>
+        <li><span class="rq-id">RQ3</span> Memory system n&ecirc;n được thiết kế thế n&agrave;o?</li>
+        <li><span class="rq-id">RQ4</span> Cơ chế x&acirc;y dựng relationship giữa Character v&agrave; user?</li>
+        <li><span class="rq-id">RQ5</span> Emotion n&ecirc;n l&agrave; output hay internal state?</li>
+        <li><span class="rq-id">RQ6</span> World simulation c&oacute; cần thiết kh&ocirc;ng?</li>
+        <li><span class="rq-id">RQ7</span> Multi-agent interaction tạo emergent behavior?</li>
+        <li><span class="rq-id">RQ8</span> Context engineering cho character state?</li>
+        <li><span class="rq-id">RQ9</span> Model independence &mdash; consistency across LLMs?</li>
+        <li><span class="rq-id">RQ10</span> Development environment cho character harness?</li>
+        <li><span class="rq-id">RQ11</span> Evaluation methodology?</li>
+        <li><span class="rq-id">RQ12</span> Human user experience?</li>
+        <li><span class="rq-id">RQ13</span> Safety, privacy, user control?</li>
+        <li><span class="rq-id">RQ14</span> Long-term interaction challenges?</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Research Pipeline</h2>
+      <div class="pipeline">
+        <div class="pipeline-step"><span class="step-num">1</span> Literature search (12 domains, 79 papers)</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">2</span> Evidence extraction (65 entries)</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">3</span> Normalization &amp; conflict detection</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">4</span> Cross-model synthesis</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">5</span> Architecture comparison (5 alternatives)</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">6</span> Hypothesis generation</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">7</span> Experiment design (Phase 1&ndash;4 roadmap)</div>
+        <div class="pipeline-arrow">&#8595;</div>
+        <div class="pipeline-step"><span class="step-num">8</span> Final paper &rarr; LaTeX submission</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Repository Structure</h2>
+      <pre>aivora-lab/
+├── README.md                 &mdash; T&agrave;i liệu ch&iacute;nh
+├── latex/                    &mdash; Source LaTeX b&agrave;i b&aacute;o
+│   ├── main.tex              &mdash; Văn bản ch&iacute;nh (1448 d&ograve;ng)
+│   ├── references.bib        &mdash; 70 BibTeX entries
+│   &mdash; figures/                &mdash; 7 figure PNG+PDF
+├── figures/                  &mdash; Figure PNG+PDF (7 cặp)
+├── research/                 &mdash; Research notes &amp; questions
+├── evidence/                 &mdash; Evidence database
+├── synthesis/                &mdash; Tổng hợp ph&acirc;n t&iacute;ch
+├── papers/                   &mdash; 12 topic papers
+├── experiments/              &mdash; Không gian th&iacute; nghiệm
+├── manuscript/               &mdash; Phiên bản manuscript
+&mdash; scripts/                  &mdash; Python build scripts</pre>
+    </section>
+
+    <footer>
+      <span>Aivora Lab &middot; September 2026 &middot; KaiyoDev</span>
+      <span>
+        <a href="https://github.com/KaiyoDev/Aivora-Lab">GitHub Repo</a> &middot;
+        <a href="https://github.com/KaiyoDev/Aivora-Lab/blob/master/latex/main.tex">LaTeX Source</a>
+      </span>
+    </footer>
+  </div>
+</body>
+</html>
