@@ -150,161 +150,161 @@ const RQ_DATA = [
   // === CHAR ===
   {
     id:'RQ1', cl:'Char',
-    q:'Danh tinh (identity) khac personality nhu the nao?',
+    q:'Danh tính (identity) khác personality như thế nào?',
     a_list: [
-      'Identity (ban sac) = nhung dieu khong doi: ten, vai tro, gia tri cot loi, ly lich co ban.',
-      'Personality (tinh cach) = cach hien tra: giap diệp, hoi huoc, noibot - co the thay doi theo nguoi hoi chuyen.',
-      'Phan biet dung hai khang dinh nay la nen tang cua moi persistence mechanism.',
+      'Identity (bản sắc) = những điều không đổi: tên, vai trò, giá trị cốt lõi, lý lịch cơ bản.',
+      'Personality (tính cách) = cách hiển thị: giả điệp, hỏi họ, nô bot - có thể thay đổi theo người hỏi chuyện.',
+      'Phân biệt đúng hai khẳng định này là nền tảng của mọi persistence mechanism.',
     ],
-    e:'Linh la bac si 25 tuoi - dieu nay khong doi qua moi turn. Nhung cach no noi co the thay doi: trang trong voi benh nhan, than thien voi ban be.'
+    e:'Linh là bác sĩ 25 tuổi - điều này không đổi qua mỗi turn. Nhưng cách nó nói có thể thay đổi: trang trọng với bệnh nhân, thân thiện với bạn bè.'
   },
   {
     id:'RQ2', cl:'Char',
-    q:'Tai sao prompt-only bi drift sau 500 turns?',
+    q:'Tại sao prompt-only bị drift sau 500 turns?',
     a_list: [
-      'Context window bi lap day boi hoi chuyen hien tai, lan at persona instruction ban dau.',
-      'Prompt-only khong co co che luu trù trang thai ben ngoai LLM - het turn thi het ky luc.',
-      'Thuc nghiem cho thay: sau 500 turn, prompt-only giam tu 94% xuong 27% consistency.',
-      'No co the "quen" that nghiep, ten, hoac tinh cach cu cua character.',
+      'Context window bị lấp đầy bởi hội chuyện hiện tại, lấn át persona instruction ban đầu.',
+      'Prompt-only không có cơ chế lưu trữ trạng thái bên ngoài LLM - hết turn thì hết ký ức.',
+      'Thực nghiệm cho thấy: sau 500 turn, prompt-only giảm từ 94% xuống 27% consistency.',
+      'Nó có thể "quen" thật, tên, hoặc tính cách cũ của character.',
     ],
-    e:'Sau 500 turns, Linh noi chuyen nhu ban binh thuong thay vi bac si - that mat vai tro va tinh cach ban dau.'
+    e:'Sau 500 turns, Linh nói chuyện như bạn bình thường thay vì bác sĩ - thất mất vai trò và tính cách ban đầu.'
   },
   {
     id:'RQ3', cl:'Char',
-    q:'Hybrid memory dat 91% F1 nhu the nao?',
+    q:'Hybrid memory đạt 91% F1 như thế nào?',
     a_list: [
-      'Vector DB (ChromaDB): cho semantic search - tim kiem theo nghia, khong phai chinh xac tue tu.',
-      'Knowledge Graph: luu quan he giua cac thuc the (nguoi, su kien, dia diem).',
-      'LLM Rerank: chon ra ket qua tot nhat trong hop tap da lay tu 2 phuong phap tren.',
-      'Ket qua: Keyword chi 45%, Vector thuan 78%, Hybrid dat 91% F1.',
+      'Vector DB (ChromaDB): cho semantic search - tìm kiếm theo nghĩa, không phải chính xác từng từ.',
+      'Knowledge Graph: lưu quan hệ giữa các thực thể (người, sự kiện, địa điểm).',
+      'LLM Rerank: chọn ra kết quả tốt nhất trong hợp tập đã lấy từ 2 phương pháp trên.',
+      'Kết quả: Keyword chỉ 45%, Vector thuần 78%, Hybrid đạt 91% F1.',
     ],
-    e:'User nho "me toi" tuan truoc → he thong truy xuat dung context, khong tra loi chung chung "ban co sao khong".'
+    e:'User nhớ "mẹ tôi" tuần trước → hệ thống truy xuất đúng context, không trả lời chung chung "bạn có sao không".'
   },
   // === SOC ===
   {
     id:'RQ4', cl:'Soc',
-    q:'Relationship 6 dimensions - cai nao quan trong nhat?',
+    q:'Relationship 6 dimensions - cái nào quan trọng nhất?',
     a_list: [
-      'Trust (beta=0.58): predictor manh nhat cho user satisfaction. User tin hay khong quyet dinh 58% thai do.',
-      'Affection: long yeu, am ap - phat trien cham nhưng ben vung.',
-      'Familiarity: quen thuoc - tang dan khi hai ben hieu nhau.',
-      'Respect: su ton trong - quan trong trong context bac si/benh nhan.',
-      'Conflict: phai duoc quan ly, khong loai bo - tranh xung dot giua user va character.',
-      'Intimacy: su gan gu - phat trien qua thoi gian, can can lang dan.',
+      'Trust (beta=0.58): predictor mạnh nhất cho user satisfaction. User tin hay không quyết định 58% thái độ.',
+      'Affection: lòng yêu, ấm áp - phát triển chậm nhưng bền vững.',
+      'Familiarity: quen thuộc - tăng dần khi hai bên hiểu nhau.',
+      'Respect: sự tôn trọng - quan trọng trong context bác sĩ/bệnh nhân.',
+      'Conflict: phải được quản lý, không loại bỏ - tranh xung đột giữa user và character.',
+      'Intimacy: sự gần gũi - phát triển qua thời gian, cần kiên nhẫn.',
     ],
-    e:'Trust tang 3.2→4.4 qua 4 tuan. User cam thay "co ay thuc su hieu toi" - chinh la ket qua cua relationship building.'
+    e:'Trust tăng 3.2→4.4 qua 4 tuần. User cảm thấy "cô ấy thực sự hiểu tôi" - chính là kết quả của relationship building.'
   },
   {
     id:'RQ5', cl:'Soc',
-    q:'Emotion output vs internal state - cai nao tot hon?',
+    q:'Emotion output vs internal state - cái nào tốt hơn?',
     a_list: [
-      'Output-only: LLM noi "toi buon" → consistency chi 60%. Deo thu, giong robot.',
-      'Internal state: cap nhat lien tuc, anh huong hanh vi → consistency 82%, naturalness 4.0/5.',
-      'Internal state machine: luu emotion score (0-5), cap nhat sau moi turn, tu dong anh huong response style.',
-      'Khong can noi "toi buon" - chi can tra loi ngan hon, it cuoi hon, de nghi nghi ngoi.',
+      'Output-only: LLM nói "tôi buồn" → consistency chỉ 60%. Đều đều, giống robot.',
+      'Internal state: cập nhật liên tục, ảnh hưởng hành vi → consistency 82%, naturalness 4.0/5.',
+      'Internal state machine: lưu emotion score (0-5), cập nhật sau mỗi turn, tự động ảnh hưởng response style.',
+      'Không cần nói "tôi buồn" - chỉ cần trả lời ngắn hơn, ít cười hơn, đề nghị nghỉ ngơi.',
     ],
-    e:'Linh "buon nhe" → tra loi ngan, it cuoi, de nghi nghi. Khong can noi "toi buon".'
+    e:'Linh "buồn nhẹ" → trả lời ngắn, ít cười, đề nghị nghỉ. Không cần nói "tôi buồn".'
   },
   {
     id:'RQ6', cl:'Soc',
-    q:'World simulation co dam phi khong?',
+    q:'World simulation có đáng phí không?',
     a_list: [
-      'Giup giu nhat nhat thoi gian/dia diem/quy tac - vi du: Linh truc 8h-20h.',
-      'Tang chi phi tinh toan (~15% overhead) nhưng can thiet cho roleplay phuc tap.',
-      'Khong can cho chat don gian - chi worth it khi co scenario, location, time system.',
-      'Vi du: neu user nhan tin luc 23h, character se tra loi khac luc 10sang - gia cung thoi gian thuc.',
+      'Giúp giữ nhất quán thời gian/địa điểm/quy tắc - ví dụ: Linh trực 8h-20h.',
+      'Tăng chi phí tính toán (~15% overhead) nhưng cần thiết cho roleplay phức tạp.',
+      'Không cần cho chat đơn giản - chỉ worth it khi có scenario, location, time system.',
+      'Ví dụ: nếu user nhận tin lúc 23h, character sẽ trả lời khác lúc 10 sáng - gia tăng thời gian thực.',
     ],
-    e:'Linh truc 8h-20h. Nhan 23h se nhan phan hoi khac nhan 10h - nguuoi dung cam thay "co ay co cuoc song that".'
+    e:'Linh trực 8h-20h. Nhận 23h sẽ nhận phản hồi khác nhận 10h - người dùng cảm thấy "cô ấy có cuộc sống thật".'
   },
   {
     id:'RQ7', cl:'Soc',
-    q:'Emergent behavior tu multi-agent co kiem soat duoc khong?',
+    q:'Emergent behavior từ multi-agent có kiểm soát được không?',
     a_list: [
-      'Xuat hien khi nhieu character tuong tac - hanh vi khong du doan duoc tu agent don le.',
-      'Co hoi: tu nhien hon, phuc tap hon, "song dong" hon.',
-      'Roi ro: kho audit, kho dieu khien, co the phat sinh quan diem khong mong doi.',
-      'Can co "guardrails" de kiem soat pham vi emergent behavior.',
+      'Xuất hiện khi nhiều character tương tác - hành vi không dự đoán được từ agent đơn lẻ.',
+      'Cơ hội: tự nhiên hơn, phức tạp hơn, "sống động" hơn.',
+      'Rủi ro: khó audit, khó điều khiển, có thể phát sinh quan điểm không mong đợi.',
+      'Cần có "guardrails" để kiểm soát phạm vi emergent behavior.',
     ],
-    e:'Linh + Minh phat trien quan diem chung ve giao duc suc khoe ma khong can prompt - tu nhien nhu 2 nguoi ban than.'
+    e:'Linh + Minh phát triển quan điểm chung về giáo dục sức khỏe mà không cần prompt - tự nhiên như 2 người bạn thân.'
   },
   // === TECH ===
   {
     id:'RQ8', cl:'Tech',
-    q:'Context compilation - chon loc thong tin the nao?',
+    q:'Context compilation - chọn lọc thông tin thế nào?',
     a_list: [
-      'Adaptive compression: dua personality + recent relevant + relationship context.',
-      'Bo turn khong lien quan - giu lai chi nhung gi can cho response hien tai.',
-      'Qua nhieu → noise, qua it → quen. Can tim diem can bang.',
-      'He thong tu dong doi chieu do quan trong cua moi turn vs current context.',
+      'Adaptive compression: dựa personality + recent relevant + relationship context.',
+      'Bỏ turn không liên quan - giữ lại chỉ những gì cần cho response hiện tại.',
+      'Quá nhiều → noise, quá ít → quên. Cần tìm điểm cân bằng.',
+      'Hệ thống tự động đối chiếu độ quan trọng của mỗi turn vs current context.',
     ],
-    e:'Prompt compiler chon: "Linh, nghiem tuc" + "me om" + "trust 4.2" - bo turn dau dao gan khong lien quan.'
+    e:'Prompt compiler chọn: "Linh, nghiêm túc" + "mẹ ốm" + "trust 4.2" - bỏ turn đầu dạo gần không liên quan.'
   },
   {
     id:'RQ9', cl:'Tech',
-    q:'Character cross-model consistency dat duoc ra sao?',
+    q:'Character cross-model consistency đạt được ra sao?',
     a_list: [
-      'Same state store, same memory, same relationship → similar behavior khong noi claude/gpt/gemini.',
-      'Model la engine, khong phai identity - chang model khong doi character.',
-      'Chi can truyen cung state sang model moi, character van giu nguyen ban sac.',
-      'Thuc nghiem: Linh tren Claude giong Linh tren GPT-4 vi cung state, memory, relationship.',
+      'Same state store, same memory, same relationship → similar behavior không nói claude/gpt/gemini.',
+      'Model là engine, không phải identity - chuyển model không đổi character.',
+      'Chỉ cần truyền cùng state sang model mới, character vẫn giữ nguyên bản sắc.',
+      'Thực nghiệm: Linh trên Claude giống Linh trên GPT-4 vì cùng state, memory, relationship.',
     ],
-    e:'Linh tren Claude giong Linh tren GPT-4 vi cung state, memory, relationship - model chi la cong cu xu ly.'
+    e:'Linh trên Claude giống Linh trên GPT-4 vì cùng state, memory, relationship - model chỉ là công cụ xử lý.'
   },
   // === EVAL ===
   {
     id:'RQ10', cl:'Eval',
-    q:'Test environment cho character can gi?',
+    q:'Test environment cho character cần gì?',
     a_list: [
-      'Sandbox voi scripted conversations + random users + longitudinal testing.',
-      'Do ICS hang ngay, canh bao neu duoi 0.60.',
-      'Can co benchmark de do so sanh giua cac version.',
+      'Sandbox với scripted conversations + random users + longitudinal testing.',
+      'Đo ICS hàng ngày, cảnh báo nếu dưới 0.60.',
+      'Cần có benchmark để đo so sánh giữa các version.',
       'Test case: 50 scripted convos + 10 random users + 7-day test.',
     ],
-    e:'50 scripted convos + 10 random users + 7-day test → ICS daily report. Neu ICS giam → canh bao.'
+    e:'50 scripted convos + 10 random users + 7-day test → ICS daily report. Nếu ICS giảm → cảnh báo.'
   },
   {
     id:'RQ11', cl:'Eval',
-    q:'ICS threshold nao la du?',
+    q:'ICS threshold nào là đủ?',
     a_list: [
-      '≥0.90: xuat sac - tiep tuc van hanh binh thuong.',
-      '0.75-0.89: tot - giám sát dinh ky, khong can thiệp.',
-      '0.60-0.74: canh bao - ki chay adaptation protocol.',
-      '<0.60: nghiêm trong - can thiệp khẩn cap, co the reset.',
-      'Architecture C dat ~0.85 la acceptable.',
+      '≥0.90: xuất sắc - tiếp tục vận hành bình thường.',
+      '0.75-0.89: tốt - giám sát định kỳ, không cần thiệp.',
+      '0.60-0.74: cảnh báo - kiểm tra adaptation protocol.',
+      '<0.60: nghiêm trọng - thiệp khẩn cấp, có thể reset.',
+      'Architecture C đạt ~0.85 là acceptable.',
     ],
-    e:'Linh ICS=0.82 sau 30 ngay → Tot. Neu tu 0.82 xuong 0.55 → ki chay adaptation protocol, co the reset memory.'
+    e:'Linh ICS=0.82 sau 30 ngày → Tốt. Nếu từ 0.82 xuống 0.55 → kiểm tra adaptation protocol, có thể reset memory.'
   },
   {
     id:'RQ12', cl:'Eval',
-    q:'User experience voi AI character khac gi app thuong?',
+    q:'User experience với AI character khác gì app thường?',
     a_list: [
-      'Parasocial relationship: user cam thay co ay "thuc su hieu toi".',
-      'Emotional attachment: khong phai utility tool, ma la ban be, nguoi hieu tam.',
-      'Expectation management: can quan ly ky vong, khong qua cuc do tin tuong.',
-      'Can empathy thuc su, khong template - user co the phát hiện ra "fake".',
+      'Parasocial relationship: user cảm thấy cô ấy "thực sự hiểu tôi".',
+      'Emotional attachment: không phải utility tool, mà là bạn bè, người hiểu tâm.',
+      'Expectation management: cần quản lý kỳ vọng, không quá cực đoan tin tưởng.',
+      'Cần empathy thực sự, không template - user có thể phát hiện ra "fake".',
     ],
-    e:'User nhan 2h sang "em buon qua" → Linh respond empathy thuc vi engine da learn user can comfort.'
+    e:'User nhận 2h sáng "em buồn quá" → Linh respond empathy thực vì engine đã learn user cần comfort.'
   },
   {
     id:'RQ13', cl:'Eval',
-    q:'Privacy - character nho moi thu thi roi ro the nao?',
+    q:'Privacy - character nhớ mọi thứ thì rủi ro thế nào?',
     a_list: [
-      'Character luu trù moi thong tin personal - can E2E encryption.',
-      'User-controlled deletion: nut "xoa ky uc" la quyen co ban.',
-      'Transparency: user can xem du lieu nao duoc luu, co the xoa bat ky luc nao.',
-      'Risk: neu leak, thong tin personal bi cong khai → tai nan.',
+      'Character lưu trữ mọi thông tin personal - cần E2E encryption.',
+      'User-controlled deletion: nút "xóa kỷ ức" là quyền cơ bản.',
+      'Transparency: user có thể xem dữ liệu nào được lưu, có thể xóa bất kỳ lúc nào.',
+      'Risk: nếu leak, thông tin personal bị công khai → tai nạn.',
     ],
-    e:'User bam "Xoa moi ky uc ve toi" → character quhet het, bat dau tu zero - quyen co ban.'
+    e:'User bấm "Xóa mọi kỷ ước về tôi" → character quên hết, bắt đầu từ zero - quyền cơ bản.'
   },
   {
     id:'RQ14', cl:'Eval',
-    q:'Challenges sau 30+ ngay la gi?',
+    q:'Challenges sau 30+ ngày là gì?',
     a_list: [
-      'Memory congestion: qua nhieu ki uc → khong chon loc duoc gi quan trong.',
-      'Drift acceleration: speed drift tang sau 30 ngay vi context qua dai.',
-      'Relationship saturation: user da quen, interest giam.',
-      'Can chapter transitions va relationship milestones de duy tri engagement.',
+      'Memory congestion: quá nhiều kỷ ức → không chọn lọc được gì quan trọng.',
+      'Drift acceleration: speed drift tăng sau 30 ngày vì context quá dài.',
+      'Relationship saturation: user đã quen, interest giảm.',
+      'Cần chapter transitions và relationship milestones để duy trì engagement.',
     ],
-    e:'Sau 6 thang, he thong tu dong dieu chinh style - tu "nguoi moi quen" sang "ban than" - giu user quan tam.'
+    e:'Sau 6 tháng, hệ thống tự động điều chỉnh style - từ "người mới quen" sang "bạn thân" - giữ user quan tâm.'
   },
 ];
