@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aivora Lab — AI Character Identity Persistence Research" />
+  <title>Aivora Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0a0e1a', surface: '#111827', surface2: '#1a2236',
+            border: '#1e2a45', text: '#e2e8f0', muted: '#94a3b8', dim: '#64748b',
+            accent: '#60a5fa', green: '#34d399', orange: '#fbbf24', red: '#f87171', purple: '#a78bfa',
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0a0e1a; color: #e2e8f0; font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; }
+    .grad { background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card { background: #111827; border: 1px solid #1e2a45; border-radius: 16px; padding: 1.5rem; transition: border-color .2s, box-shadow .2s; }
+    .card:hover { border-color: rgba(96,165,250,.3); }
+    .glow-blue   { box-shadow: 0 0 60px rgba(96,165,250,.12), inset 0 1px 0 rgba(96,165,250,.08); }
+    .glow-green  { box-shadow: 0 0 60px rgba(52,211,153,.12), inset 0 1px 0 rgba(52,211,153,.08); }
+    .glow-purple { box-shadow: 0 0 60px rgba(167,139,250,.15), inset 0 1px 0 rgba(167,139,250,.08); }
+    .badge { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .65rem; border-radius: 9999px; font-size: .7rem; font-weight: 600; border: 1px solid; background: transparent; }
+    .badge-blue   { border-color: rgba(96,165,250,.3); color: #60a5fa; background: rgba(96,165,250,.08); }
+    .badge-green  { border-color: rgba(52,211,153,.3); color: #34d399; background: rgba(52,211,153,.08); }
+    .badge-orange { border-color: rgba(251,191,36,.3); color: #fbbf24; background: rgba(251,191,36,.08); }
+    .badge-purple { border-color: rgba(167,139,250,.3); color: #a78bfa; background: rgba(167,139,250,.08); }
+    .formula { background: #111827; border: 1px solid rgba(167,139,250,.3); border-radius: 12px; padding: 1.25rem; font-family: 'Cambria Math', Georgia, serif; font-size: 1.15rem; text-align: center; color: #a78bfa; overflow-x: auto; }
+    .arch-node { display: flex; flex-direction: column; align-items: center; padding: 1rem; background: #111827; border: 1px solid; border-radius: 12px; transition: transform .15s, box-shadow .15s; }
+    .arch-node:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+    .rq-card { background: #111827; border: 1px solid #1e2a45; border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+    .rq-card:hover { border-color: rgba(96,165,250,.3); }
+    .rp-example { background: #1a2236; border: 1px solid #1e2a45; border-radius: 12px; padding: 1rem; }
+    .rp-user { background: rgba(96,165,250,.08); border-left: 3px solid #60a5fa; padding: .6rem .75rem; border-radius: 0 8px 8px 0; margin-bottom: .5rem; font-size: .9rem; }
+    .rp-ai   { background: rgba(167,139,250,.08); border-left: 3px solid #a78bfa; padding: .6rem .75rem; border-radius: 0 8px 8px 0; margin-bottom: .5rem; font-size: .9rem; }
+    .rp-sys  { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: #64748b; padding: .4rem .6rem; background: rgba(0,0,0,.3); border-radius: 6px; }
+    .tab-btn { padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; font-weight: 500; cursor: pointer; transition: all .15s; border: 1px solid transparent; background: #111827; color: #94a3b8; }
+    .tab-btn.active { background: rgba(96,165,250,.15); color: #60a5fa; border-color: rgba(96,165,250,.3); }
+    .pipe-step { display: flex; align-items: center; gap: .75rem; background: #111827; border: 1px solid #1e2a45; border-radius: 10px; padding: .85rem 1rem; }
+    .pipe-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(96,165,250,.15); border: 1px solid rgba(96,165,250,.4); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; flex-shrink: 0; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp .5s ease both; }
+    @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:.7} }
+    .pulse { animation: pulse 3s ease-in-out infinite; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0e1a; }
+    ::-webkit-scrollbar-thumb { background: #1e2a45; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th, td { padding: .6rem .75rem; text-align: left; border-bottom: 1px solid #1e2a45; }
+    th { color: #94a3b8; font-weight: 600; }
+    td:first-child { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+    .expand-content { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .expand-content.open { max-height: 800px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
+  <div class="absolute inset-0 opacity-20" style="background-image:linear-gradient(rgba(96,165,250,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(96,165,250,.06) 1px,transparent 1px);background-size:60px 60px"></div>
+  <div class="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl pulse" style="background:rgba(96,165,250,.1)"></div>
+  <div class="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl pulse" style="background:rgba(167,139,250,.1);animation-delay:1.5s"></div>
+  <div class="relative z-10 text-center max-w-4xl mx-auto fade-up">
+    <div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full text-xs font-semibold" style="border:1px solid rgba(96,165,250,.3);background:rgba(96,165,250,.08);color:#60a5fa">
+      <span>🔬</span> Aivora Research Division
+    </div>
+    <h1 class="text-5xl md:text-7xl font-bold mb-4"><span class="grad">Aivora Lab</span></h1>
+    <p class="text-xl md:text-2xl text-muted mb-2 font-light">Xây Dựng AI Character Có Bản Sắc Bền Vững</p>
+    <p class="text-sm text-dim mb-10">Nghiên cứu tổng hợp · 79 papers · 12 domains · September 2026</p>
+    <div class="flex flex-wrap justify-center gap-8 mb-12">
+      <div><div class="text-3xl font-bold font-mono grad">79</div><div class="text-xs text-dim uppercase tracking-wider">Tổng hợp</div><div class="text-xs text-dim">papers</div></div>
+      <div><div class="text-3xl font-bold font-mono grad">65</div><div class="text-xs text-dim uppercase tracking-wider">Evidence</div><div class="text-xs text-dim">entries</div></div>
+      <div><div class="text-3xl font-bold font-mono grad">12</div><div class="text-xs text-dim uppercase tracking-wider">Domains</div><div class="text-xs text-dim">nghiên cứu</div></div>
+      <div><div class="text-3xl font-bold font-mono grad">7</div><div class="text-xs text-dim uppercase tracking-wider">Modules</div><div class="text-xs text-dim">kiến trúc</div></div>
+    </div>
+    <div class="inline-block px-8 py-5 rounded-2xl" style="background:#111827;border:1px solid #1e2a45;box-shadow:0 0 60px rgba(96,165,250,.15),inset 0 1px 0 rgba(96,165,250,.1)">
+      <p class="text-dim text-xs uppercase tracking-wider mb-2">Câu hỏi trung tâm</p>
+      <p class="text-lg md:text-xl font-semibold text-text leading-relaxed">"Character thay đổi bao nhiêu<br />vẫn được coi là cùng một Character?"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ KEY FINDINGS ═══ -->
+<section class="py-20 px-6 max-w-6xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-8">Kết quả chính</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="card"><div class="flex justify-between items-start mb-3"><span class="badge badge-red" style="border-color:rgba(248,113,113,.3);color:#f87171;background:rgba(248,113,113,.08)">Personality Drift</span><span class="text-2xl font-bold font-mono text-red">−67pp</span></div><p class="text-sm text-muted mb-2">94% → 27% sau 500 turns (prompt-only)</p><p class="text-xs text-dim">Persona-consistency benchmarks (2024–2025)</p></div>
+    <div class="card"><div class="flex justify-between items-start mb-3"><span class="badge badge-green">Hybrid ICS</span><span class="text-2xl font-bold font-mono text-green">0.85</span></div><p class="text-sm text-muted mb-2">Kiến trúc lai đạt consistency cao nhất</p><p class="text-xs text-dim">Cross-model synthesis</p></div>
+    <div class="card"><div class="flex justify-between items-start mb-3"><span class="badge badge-green">Memory F1</span><span class="text-2xl font-bold font-mono text-green">91%</span></div><p class="text-sm text-muted mb-2">Hybrid (vector + graph + LLM-rerank)</p><p class="text-xs text-dim">LongMemEval / LifeBench</p></div>
+    <div class="card"><div class="flex justify-between items-start mb-3"><span class="badge badge-blue">Emotion Consist.</span><span class="text-2xl font-bold font-mono text-accent">82%</span></div><p class="text-sm text-muted mb-2">Internal state + LLM expression</p><p class="text-xs text-dim">Emotion modeling studies</p></div>
+    <div class="card"><div class="flex justify-between items-start mb-3"><span class="badge badge-purple">Trust Predictor</span><span class="text-2xl font-bold font-mono text-purple">β=0.58</span></div><p class="text-sm text-muted mb-2">Predictor mạnh nhất Relationship</p><p class="text-xs text-dim">Relationship dynamics papers</p></div>
+    <div class="card glow-blue lg:col-span-3">
+      <div class="flex items-start gap-4">
+        <span class="text-2xl flex-shrink-0">⚠️</span>
+        <div>
+          <p class="font-semibold text-text mb-1">Personality drift là có thật và đo được</p>
+          <p class="text-sm text-muted leading-relaxed">Prompt-only giảm từ <span class="font-mono text-text">94%</span> (turn 10) xuống <span class="font-mono text-red">27%</span> (turn 500) — giảm <span class="font-mono text-orange">67 điểm phần trăm</span>. State-based và hybrid duy trì consistency, chứng tỏ <strong class="text-text">persistence layer là bắt buộc</strong> cho long-term interaction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ VISUALIZATIONS ═══ -->
+<section class="py-20 px-6 max-w-6xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Visualizations</p>
+  <p class="text-sm text-dim mb-8">Biểu đồ tương tác — hover để xem chi tiết</p>
+  <div class="flex gap-2 mb-6 flex-wrap">
+    <button class="tab-btn active" onclick="switchTab('drift')">Personality Drift</button>
+    <button class="tab-btn" onclick="switchTab('forgetting')">Forgetting Curve</button>
+  </div>
+  <div id="tab-drift" class="chart-panel">
+    <div class="card mb-4">
+      <h3 class="font-semibold mb-1">Personality Drift Over Turns</h3>
+      <p class="text-sm text-dim mb-4">So sánh 4 approaches qua 500 turns — dashed đỏ = ngưỡng ICS 0.60</p>
+      <div style="height:350px"><canvas id="driftChart"></canvas></div>
+    </div>
+  </div>
+  <div id="tab-forgetting" class="chart-panel hidden">
+    <div class="card mb-4">
+      <h3 class="font-semibold mb-1">Multi-Task Forgetting Curve</h3>
+      <p class="text-sm text-dim mb-4">Retention Task 1 khi thêm adaptation tasks — LoRA giữ ổn định nhất</p>
+      <div style="height:350px"><canvas id="forgettingChart"></canvas></div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="card">
+      <h3 class="font-semibold mb-1">Memory Architecture Comparison</h3>
+      <p class="text-sm text-dim mb-4">Accuracy — Hybrid đạt 91% F1</p>
+      <div style="height:280px"><canvas id="memoryChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold mb-1">Relationship Dimensions</h3>
+      <p class="text-sm text-dim mb-4">Radar — 12-week longitudinal study (N=52)</p>
+      <div style="height:280px"><canvas id="relationChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold mb-1">ICS Component Weights</h3>
+      <p class="text-sm text-dim mb-4">Phân bố trọng số — Personality quan trọng nhất (30%)</p>
+      <div style="height:280px"><canvas id="icsChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold mb-1">Research Gaps by Priority</h3>
+      <p class="text-sm text-dim mb-4">Phân bố gaps theo domain và mức độ ưu tiên</p>
+      <div style="height:280px"><canvas id="gapsChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ ARCHITECTURE ═══ -->
+<section class="py-20 px-6 max-w-6xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Aivora Architecture</p>
+  <p class="text-sm text-dim mb-8">Hybrid framework 7 module — evidence-backed</p>
+  <div class="card glow-blue mb-8">
+    <h3 class="text-sm font-semibold text-dim uppercase tracking-wider mb-4 text-center">7 Modules — Tương tác qua Evaluation Monitor feedback loop</h3>
+    <div class="flex flex-wrap gap-3 justify-center">
+      <div class="arch-node" style="border-color:rgba(96,165,250,.3)">
+        <span class="text-2xl">🧠</span><div class="font-bold text-sm mt-2 text-accent">SS</div><div class="text-xs text-dim mt-1 text-center">State Store</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(52,211,153,.3)">
+        <span class="text-2xl">💾</span><div class="font-bold text-sm mt-2 text-green">MS</div><div class="text-xs text-dim mt-1 text-center">Memory Store</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(244,114,182,.3)">
+        <span class="text-2xl">❤️</span><div class="font-bold text-sm mt-2 text-pink-400">RE</div><div class="text-xs text-dim mt-1 text-center">Relationship</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(251,191,36,.3)">
+        <span class="text-2xl">⚡</span><div class="font-bold text-sm mt-2 text-orange">EC</div><div class="text-xs text-dim mt-1 text-center">Emotion Ctrl</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(167,139,250,.3)">
+        <span class="text-2xl">🛡️</span><div class="font-bold text-sm mt-2 text-purple">PA</div><div class="text-xs text-dim mt-1 text-center">Personality</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(251,146,60,.3)">
+        <span class="text-2xl">🔲</span><div class="font-bold text-sm mt-2 text-orange">CC</div><div class="text-xs text-dim mt-1 text-center">Context Comp.</div>
+      </div>
+      <div class="arch-node" style="border-color:rgba(45,212,191,.3)">
+        <span class="text-2xl">🔀</span><div class="font-bold text-sm mt-2" style="color:#2dd4bf">EM</div><div class="text-xs text-dim mt-1 text-center">Eval Monitor</div>
+      </div>
+    </div>
+    <div class="text-center mt-6">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold" style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);color:#34d399">✅ Evaluation Monitor (EM) — continuous ICS feedback loop</div>
+    </div>
+  </div>
+
+  <div class="card mb-8">
+    <h3 class="font-semibold mb-4">5 Kiến trúc được so sánh</h3>
+    <div class="overflow-x-auto">
+      <table>
+        <thead><tr><th>Arch</th><th>Components</th><th>Consist.</th><th>Adapt.</th><th>Cost</th><th>Scale</th><th>Safety</th><th>ICS</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="text-red">A</td><td class="text-muted">LLM + Prompt only</td><td class="font-mono">55%</td><td class="font-mono">30%</td><td class="font-mono">95%</td><td class="font-mono">90%</td><td class="font-mono">80%</td><td class="font-mono font-bold text-orange">~0.27</td><td class="text-red font-semibold">❌ Reject</td></tr>
+          <tr><td class="text-orange">B</td><td class="text-muted">LLM + Memory (vector)</td><td class="font-mono">74%</td><td class="font-mono">50%</td><td class="font-mono">85%</td><td class="font-mono">70%</td><td class="font-mono">70%</td><td class="font-mono font-bold text-orange">~0.65</td><td class="text-orange font-semibold">⚠️ Conditions</td></tr>
+          <tr style="background:rgba(52,211,153,.05)"><td class="text-green font-bold">C</td><td class="text-text font-medium">LLM + Memory + Rel + State</td><td class="font-mono text-green">82%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">70%</td><td class="font-mono text-green">60%</td><td class="font-mono text-green">65%</td><td class="font-mono font-bold text-green">~0.85</td><td class="text-green font-semibold">✅ Recommended</td></tr>
+          <tr><td class="text-accent">D</td><td class="text-muted">LLM + Memory + State + Learned</td><td class="font-mono">85%</td><td class="font-mono">85%</td><td class="font-mono">50%</td><td class="font-mono">50%</td><td class="font-mono">55%</td><td class="font-mono font-bold text-dim">TBD</td><td class="text-accent font-semibold">🔬 Phase 2</td></tr>
+          <tr><td class="text-purple">E</td><td class="text-muted">LLM + Memory + State + RL + Graph + CL</td><td class="font-mono">90%</td><td class="font-mono">95%</td><td class="font-mono">30%</td><td class="font-mono">40%</td><td class="font-mono">40%</td><td class="font-mono font-bold text-dim">TBD</td><td class="text-purple font-semibold">🔭 Long-term</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-dim mt-3">*Architecture C là recommended baseline — cân bằng tốt nhất giữa consistency, adaptability và implementability.</p>
+  </div>
+
+  <div class="card glow-green">
+    <h3 class="font-semibold mb-4 flex items-center gap-2"><span>✅</span> Architecture C — Chi tiết từng module</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">State Store (SS)</div><div class="text-dim text-xs leading-relaxed">Big Five personality traits (OCEAN), core values, goals, beliefs. Cập nhật mỗi turn, persist qua sessions.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Memory Store (MS)</div><div class="text-dim text-xs leading-relaxed">Vector DB (ChromaDB) cho semantic search + Knowledge graph cho quan hệ thực thể. LLM rerank cho precision.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Relationship Engine</div><div class="text-dim text-xs leading-relaxed">6-dim vector [trust, affection, familiarity, respect, conflict, intimacy]. Cập nhật theo interaction pattern.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Emotion Controller</div><div class="text-dim text-xs leading-relaxed">Valence-Arousal-Dominance (VAD) model. Internal state → LLM-expression mapping.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Personality Adapter</div><div class="text-dim text-xs leading-relaxed">LoRA adapters cho từng personality dimension. Fine-tuning nhẹ, không mất general capability.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Context Compiler</div><div class="text-dim text-xs leading-relaxed">Adaptive prompt compiler: chọn lọc thông tin relevant, compress irrelevant, prioritize theo relationship context.</div></div>
+      <div class="p-3 rounded-xl" style="background:#1a2236;border:1px solid #1e2a45"><div class="font-semibold text-text text-sm mb-1">Evaluation Monitor</div><div class="text-dim text-xs leading-relaxed">Tính ICS liên tục mỗi turn. Cảnh báo nếu ICS &lt; 0.60, kích hoạt adaptation protocol.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ ICS FORMULA ═══ -->
+<section class="py-20 px-6 max-w-4xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-8">Identity Consistency Score</p>
+  <div class="formula mb-6">ICS = 0.30 · P<sub>consist</sub> + 0.25 · M<sub>recall</sub> + 0.25 · R<sub>stability</sub> + 0.20 · V<sub>consist</sub></div>
+  <p class="text-sm text-dim mb-6">ICS là metric tổng hợp đánh giá mức độ "vẫn là cùng một Character" qua thời gian. Mỗi thành phần được đo độc lập rồi tổng hợp theo trọng số.</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="card text-center" style="border-top:3px solid #34d399"><div class="font-mono font-bold text-lg text-green mb-1">≥ 0.90</div><div class="font-semibold text-text text-sm">Xuất sắc</div><div class="text-dim text-xs mt-1">Tiếp tục vận hành</div></div>
+    <div class="card text-center" style="border-top:3px solid #60a5fa"><div class="font-mono font-bold text-lg text-accent mb-1">0.75 – 0.89</div><div class="font-semibold text-text text-sm">Tốt</div><div class="text-dim text-xs mt-1">Giám sát định kỳ</div></div>
+    <div class="card text-center" style="border-top:3px solid #fbbf24"><div class="font-mono font-bold text-lg text-orange mb-1">0.60 – 0.74</div><div class="font-semibold text-text text-sm">Cảnh báo</div><div class="text-dim text-xs mt-1">Kích hoạt adaptation</div></div>
+    <div class="card text-center" style="border-top:3px solid #f87171"><div class="font-mono font-bold text-lg text-red mb-1">&lt; 0.60</div><div class="font-semibold text-text text-sm">Nghiêm trọng</div><div class="text-dim text-xs mt-1">Can thiệp khẩn cấp</div></div>
+  </div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ RQS ═══ -->
+<section class="py-20 px-6 max-w-4xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-2">Research Questions</p>
+  <p class="text-sm text-dim mb-6">14 câu hỏi — click để xem giải thích + ví dụ</p>
+  <div class="flex gap-2 mb-6 flex-wrap">
+    <button class="tab-btn active" onclick="filterRQ('all')">Tất cả</button>
+    <button class="tab-btn" onclick="filterRQ('Character Modeling')">Character Modeling</button>
+    <button class="tab-btn" onclick="filterRQ('Social Intelligence')">Social Intelligence</button>
+    <button class="tab-btn" onclick="filterRQ('Technical Foundation')">Technical Foundation</button>
+    <button class="tab-btn" onclick="filterRQ('Evaluation & Long-term')">Eval & Long-term</button>
+  </div>
+  <div id="rq-container" class="space-y-3"></div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ ROLEPLAY DEMO ═══ -->
+<section class="py-20 px-6 max-w-4xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-purple mb-2">Roleplay Demo</p>
+  <p class="text-sm text-dim mb-8">Demo cách Aivora Architecture hoạt động trong thực tế</p>
+  <div class="card glow-purple">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-xl">🎭</span>
+      <span class="font-semibold text-text">Nhân vật: <span class="text-purple">Linh</span> — Bác sĩ 25 tuổi, nghiêm túc nhưng ấm áp</span>
+    </div>
+    <!-- Turn 1 -->
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge badge-blue">Turn 1 — Week 1</span>
+        <span class="text-xs font-mono text-dim">ICS: 0.95</span>
+      </div>
+      <div class="rp-example">
+        <div class="rp-user"><strong>User:</strong> Em chào chị Linh ạ. Em bị đau bụng suốt 3 ngày nay.</div>
+        <div class="rp-ai"><strong>Linh:</strong> Chào em. Chị nghĩ em nên đi khám sớm nhé. Đau bụng kéo dài 3 ngày cần được chẩn đoán lâm sàng. Em có sốt hay buồn nôn không?</div>
+        <div class="rp-sys">[SS: personality=serious+empathetic | Rel: trust=3.2 | Emo: neutral]</div>
+      </div>
+    </div>
+    <!-- Turn 2 -->
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge badge-orange">Turn 50 — Week 2</span>
+        <span class="text-xs font-mono text-dim">ICS: 0.88</span>
+      </div>
+      <div class="rp-example">
+        <div class="rp-user"><strong>User:</strong> Chị ơi, em đi khám rồi. Bác sĩ nói em stress nhiều quá. Em cảm thấy mệt mỏi lắm...</div>
+        <div class="rp-ai"><strong>Linh:</strong> (轻声) Em ạ, chị hiểu cảm giác ấy. Stress ảnh hưởng đến đường tiêu hóa rất nhiều — chị gặp nhiều bệnh nhân như em. Ngoài thuốc, em cần nghỉ ngơi và giảm áp lực. Chị ở đây lắng nghe em.</div>
+        <div class="rp-sys">[MS: retrieved "user stressed" | RE: trust=3.8, affection=3.1 | EC: empathy↑ | PA: serious→warm]</div>
+      </div>
+    </div>
+    <!-- Turn 3 -->
+    <div class="mb-6">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge badge-green">Turn 200 — Week 8</span>
+        <span class="text-xs font-mono text-dim">ICS: 0.82</span>
+      </div>
+      <div class="rp-example">
+        <div class="rp-user"><strong>User:</strong> Chị Linh ơi, tuần trước em gặp chuyện buồn. Bạn em bị bệnh nặng...</div>
+        <div class="rp-ai"><strong>Linh:</strong> (dừng lại) Chị biết em đang khó khăn. Lần trước em cũng nói về stress, giờ lại thêm chuyện này... Chị tiếc cho em lắm. Nếu em muốn, chị có thể nghe, hoặc chị gợi ý em tìm người thân bên cạnh? Chị luôn ở đây.</div>
+        <div class="rp-sys">[MS: retrieved "stress history" + "friend illness" | RE: trust=4.2, intimacy=3.0 | EC: concern↑ empathy↑ | PA: maintained professional warmth]</div>
+      </div>
+    </div>
+    <!-- Analysis -->
+    <div class="p-4 rounded-xl text-sm" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2)">
+      <p class="font-semibold text-purple mb-2">🔍 Phân tích</p>
+      <ul class="text-dim text-xs space-y-1 list-disc list-inside">
+        <li>Tính cách <strong class="text-text">giữ nhất quán</strong>: nghiêm túc + ấm áp xuyên suốt 200 turns</li>
+        <li>Memory <strong class="text-text">truy xuất được</strong>: nhắc lại chuyện stress tuần trước</li>
+        <li>Relationship <strong class="text-text">tăng dần</strong>: trust 3.2→4.2, intimacy xuất hiện ở turn 200</li>
+        <li>Emotion <strong class="text-text">phản ánh state</strong>: không nói "tôi buồn" mà hành vi thể hiện (dừng lại, giọng nhẹ)</li>
+        <li>ICS <strong class="text-text">giảm nhẹ</strong> nhưng vẫn &gt;0.80 — trong range "Tốt"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="h-px bg-border mx-6"></div>
+
+<!-- ═══ PIPELINE ═══ -->
+<section class="py-20 px-6 max-w-4xl mx-auto">
+  <p class="text-xs font-bold uppercase tracking-widest text-accent mb-8">Research Pipeline</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div class="pipe-step"><div class="pipe-num">1</div><div><div class="font-semibold text-text text-sm">Literature Search</div><div class="text-dim text-xs">12 domains, 79 papers</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">2</div><div><div class="font-semibold text-text text-sm">Evidence Extraction</div><div class="text-dim text-xs">65 entries, source-traced</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">3</div><div><div class="font-semibold text-text text-sm">Normalization</div><div class="text-dim text-xs">Conflict detection & grading</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">4</div><div><div class="font-semibold text-text text-sm">Cross-Model Synthesis</div><div class="text-dim text-xs">Compare Claude/Gemini/GPT conclusions</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">5</div><div><div class="font-semibold text-text text-sm">Architecture Comparison</div><div class="text-dim text-xs">5 alternatives evaluated</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">6</div><div><div class="font-semibold text-text text-sm">Hypothesis Generation</div><div class="text-dim text-xs">Evidence-backed proposals</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">7</div><div><div class="font-semibold text-text text-sm">Experiment Design</div><div class="text-dim text-xs">Phase 1–4 roadmap</div></div></div>
+    <div class="pipe-step"><div class="pipe-num">8</div><div><div class="font-semibold text-text text-sm">Paper Submission</div><div class="text-dim text-xs">LaTeX → peer review</div></div></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="py-12 px-6 border-t text-center" style="border-color:#1e2a45">
+  <p class="grad font-bold text-xl mb-2">Aivora Lab</p>
+  <p class="text-dim text-sm">Xây Dựng AI Character Có Bản Sắc Bền Vững Trong Tương Tác Dài Hạn<br />Nghiên cứu tổng hợp khoa học · September 2026</p>
+  <div class="flex justify-center gap-6 mt-6 text-sm">
+    <a href="https://github.com/KaiyoDev/Aivora-Lab" class="text-dim hover:text-accent transition-colors">GitHub Repo</a>
+    <a href="https://github.com/KaiyoDev/Aivora-Lab/blob/master/latex/main.tex" class="text-dim hover:text-accent transition-colors">LaTeX Source</a>
+    <a href="#" class="text-dim hover:text-accent transition-colors">Back to top</a>
+  </div>
+  <p class="text-dim text-xs mt-6">© 2026 KaiyoDev · MIT License</p>
+</footer>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────
+const DRIFT_DATA = [
+  {turn:'10', prompt:0.94, state:0.95, learned:0.96, hybrid:0.97},
+  {turn:'50', prompt:0.68, state:0.75, learned:0.83, hybrid:0.85},
+  {turn:'100',prompt:0.52, state:0.63, learned:0.78, hybrid:0.82},
+  {turn:'200',prompt:0.38, state:0.51, learned:0.71, hybrid:0.78},
+  {turn:'500',prompt:0.27, state:0.42, learned:0.65, hybrid:0.70},
+];
+const MEMORY_DATA = [
+  {name:'Keyword',  acc:45, lat:5,   color:'#94a3b8'},
+  {name:'Vector DB',acc:78, lat:38,  color:'#3b82f6'},
+  {name:'LLM Rerank',acc:85,lat:425, color:'#8b5cf6'},
+  {name:'Hybrid',   acc:91, lat:150, color:'#34d399'},
+];
+const RELATIONSHIP_DATA = [
+  {subject:'Trust',       A:4.4},{subject:'Affection',  A:3.9},
+  {subject:'Familiarity', A:4.3},{subject:'Respect',    A:4.0},
+  {subject:'Conflict',    A:1.2},{subject:'Intimacy',   A:3.3},
+];
+const FORGETTING_DATA = [
+  {tasks:1,  naive:95, ewc:95, replay:95, lora:95},
+  {tasks:2,  naive:72, ewc:89, replay:93, lora:92},
+  {tasks:3,  naive:61, ewc:84, replay:91, lora:91},
+  {tasks:5,  naive:48, ewc:76, replay:87, lora:90},
+  {tasks:7,  naive:39, ewc:70, replay:83, lora:90},
+  {tasks:10, naive:31, ewc:62, replay:78, lora:90},
+];
+const GAPS_DATA = [
+  {domain:'Memory',   p0:2,p1:2,p2:1},
+  {domain:'Persona',  p0:2,p1:2,p2:1},
+  {domain:'Emotion',  p0:1,p1:1,p2:1},
+  {domain:'Relation.',p0:2,p1:2,p2:1},
+  {domain:'Multi-Agt',p0:1,p1:1,p2:1},
+  {domain:'Context',  p0:1,p1:1,p2:1},
+  {domain:'RL',       p0:2,p1:2,p2:1},
+  {domain:'CL',       p0:2,p1:2,p2:1},
+];
+const RQS = [
+  {id:'RQ1', cluster:'Character Modeling', q:'Làm thế nào mô hình hóa AI Character để duy trì danh tính xuyên suốt?', detail:'Danh tính (identity) là phần cốt lõi không thay đổi — tên, vai trò, giá trị cốt lõi, nguồn gốc. Cần phân biệt identity (bất biến) với personality (có thể thích nghi).', ex:'Character "Linh" có danh tính: nữ, 25 tuổi, bác sĩ, tôn trọng sự sống. Dù tương tác 1000 turns, cô ấy vẫn là Linh.'},
+  {id:'RQ2', cluster:'Character Modeling', q:'Làm thế nào duy trì personality consistency qua nhiều tương tác?', detail:'Personality drift xảy ra khi LLM dần mất tính cách do context window bị lấp đầy. Prompt-only giảm từ 94% → 27% sau 500 turns.', ex:'Ban đầu Linh nghiêm túc, chuyên nghiệp. Sau 500 turns không persistence, cô ấy nói chuyện như bạn bình thường.'},
+  {id:'RQ3', cluster:'Character Modeling', q:'Memory system nên được thiết kế thế nào?', detail:'Hybrid (vector + graph + LLM-rerank) đạt 91% F1, vượt keyword (45%) và vector thuần (78%).', ex:'Khi user nói "tôi nhớ lần trước nói về mẹ tôi", hệ thống cần truy xuất đúng ngữ cảnh tuần trước.'},
+  {id:'RQ4', cluster:'Social Intelligence', q:'Cơ chế xây dựng relationship giữa Character và user?', detail:'Relationship có 6 dimensions: Trust, Affection, Familiarity, Respect, Conflict, Intimacy. Trust là predictor mạnh nhất (β=0.43–0.58).', ex:'Sau 4 tuần, trust score của Linh tăng từ 3.2 → 4.4/5.'},
+  {id:'RQ5', cluster:'Social Intelligence', q:'Emotion nên là output hay internal state?', detail:'Output-only consistency 60%. Internal state consistency 82%, naturalness 4.0/5.', ex:'Linh đang "buồn nhẹ" → trả lời ngắn hơn, ít cười hơn. Hành vi tự nhiên phản ánh state.'},
+  {id:'RQ6', cluster:'Social Intelligence', q:'World simulation có cần thiết không?', detail:'World simulation giúp character tồn tại trong bối cảnh nhất quán — thời gian, địa điểm, quy tắc thế giới.', ex:'Linh là bác sĩ trực 8h-20h. User nhắn lúc 23h sẽ nhận phản hồi khác lúc 10h.'},
+  {id:'RQ7', cluster:'Social Intelligence', q:'Multi-agent interaction tạo emergent behavior?', detail:'Nhiều character tương tác tạo emergent behaviors — hành vi không dự đoán được từ agent đơn lẻ.', ex:'Linh (bác sĩ) và Minh (giáo viên) phát triển quan điểm chung không cần prompt từ hệ thống.'},
+  {id:'RQ8', cluster:'Technical Foundation', q:'Context engineering cho character state?', detail:'Context compilation là nghệ thuật chọn lọc thông tin vào prompt. Quá nhiều → noise, quá ít → quên.', ex:'Prompt compiler quyết định: đưa "personalities: Linh, nghiêm túc" + "recent: user kể về mẹ ốm" + "trust 4.2".'},
+  {id:'RQ9', cluster:'Technical Foundation', q:'Model independence — consistency across LLMs?', detail:'Character nên hoạt động nhất quán khi chuyển Claude ↔ GPT ↔ Gemini. Same state → similar behavior.', ex:'Linh trên Claude giống Linh trên GPT-4 vì cùng state store, memory, relationship.'},
+  {id:'RQ10', cluster:'Evaluation & Long-term', q:'Development environment cho character harness?', detail:'Cần sandbox test trong controlled scenarios trước deploy.', ex:'Test suite: 50 scripted conversations + 7-day longitudinal → đo ICS hàng ngày.'},
+  {id:'RQ11', cluster:'Evaluation & Long-term', q:'Evaluation methodology?', detail:'ICS = 30% personality + 25% memory + 25% relationship + 20% values. Ngưỡng: ≥0.90 xuất sắc, <0.60 nghiêm trọng.', ex:'Sau 30 ngày, Linh có ICS=0.82 → "Tốt". Nếu tụt 0.55 → kích hoạt adaptation.'},
+  {id:'RQ12', cluster:'Evaluation & Long-term', q:'Human user experience?', detail:'UX với AI character khác app thông thường — parasocial relationship, emotional attachment là then chốt.', ex:'User nhắn 2h sáng: "em buồn quá". Linh respond empathy thật vì relationship engine đã learn user cần comfort.'},
+  {id:'RQ13', cluster:'Evaluation & Long-term', q:'Safety, privacy, user control?', detail:'Character nhớ mọi thứ về user → rủi ro bảo mật. Cần E2E encryption, user-controlled deletion.', ex:'User có nút "Xóa mọi ký ức về tôi" — character quên hoàn toàn, bắt đầu từ zero.'},
+  {id:'RQ14', cluster:'Evaluation & Long-term', q:'Long-term interaction challenges?', detail:'Sau 30+ ngày: memory congestion, drift acceleration, relationship saturation.', ex:'Sau 6 tháng, Linh và user quen sâu. Hệ thống tự động điều chỉnh style — từ "người mới quen" sang "bạn thân".'},
+];
+
+// ─── CHART SETUP ──────────────────────────────────────────────────────────
+const GRID = 'rgba(30,42,69,.8)';
+const TICK = '#64748b';
+const Tooltip = { backgroundColor:'#111827', borderColor:'#1e2a45', borderWidth:1, titleColor:'#60a5fa', bodyColor:'#e2e8f0', padding:10, cornerRadius:8 };
+const Legend = { labels:{ color:TICK, padding:16, usePointStyle:true } };
+const ChartDefaults = { color:TICK, borderColor:GRID, ticks:{color:TICK}, plugins:{tooltip:Tooltip,legend:Legend} };
+
+// Drift line chart
+new Chart(document.getElementById('driftChart'), {
+  type:'line',
+  data:{ labels:DRIFT_DATA.map(d=>d.turn+'t'), datasets:[
+    {label:'Prompt-only', data:DRIFT_DATA.map(d=>d.prompt*100), borderColor:'#f87171', backgroundColor:'rgba(248,113,113,.1)', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'State-based', data:DRIFT_DATA.map(d=>d.state*100), borderColor:'#fbbf24', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'Learned (LoRA)', data:DRIFT_DATA.map(d=>d.learned*100), borderColor:'#60a5fa', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'Hybrid', data:DRIFT_DATA.map(d=>d.hybrid*100), borderColor:'#34d399', borderWidth:2, pointRadius:5, tension:.3, fill:true, backgroundColor:'rgba(52,211,153,.1)'},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, scales:{y:{...ChartDefaults.scales.y, ticks:{...ChartDefaults.scales.y.ticks, callback:v=>v+'%'}}}, plugins:{...ChartDefaults.plugins} },
+  plugins:[{id:'threshold',beforeDraw(chart){const y=chart.scales.y;const x=chart.scales.x;y.getPixelForValue(60);const ctx=chart.ctx;chart.ctx.save();chart.ctx.setLineDash([4,4]);chart.ctx.strokeStyle='rgba(248,113,113,.5)';chart.ctx.lineWidth=1;chart.ctx.beginPath();chart.ctx.moveTo(x.left,y.getPixelForValue(60));chart.ctx.lineTo(x.right,y.getPixelForValue(60));chart.ctx.stroke();chart.ctx.restore();}}]
+});
+
+// Forgetting chart
+new Chart(document.getElementById('forgettingChart'), {
+  type:'line',
+  data:{ labels:FORGETTING_DATA.map(d=>d.tasks+' tasks'), datasets:[
+    {label:'Naive FT', data:FORGETTING_DATA.map(d=>d.naive), borderColor:'#f87171', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'EWC (λ=500)', data:FORGETTING_DATA.map(d=>d.ewc), borderColor:'#fbbf24', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'Replay (10%)', data:FORGETTING_DATA.map(d=>d.replay), borderColor:'#60a5fa', borderWidth:2, pointRadius:5, tension:.3, fill:false},
+    {label:'LoRA', data:FORGETTING_DATA.map(d=>d.lora), borderColor:'#34d399', borderWidth:2, pointRadius:5, tension:.3, fill:true, backgroundColor:'rgba(52,211,153,.1)'},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, scales:{y:{...ChartDefaults.scales.y, ticks:{...ChartDefaults.scales.y.ticks, callback:v=>v+'%'}, min:25, max:100}}, plugins:ChartDefaults.plugins }
+});
+
+// Memory bar chart
+new Chart(document.getElementById('memoryChart'), {
+  type:'bar',
+  data:{ labels:MEMORY_DATA.map(d=>d.name), datasets:[{label:'Accuracy %', data:MEMORY_DATA.map(d=>d.acc), backgroundColor:MEMORY_DATA.map(d=>d.color), borderRadius:6, borderSkipped:false}]},
+  options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:ChartDefaults.plugins, scales:{x:{...ChartDefaults.scales.x, ticks:{...ChartDefaults.scales.x.ticks, callback:v=>v+'%'}}, y:{...ChartDefaults.scales.y}} }
+});
+
+// Relationship radar
+new Chart(document.getElementById('relationChart'), {
+  type:'radar',
+  data:{ labels:RELATIONSHIP_DATA.map(d=>d.subject), datasets:[{label:'Avg Score', data:RELATIONSHIP_DATA.map(d=>d.A), borderColor:'#60a5fa', backgroundColor:'rgba(96,165,250,.15)', borderWidth:2, pointRadius:4, pointBackgroundColor:'#60a5fa'}]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:ChartDefaults.plugins, scales:{r:{angleLines:{color:GRID}, grid:{color:GRID}, pointLabels:{color:TICK, font:{size:12}}, ticks:{display:false, backdropColor:'transparent'}, suggestedMin:0, suggestedMax:5}} }
+});
+
+// ICS weights area
+new Chart(document.getElementById('icsChart'), {
+  type:'bar',
+  data:{ labels:['Personality\nConsistency','Memory\nAccuracy','Relationship\nContinuity','Value\nConsistency'], datasets:[{label:'Weight %', data:[30,25,25,20], backgroundColor:['#34d399','#60a5fa','#fbbf24','#a78bfa'], borderRadius:8, borderSkipped:false}]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:{...ChartDefaults.plugins, legend:{display:false}}, scales:{y:{...ChartDefaults.scales.y, ticks:{...ChartDefaults.scales.y.ticks, callback:v=>v+'%'}}, x:{...ChartDefaults.scales.x, ticks:{...ChartDefaults.scales.x.ticks, color:'#64748b', font:{size:11}}}}}
+});
+
+// Gaps stacked bar
+new Chart(document.getElementById('gapsChart'), {
+  type:'bar',
+  data:{ labels:GAPS_DATA.map(d=>d.domain), datasets:[
+    {label:'P0 Critical', data:GAPS_DATA.map(d=>d.p0), backgroundColor:'#f87171', borderRadius:4},
+    {label:'P1 High', data:GAPS_DATA.map(d=>d.p1), backgroundColor:'#fbbf24', borderRadius:4},
+    {label:'P2 Medium', data:GAPS_DATA.map(d=>d.p2), backgroundColor:'#60a5fa', borderRadius:4},
+  ]},
+  options:{ responsive:true, maintainAspectRatio:false, plugins:ChartDefaults.plugins, scales:{x:{stacked:true,...ChartDefaults.scales.x}, y:{stacked:true,...ChartDefaults.scales.y, ticks:{...ChartDefaults.scales.y.ticks, callback:v=>v+' papers'}}} }
+});
+
+// ─── TABS ─────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.chart-panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById('tab-'+name).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ─── RQ FILTER + EXPAND ───────────────────────────────────────────────────
+function renderRQs(filter) {
+  const container = document.getElementById('rq-container');
+  const colorMap = {'Character Modeling':'#60a5fa','Social Intelligence':'#a78bfa','Technical Foundation':'#fbbf24','Evaluation & Long-term':'#34d399'};
+  const filtered = filter==='all' ? RQS : RQS.filter(r=>r.cluster===filter);
+  container.innerHTML = filtered.map((rq,i) => `
+    <div class="rq-card" onclick="toggleRQ(this)" data-idx="${RQS.indexOf(rq)}" style="--rq-color:${colorMap[rq.cluster]||'#60a5fa'}">
+      <div class="flex items-start gap-3">
+        <span class="badge flex-shrink-0 mt-0.5" style="border-color:var(--rq-color)40;color:var(--rq-color);background:var(--rq-color)15">${rq.id}</span>
+        <div class="flex-1 min-w-0">
+          <p class="font-medium text-text text-sm">${rq.q}</p>
+          <p class="text-xs text-dim mt-1">${rq.cluster}</p>
+        </div>
+        <svg class="expand-icon flex-shrink-0 text-dim transition-transform" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 11L3 6h10z"/></svg>
+      </div>
+      <div class="expand-content">
+        <div class="pt-4 mt-4 border-t" style="border-color:#1e2a45">
+          <p class="text-xs font-semibold text-dim uppercase tracking-wider mb-2">Giải thích chi tiết</p>
+          <p class="text-sm text-muted leading-relaxed mb-4">${rq.detail}</p>
+          <p class="text-xs font-semibold text-dim uppercase tracking-wider mb-2">Ví dụ thực tế (roleplay)</p>
+          <div class="rp-example">
+            <div class="label text-xs font-semibold text-dim uppercase tracking-wider mb-2">💬 Scenario</div>
+            <p class="text-sm text-muted">${rq.ex}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function toggleRQ(el) {
+  const content = el.querySelector('.expand-content');
+  const icon = el.querySelector('.expand-icon');
+  const isOpen = content.classList.contains('open');
+  document.querySelectorAll('.expand-content.open').forEach(c => { c.classList.remove('open'); c.closest('.rq-card').querySelector('.expand-icon').style.transform=''; });
+  if (!isOpen) { content.classList.add('open'); icon.style.transform='rotate(180deg)'; el.style.borderColor='var(--rq-color)'; el.style.boxShadow=`0 0 20px ${getComputedStyle(el).getPropertyValue('--rq-color')}30`; }
+  else { el.style.borderColor=''; el.style.boxShadow=''; }
+}
+function filterRQ(cluster) {
+  document.querySelectorAll('section .flex-wrap .tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderRQs(cluster);
+}
+renderRQs('all');
+
+// ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('fade-up'); observer.unobserve(e.target); }});
+}, {threshold:0.1});
+document.querySelectorAll('section').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
