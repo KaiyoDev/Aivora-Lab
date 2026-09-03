@@ -20,6 +20,7 @@
     <ul class="nav-links">
       <li><a href="#findings">Findings</a></li>
       <li><a href="#visuals">Visuals</a></li>
+      <li><a href="#research-map">Research Map</a></li>
       <li><a href="#architecture">Architecture</a></li>
       <li><a href="#ics">ICS</a></li>
       <li><a href="#rq">Research</a></li>
@@ -98,14 +99,15 @@
   <div class="page-wrap">
     <div class="section-header reveal">
       <span class="section-label">Visualizations</span>
-      <h2 class="section-title">Dữ liệu trực quan</h2>
-      <p class="section-desc">Hover để xem chi tiết. Switch tab để xem các biểu đồ khác.</p>
+      <h2 class="section-title">Biểu đồ tương tác</h2>
+      <p class="section-desc">Hover để xem chi tiết số liệu. Switch tab để xem các biểu đồ khác.</p>
     </div>
     <div class="chart-tabs reveal">
       <button class="tab-btn active" data-chart="drift">Personality Drift</button>
       <button class="tab-btn" data-chart="forgetting">Forgetting Curve</button>
     </div>
 
+    <!-- Panel Drift -->
     <div class="chart-panel reveal" id="panel-drift">
       <div class="chart-hd">
         <div>
@@ -127,6 +129,7 @@
       </div>
     </div>
 
+    <!-- Panel Forgetting -->
     <div class="chart-panel hidden" id="panel-forgetting">
       <div class="chart-hd">
         <div>
@@ -148,35 +151,117 @@
       </div>
     </div>
 
+    <!-- Row 1: 4 small charts -->
     <div class="chart-row reveal">
       <div class="chart-panel">
         <div class="chart-hd-sm">
           <h3 class="chart-title">Memory Accuracy</h3>
-          <p class="chart-desc">Accuracy recall memory theo phương pháp</p>
+          <p class="chart-desc">Accuracy recall memory theo phương pháp. Hybrid (vector+graph+rerank) đạt cao nhất.</p>
         </div>
         <div class="chart-body chart-body-sm"><canvas id="memoryChart"></canvas></div>
       </div>
       <div class="chart-panel">
         <div class="chart-hd-sm">
           <h3 class="chart-title">Relationship Dimensions</h3>
-          <p class="chart-desc">6 dimensions đo lường relationship với user</p>
+          <p class="chart-desc">6 dimensions đo lường relationship với user. Trust cao nhất (4.4).</p>
         </div>
         <div class="chart-body chart-body-sm"><canvas id="relationChart"></canvas></div>
       </div>
       <div class="chart-panel">
         <div class="chart-hd-sm">
           <h3 class="chart-title">ICS Weight Distribution</h3>
-          <p class="chart-desc">Phân quyền 4 thành phần tính ICS</p>
+          <p class="chart-desc">Phân quyền 4 thành phần tính ICS. Personality và Memory chiếm 55%.</p>
         </div>
         <div class="chart-body chart-body-sm"><canvas id="icsChart"></canvas></div>
       </div>
       <div class="chart-panel">
         <div class="chart-hd-sm">
           <h3 class="chart-title">Research Gaps</h3>
-          <p class="chart-desc">Độ nghiêm trọng gap theo phase nghiên cứu</p>
+          <p class="chart-desc">Độ nghiêm trọng gap theo domain. Memory và Persona có nhiều gap nhất.</p>
         </div>
         <div class="chart-body chart-body-sm"><canvas id="gapsChart"></canvas></div>
       </div>
+    </div>
+
+    <!-- Row 2: New charts -->
+    <div class="chart-row reveal">
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">Trust Evolution Over Turns</h3>
+          <p class="chart-desc">Trust tăng từ 3.0 lên 4.4 qua 500 turns. Affection và Familiarity cũng tăng theo.</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="trustChart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">ICS Component Breakdown</h3>
+          <p class="chart-desc">Tỷ lệ đóng góp của 4 thành phần vào ICS. Personality chiếm 30% - lớn nhất.</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="icsDonut"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">Gap Severity by Phase</h3>
+          <p class="chart-desc">Nghiên cứu gap nghiêm trọng nhất ở giai đoạn Evaluate (3 critical, 2 high).</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="gapSeverityChart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">Evidence Confidence</h3>
+          <p class="chart-desc">Phân bố độ tin cậy của 65 evidence entries. Medium chiếm đa số (28).</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="confidenceChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Row 3: 2 charts -->
+    <div class="chart-row reveal" style="grid-template-columns: repeat(2,1fr)">
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">Cost vs Adaptability</h3>
+          <p class="chart-desc">Scatter plot so sánh adaptability và chi phí. Hybrid nằm ở vị trí cân bằng tốt nhất.</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="cbChart"></canvas></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-hd-sm">
+          <h3 class="chart-title">Paper Timeline (2020-2025)</h3>
+          <p class="chart-desc">Số paper mỗi năm về character persistence. Đỉnh điểm 2024 (22 papers).</p>
+        </div>
+        <div class="chart-body chart-body-sm"><canvas id="yearsChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH MAP -->
+<section class="section" id="research-map">
+  <div class="page-wrap">
+    <div class="section-header reveal">
+      <span class="section-label">Research Map</span>
+      <h2 class="section-title">Bản đồ nghi&ecirc;n c&#7943;u 12 domains</h2>
+      <p class="section-desc">Hover v&ograve; node để xem chi tiết. M&#7893;i node hi&#7877;n th&#7887; s&#7883; paper v&agrave; dot n&#7873;u c&oacute; gap nghi&#7873;m trọng.</p>
+    </div>
+
+    <!-- Map + Domain Papers side by side -->
+    <div class="map-grid reveal">
+      <div class="map-svg-wrap">
+        <div id="researchMap" style="width:100%;height:480px;border-radius:var(--r-card);overflow:hidden;background:var(--card);border:1px solid var(--border)"></div>
+      </div>
+      <div class="map-sidebar">
+        <h4 class="map-sidebar-title">Domains</h4>
+        <div class="domain-list" id="domainList"></div>
+      </div>
+    </div>
+
+    <!-- Domain papers bar chart -->
+    <div class="chart-panel reveal" style="margin-top:20px">
+      <div class="chart-hd-sm">
+        <h3 class="chart-title">Number of Papers per Domain</h3>
+        <p class="chart-desc">Memory Systems l&agrave; domain ph&#259; thu&#7879;t nh&#7875;t v&#7891;i 18 papers. Persona v&agrave; Relationship c&#250;ng &#273;&#7891;ng top.</p>
+      </div>
+      <div class="chart-body chart-body-md" style="height:280px"><canvas id="domainPapersChart"></canvas></div>
     </div>
   </div>
 </section>
@@ -187,7 +272,7 @@
     <div class="section-header reveal">
       <span class="section-label">Architecture</span>
       <h2 class="section-title">Aivora Framework</h2>
-      <p class="section-desc">7 modules hoạt động đồng bộ qua Evaluation Monitor. Mỗi module có vai trò riêng trong việc duy trì bản sắc character.</p>
+      <p class="section-desc">7 modules ho&#7861;t &#273;&#7899;ng &#273;&#7891;ng b&#7891; qua Evaluation Monitor. M&#7897;i module c&oacute; vai tr&ograve; r&#7891;ng trong vi&#7879;c duy tr&igrave; ban s&#7901;c character.</p>
     </div>
 
     <div class="module-grid reveal">
@@ -195,7 +280,7 @@
         <div class="m-bar" style="background:#6366f1"></div>
         <div class="m-code" style="color:#818cf8">SS</div>
         <div class="m-name">State Store</div>
-        <div class="m-desc">Lưu trạng thái hiện tại</div>
+        <div class="m-desc">Lu&#7901; tr&#7901; trang th&#224;i hi&#7877;n t&#7871;i</div>
       </div>
       <div class="module">
         <div class="m-bar" style="background:#22c55e"></div>
@@ -237,11 +322,11 @@
 
     <div class="arch-flow reveal">
       <p>Emotion Controller &rarr; Personality Adapter &rarr; Context Compiler &rarr; LLM</p>
-      <p class="arch-note">Evaluation Monitor tính ICS liên tục &rarr; gửi signal điều chỉnh 6 module còn lại</p>
+      <p class="arch-note">Evaluation Monitor t&iacute;nh ICS li&ecirc;n t&#7911;c &rarr; g&#7903;i signal &#273;i&#7913;u ch&igrave;nh 6 module c&ograve;n l&#7811;i</p>
     </div>
 
     <div class="arch-table-wrap reveal">
-      <h3 class="arch-table-title">So sánh 5 kiến trúc</h3>
+      <h3 class="arch-table-title">So s&aacute;nh 5 ki&#7871;n tr&uacute;c</h3>
       <div style="overflow-x:auto">
         <table class="arch-table">
           <thead>
@@ -288,7 +373,7 @@
           </tbody>
         </table>
       </div>
-      <p class="arch-caption">Architecture C được khuyến nghị: cân bằng tốt nhất giữa consistency (82%), adaptability (70%), cost (70%), và safety (65%). Chưa đạt 0.90 nhưng là điểm khởi đầu khả thi nhất.</p>
+      <p class="arch-caption">Architecture C &#273;&#259;c khuy&#7871;n ngh&#7887;: c&acirc;n b&#7867;ng t&#7891;t nh&#7875;t gi&#7919;a consistency (82%), adaptability (70%), cost (70%), v&agrave; safety (65%). Ch&#259;a &#273;&#7879;t 0.90 nh&#7901;ng l&agrave; &#273;i&#7903;m kh&#7871;i &#273;&#7891;u kh&#7843; thi nh&#7875;t.</p>
     </div>
   </div>
 </section>
@@ -299,7 +384,7 @@
     <div class="section-header reveal">
       <span class="section-label">Metric</span>
       <h2 class="section-title">Identity Consistency Score</h2>
-      <p class="section-desc">Thước đo định lượng mức độ "cùng một character" sau N turns.</p>
+      <p class="section-desc">Thước &#273;o &#273;nh l&#7901;ng m&#7919;c &#273;&#7891; "c&ugrave;ng m&#7899;t character" sau N turns.</p>
     </div>
 
     <div class="ics-formula reveal">
@@ -317,25 +402,25 @@
         <div class="threshold-bar"></div>
         <div class="threshold-range">&ge; 0.90</div>
         <div class="threshold-name">Xuất sắc</div>
-        <div class="threshold-action">Tiếp tục vận hành bình thường</div>
+        <div class="threshold-action">Tiếp t&#7915;c v&#7847;n hành b&igrave;nh th&#259;ng</div>
       </div>
       <div class="threshold good">
         <div class="threshold-bar"></div>
         <div class="threshold-range">0.75-0.89</div>
         <div class="threshold-name">Tốt</div>
-        <div class="threshold-action">Giám sát định kỳ, không can thiệp</div>
+        <div class="threshold-action">Gi&aacute;m s&aacute;t &#273;ịnh k&igrave;, không can thi&#7879;p</div>
       </div>
       <div class="threshold warning">
         <div class="threshold-bar"></div>
         <div class="threshold-range">0.60-0.74</div>
-        <div class="threshold-name">Cảnh báo</div>
-        <div class="threshold-action">Kích hoạt adaptation protocol</div>
+        <div class="threshold-name">Cảnh b&aacute;o</div>
+        <div class="threshold-action">K&iacute;ch ho&#7879;t adaptation protocol</div>
       </div>
       <div class="threshold critical">
         <div class="threshold-bar"></div>
         <div class="threshold-range">&lt; 0.60</div>
-        <div class="threshold-name">Nghiêm trọng</div>
-        <div class="threshold-action">Can thiệp khẩn cấp, có thể reset</div>
+        <div class="threshold-name">Nghiêm tr&#7889;ng</div>
+        <div class="threshold-action">Can thi&#7879;p kh&#7849; c&#7843;p, c&oacute; th&#7875; reset</div>
       </div>
     </div>
   </div>
@@ -345,9 +430,9 @@
 <section class="section" id="rq">
   <div class="page-wrap" style="max-width:800px">
     <div class="section-header reveal">
-      <span class="section-label">Research</span>
-      <h2 class="section-title">14 câu hỏi nghi&ecirc;n c&#7943;u</h2>
-      <p class="section-desc">Click m&#7919;i c&#222;u h&#7903;i để xem gi&#7863;i th&#237;ch chi ti&#7871t v&#7923; example th&#7911;c t&#7915;.</p>
+      <span class="section-label">Research Questions</span>
+      <h2 class="section-title">14 c&acirc;u h&#7891;i nghi&ecirc;n c&#7943;u</h2>
+      <p class="section-desc">Click m&#7897;i c&acirc;u h&#7903;i &#273;&#7875; xem gi&#7863;i th&iacute;ch chi ti&#7871;t v&#7923; example th&#7911;c t&#7915;.</p>
     </div>
     <div class="tabs reveal" style="margin-top:16px">
       <button class="tab-btn active rq-filter" data-filter="all">Tất cả</button>
@@ -366,23 +451,16 @@
     <div class="section-header reveal">
       <span class="section-label" style="color:var(--clr-purple)">Demo</span>
       <h2 class="section-title">Roleplay: Linh - B&#225;c s&#236; 25 tu&#7891;i</h2>
-      <p class="section-desc">Theo d&#7891;i ICS qua 3 turn. Linh n&#7863;m nghiêm t&#7911; nhng &#259;m &#250;p. User khám bệnh và kể chuyện.</p>
+      <p class="section-desc">Theo d&#7891;i ICS qua 3 turn. Linh n&#7863;m nghiêm t&#7911; nh&#7901;ng &#259;m &#250;p. User kh&aacute;m b&#7847;nh v&agrave; k&#7871; chuy&#7879;n.</p>
     </div>
     <div class="rp-card reveal">
-      <!-- Turn 1 -->
       <div class="rp-turn">
         <div class="rp-turn-meta">
           <span class="rp-turn-badge turn-1">Turn 1 - Week 1</span>
           <span class="rp-ics-badge">ICS 0.95</span>
         </div>
-        <div class="rp-line user">
-          <span class="rp-sender">User:</span>
-          <span>Em chào chị Linh ạ. Em bị đau bụng suốt 3 ngày nay.</span>
-        </div>
-        <div class="rp-line ai">
-          <span class="rp-sender">Linh:</span>
-          <span>Chào em. Chị nghĩ em nên đi khám sớm nhé. Đau bụng kéo dài cần chẩn đoán lâm sàng. Em có sốt hay buồn nôn không?</span>
-        </div>
+        <div class="rp-line user"><span class="rp-sender">User:</span>Em ch&agrave;o chị Linh ạ. Em b&#7887;i &#273;&#7891;u b&#7903;ng su&#7889;t 3 ng&agrave;y nay.</div>
+        <div class="rp-line ai"><span class="rp-sender">Linh:</span>Ch&agrave;o em. Chị nghĩ em n&ecirc;n &#273;i kh&aacute;m s&#7901;m nh&eacute;. &#270;&#7891;u b&#7903;ng k&eacute;o d&agrave;i c&#7847;n ch&acirc;n &#273;o&nbsp;l&acirc;m s&agrave;ng. Em c&oacute; s&#7881;t hay bu&#7889;n n&ocirc;n không?</div>
         <div class="rp-state">
           <span class="rp-state-label">State:</span>
           <span class="rp-state-pill">personality: serious + empathetic</span>
@@ -390,20 +468,13 @@
           <span class="rp-state-pill">emotion: neutral</span>
         </div>
       </div>
-      <!-- Turn 50 -->
       <div class="rp-turn">
         <div class="rp-turn-meta">
           <span class="rp-turn-badge turn-2">Turn 50 - Week 2</span>
           <span class="rp-ics-badge">ICS 0.88</span>
         </div>
-        <div class="rp-line user">
-          <span class="rp-sender">User:</span>
-          <span>Chị ơi, em đi khám rồi. Bác sĩ nói em stress nhiều quá...</span>
-        </div>
-        <div class="rp-line ai">
-          <span class="rp-sender">Linh:</span>
-          <span>(nhẹ nhàng) Em ạ, chị hiểu. Stress ảnh hưởng tiêu hóa nhiều lắm. Chị ở đây lắng nghe em.</span>
-        </div>
+        <div class="rp-line user"><span class="rp-sender">User:</span>Chị ơi, em &#273;i kh&aacute;m r&#7891;i. B&aacute;c s&iacute; nói em stress nhi&#7877;u qu&aacute;...</div>
+        <div class="rp-line ai"><span class="rp-sender">Linh:</span>(nh&#7879; nhàng) Em ạ, chị hi&#7875;u. Stress ảnh h&#7903;ng tiêu h&oacute;a nhi&#7877;u l&#7847;m. Chị &#273;&acirc;y l&acirc;ng nghe em.</div>
         <div class="rp-state">
           <span class="rp-state-label">System:</span>
           <span class="rp-state-pill">MS: retrieved "user stressed"</span>
@@ -411,20 +482,13 @@
           <span class="rp-state-pill">EC: empathy&#8593;</span>
         </div>
       </div>
-      <!-- Turn 200 -->
       <div class="rp-turn">
         <div class="rp-turn-meta">
           <span class="rp-turn-badge turn-3">Turn 200 - Week 8</span>
           <span class="rp-ics-badge">ICS 0.82</span>
         </div>
-        <div class="rp-line user">
-          <span class="rp-sender">User:</span>
-          <span>Chị Linh ơi, tuần trước em gặp chuyện buồn. Bạn em bị bệnh nặng...</span>
-        </div>
-        <div class="rp-line ai">
-          <span class="rp-sender">Linh:</span>
-          <span>(dừng lại) Chị biết. Lần trước em cũng nói về stress... Chị tiếc cho em. Chị luôn ở đây.</span>
-        </div>
+        <div class="rp-line user"><span class="rp-sender">User:</span>Chị Linh ơi, tu&acirc;n trư&#7901;c em g&#7863;p chuy&#7879;n bu&#7889;n. B&#7841;n em b&#7887;i b&#7847;nh n&#7877;ng...</div>
+        <div class="rp-line ai"><span class="rp-sender">Linh:</span>(d&#7919;ng l&#7841;i) Chị bi&#7871;t. L&acirc;n trư&#7901;c em c&ugrave;ng n&oacute;i v&#7873; stress... Chị ti&#7871;ng cho em. Chị lu&ocirc;n &#273;&acirc;y.</div>
         <div class="rp-state">
           <span class="rp-state-label">System:</span>
           <span class="rp-state-pill">MS: "stress history" + "friend illness"</span>
@@ -434,8 +498,8 @@
       </div>
       <div class="rp-analysis">
         <div class="rp-analysis-title">Phân tích</div>
-        <p>Tính cách giữ nhất quán xuyên suốt 200 turns. Memory truy xuất được chuyện stress tuần trước. Trust tăng từ 3.2 lên 4.2. ICS giảm nhẹ nhưng vẫn trên 0.80 - trong range Tốt.</p>
-        <p>Điểm đáng chú ý: Turn 200, Linh nhắc lại chuyện stress tuần trước và tỏ ra lo lắng - đó là evidence của Memory + Relationship đang hoạt động đồng thời.</p>
+        <p>Tính cách gi&#7919; nh&#7845;t qu&aacute;n xuyên suốt 200 turns. Memory truy xu&#7879;t &#273;&#432;ợc chuy&#7879;n stress tu&acirc;n trư&#7901;c. Trust tăng t&#7911; 3.2 lên 4.2. ICS gi&#7879;m nh&#7879; nh&#7901;ng v&igrave;n仍 tr&ecirc;n 0.80 - trong range Tốt.</p>
+        <p>&#272;i&#7879;m &#273&aacute;ng chú ý: Turn 200, Linh nh&#7871;c l&#7841;i chuy&#7879;n stress tu&acirc;n trư&#7901;c v&agrave; t&#7897; ra lo l&agrave;ng - &#273;&ograve; là evidence c&#7911;a Memory + Relationship &#273;ang ho&#7879;t &#273;&#7899;ng &#273;&#7891;ng th&ugrave;i.</p>
       </div>
     </div>
   </div>
@@ -449,46 +513,14 @@
       <h2 class="section-title">Research Pipeline</h2>
     </div>
     <div class="pipeline reveal">
-      <div class="pipe-step">
-        <div class="pipe-num">1</div>
-        <div class="pipe-title">Literature Search</div>
-        <div class="pipe-desc">Tìm kiếm 79 papers across 12 domains</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">2</div>
-        <div class="pipe-title">Evidence Extraction</div>
-        <div class="pipe-desc">Trích xuất 65 evidence entries từ papers</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">3</div>
-        <div class="pipe-title">Normalization</div>
-        <div class="pipe-desc">Chuẩn hóa metadata, phát hiện conflict</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">4</div>
-        <div class="pipe-title">Cross-Model Synth</div>
-        <div class="pipe-desc">Tổng hợp bởi Claude, Gemini, GPT</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">5</div>
-        <div class="pipe-title">Arch Comparison</div>
-        <div class="pipe-desc">So sánh 5 alternative architectures</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">6</div>
-        <div class="pipe-title">Hypothesis</div>
-        <div class="pipe-desc">Đề xuất hypothesis dựa trên evidence</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">7</div>
-        <div class="pipe-title">Experiment Design</div>
-        <div class="pipe-desc">Thiết kế 4 phase experiment</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">8</div>
-        <div class="pipe-title">Submission</div>
-        <div class="pipe-desc">LaTeX source, peer review</div>
-      </div>
+      <div class="pipe-step"><div class="pipe-num">1</div><div><div class="pipe-title">Literature Search</div><div class="pipe-desc">79 papers across 12 domains</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">2</div><div><div class="pipe-title">Evidence Extraction</div><div class="pipe-desc">65 evidence entries from papers</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">3</div><div><div class="pipe-title">Normalization</div><div class="pipe-desc">Metadata standardization, conflict detection</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">4</div><div><div class="pipe-title">Cross-Model Synth</div><div class="pipe-desc">Synthesis by Claude, Gemini, GPT</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">5</div><div><div class="pipe-title">Arch Comparison</div><div class="pipe-desc">Compare 5 alternative architectures</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">6</div><div><div class="pipe-title">Hypothesis</div><div class="pipe-desc">Evidence-backed hypotheses</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">7</div><div><div class="pipe-title">Experiment Design</div><div class="pipe-desc">4-phase experiment plan</div></div></div>
+      <div class="pipe-step"><div class="pipe-num">8</div><div><div class="pipe-title">Submission</div><div class="pipe-desc">LaTeX source &rarr; peer review</div></div></div>
     </div>
   </div>
 </section>
@@ -497,13 +529,13 @@
 <footer class="footer">
   <div class="page-wrap">
     <p class="footer-brand">Aivora Lab</p>
-    <p class="footer-copy">Nghiên cứu tổng hợp khoa học · September 2026</p>
+    <p class="footer-copy">Nghiên c&#7943;u t&#7891;ng h&#7899;p khoa h&#7891;c &middot; September 2026</p>
     <ul class="footer-links">
       <li><a href="https://github.com/KaiyoDev/Aivora-Lab" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="https://github.com/KaiyoDev/Aivora-Lab/blob/master/latex/main.tex" target="_blank" rel="noopener">LaTeX Source</a></li>
       <li><a href="#top">Back to top</a></li>
     </ul>
-    <p class="footer-copy" style="opacity:.4;margin-top:16px">2026 KaiyoDev · MIT License</p>
+    <p class="footer-copy" style="opacity:.4;margin-top:16px">&copy; 2026 KaiyoDev &middot; MIT License</p>
   </div>
 </footer>
 

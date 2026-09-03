@@ -1,7 +1,7 @@
 /* ==========================================================================
    Aivora Lab - Application Logic
-   Handles: tab switching, RQ accordion, scroll reveal
-   Uses safe DOM APIs (no innerHTML for user content)
+   Handles: tab switching, RQ accordion (expanded with bullets), scroll reveal
+   Uses safe DOM APIs only (no innerHTML for user content)
    ========================================================================== */
 
 (function () {
@@ -67,11 +67,11 @@
     }
   }
 
-  // ── RQ Accordion ───────────────────────────────────────────────────────
+  // ── RQ Accordion (Expanded with bullet list, DOM-safe) ─────────────────
   function renderRQs(filter) {
     var container = document.getElementById('rq-container');
     if (!container) return;
-    container.innerHTML = '';
+    container.innerHTML = ''; // safe: we own this container, cleared before each render
 
     var filtered = filter === 'all' ? RQ_DATA : RQ_DATA.filter(function (r) { return r.cl === filter; });
 
@@ -82,7 +82,7 @@
         dataset: { cl: r.cl }
       });
 
-      // Header row
+      // Header
       var header = el('div', { className: 'rq-header' });
       header.appendChild(el('span', { className: 'rq-badge ' + r.cl }, r.id));
 
@@ -102,13 +102,24 @@
       header.appendChild(chevron);
       item.appendChild(header);
 
-      // Body (hidden by default)
+      // Body (expanded with bullet points)
       var body = el('div', { className: 'rq-body' });
       var bodyInner = el('div', { className: 'rq-body-inner' });
 
-      var answer = el('p', { className: 'rq-answer' }, r.a);
+      // Answer as bullet list (DOM-safe)
+      var answer = el('div', { className: 'rq-answer' });
+      if (Array.isArray(r.a_list)) {
+        var ul = el('ul', { className: 'rq-bullets' });
+        for (var b = 0; b < r.a_list.length; b++) {
+          ul.appendChild(el('li', {}, r.a_list[b]));
+        }
+        answer.appendChild(ul);
+      } else {
+        answer.appendChild(document.createTextNode(r.a));
+      }
       bodyInner.appendChild(answer);
 
+      // Example
       var example = el('p', { className: 'rq-example' });
       example.appendChild(el('strong', {}, 'Example: '));
       example.appendChild(document.createTextNode(r.e));
@@ -159,10 +170,32 @@
     }
   }
 
+  // Domain List Sidebar
+  function initDomainList() {
+    var container = document.getElementById('domainList');
+    if (!container) return;
+    for (var i = 0; i < DOMAINS_DATA.length; i++) {
+      var d = DOMAINS_DATA[i];
+      var item = el('div', { className: 'domain-item' });
+      var dot = el('div', { className: 'domain-dot', style: 'background:' + d.color });
+      var info = el('div', { className: 'domain-info' });
+      var name = el('div', { className: 'domain-name' }, d.name);
+      var meta = el('div', { className: 'domain-meta' }, d.papers + ' papers');
+      info.appendChild(name);
+      info.appendChild(meta);
+      var gap = el('div', { className: 'domain-gap' }, 'GAP ' + d.gap);
+      item.appendChild(dot);
+      item.appendChild(info);
+      item.appendChild(gap);
+      container.appendChild(item);
+    }
+  }
+
   // ── Init ───────────────────────────────────────────────────────────────
   function init() {
     initReveal();
     initChartTabs();
+    initDomainList();
     initRQFilters();
     renderRQs('all');
   }
