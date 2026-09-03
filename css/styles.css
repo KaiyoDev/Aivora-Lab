@@ -386,45 +386,81 @@ a { color: inherit; text-decoration: none; }
 .threshold-action { font-size: 11px; color: var(--muted); line-height: 1.4; }
 @media (max-width: 640px) { .ics-thresholds { grid-template-columns: repeat(2, 1fr); } }
 
-/* ===================== RQ ACCORDION ==================================== */
+/* ===================== RQ TABLE (QA STYLE) ============================== */
 .rq-item {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: var(--r-card); padding: 14px 16px;
-  cursor: pointer; transition: border-color .2s; margin-bottom: 6px;
+  border-radius: var(--r-card); margin-bottom: 10px;
+  overflow: hidden; transition: border-color .2s;
 }
 .rq-item:hover { border-color: var(--border-hi); }
-.rq-item.open { border-color: var(--border-hi); }
-.rq-item[data-cl="Char"] { border-left: 2px solid var(--accent-lt); }
-.rq-item[data-cl="Soc"]  { border-left: 2px solid var(--purple); }
-.rq-item[data-cl="Tech"] { border-left: 2px solid var(--orange); }
-.rq-item[data-cl="Eval"] { border-left: 2px solid var(--green); }
+.rq-item[data-cl="Char"] { border-left: 3px solid var(--accent-lt); }
+.rq-item[data-cl="Soc"]  { border-left: 3px solid var(--purple); }
+.rq-item[data-cl="Tech"] { border-left: 3px solid var(--orange); }
+.rq-item[data-cl="Eval"] { border-left: 3px solid var(--green); }
 
-.rq-header { display: flex; align-items: flex-start; gap: 10px; }
+.rq-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px 10px; background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
 .rq-badge {
   flex-shrink: 0; font-family: var(--mono); font-size: 10px;
-  font-weight: 700; padding: 2px 7px; border-radius: var(--r-btn);
-  border: 1px solid; margin-top: 1px;
+  font-weight: 700; padding: 2px 8px; border-radius: var(--r-btn);
+  border: 1px solid; letter-spacing: .05em;
 }
 .rq-badge.Char { color: var(--accent-lt); border-color: rgba(99,102,241,.3); background: rgba(99,102,241,.08); }
 .rq-badge.Soc  { color: var(--purple); border-color: rgba(168,85,247,.3); background: rgba(168,85,247,.08); }
 .rq-badge.Tech { color: var(--orange); border-color: rgba(249,115,22,.3); background: rgba(249,115,22,.08); }
 .rq-badge.Eval { color: var(--green); border-color: rgba(34,197,94,.3); background: rgba(34,197,94,.08); }
 
-.rq-question { flex: 1; font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.45; }
-.rq-chevron {
-  flex-shrink: 0; color: var(--muted); transition: transform .2s; margin-top: 2px;
+.rq-question {
+  flex: 1; font-size: 13px; font-weight: 600; color: var(--text);
+  line-height: 1.45;
 }
-.rq-item.open .rq-chevron { transform: rotate(90deg); }
-.rq-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
-.rq-item.open .rq-body { max-height: 500px; }
-.rq-body-inner { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); }
-.rq-answer { font-size: 13px; color: var(--dim); line-height: 1.65; margin: 0 0 10px; }
+.rq-card { padding: 14px 16px 16px; }
+
+/* Answer bullets */
+.rq-answer { font-size: 13px; color: var(--dim); line-height: 1.65; margin: 0 0 12px; }
+.rq-bullets {
+  margin: 0; padding: 0 0 0 18px; list-style: none;
+  border-left: 2px solid var(--border);
+}
+.rq-bullets li {
+  position: relative; padding: 4px 0 4px 10px;
+  font-size: 13px; color: var(--dim); line-height: 1.55;
+}
+.rq-bullets li::before {
+  content: '\203A'; position: absolute; left: -2px;
+  color: var(--accent-lt); font-size: 11px; font-weight: 700;
+}
+.rq-item[data-cl="Soc"] .rq-bullets li::before { color: var(--purple); }
+.rq-item[data-cl="Tech"] .rq-bullets li::before { color: var(--orange); }
+.rq-item[data-cl="Eval"] .rq-bullets li::before { color: var(--green); }
+
+/* Example box */
 .rq-example {
-  font-size: 12px; color: var(--muted); padding: 8px 12px;
-  background: var(--surface); border-radius: 6px; border: 1px solid var(--border); margin: 0;
+  display: flex; gap: 8px; align-items: flex-start;
+  padding: 10px 12px; background: var(--surface);
+  border-radius: 8px; border: 1px solid var(--border);
 }
-.rq-example strong { color: var(--dim); font-weight: 600; }
-@media (max-width: 640px) { .rq-question { font-size: 13px; } }
+.rq-ex-label {
+  flex-shrink: 0; font-family: var(--mono); font-size: 9px;
+  font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); padding: 2px 6px;
+  background: rgba(99,102,241,.1); border-radius: 4px; margin-top: 1px;
+}
+.rq-example p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+/* Category labels for the filter tabs */
+.rq-filter-soc { background: rgba(168,85,247,.08); color: var(--purple); }
+.rq-filter-char { background: rgba(99,102,241,.08); color: var(--accent-lt); }
+.rq-filter-tech { background: rgba(249,115,22,.08); color: var(--orange); }
+.rq-filter-eval { background: rgba(34,197,94,.08); color: var(--green); }
+
+@media (max-width: 640px) {
+  .rq-header { flex-wrap: wrap; }
+  .rq-question { font-size: 12px; }
+}
 
 /* ===================== ROLEPLAY DEMO ==================================== */
 .rp-card {

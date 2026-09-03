@@ -71,42 +71,25 @@
   function renderRQs(filter) {
     var container = document.getElementById('rq-container');
     if (!container) return;
-    container.innerHTML = ''; // safe: we own this container, cleared before each render
+    container.innerHTML = '';
 
     var filtered = filter === 'all' ? RQ_DATA : RQ_DATA.filter(function (r) { return r.cl === filter; });
 
     for (var i = 0; i < filtered.length; i++) {
       var r = filtered[i];
-      var item = el('div', {
-        className: 'rq-item reveal',
-        dataset: { cl: r.cl }
-      });
+      var item = el('div', { className: 'rq-item reveal', dataset: { cl: r.cl } });
 
-      // Header
+      // Header row
       var header = el('div', { className: 'rq-header' });
       header.appendChild(el('span', { className: 'rq-badge ' + r.cl }, r.id));
-
       var qDiv = el('div', { className: 'rq-question' }, r.q);
       header.appendChild(qDiv);
-
-      var chevron = el('svg', {
-        className: 'rq-chevron',
-        width: '12', height: '12',
-        viewBox: '0 0 12 12',
-        fill: 'none',
-        stroke: 'currentColor',
-        'stroke-width': '1.5',
-        'stroke-linecap': 'round',
-        'stroke-linejoin': 'round'
-      }, [el('path', { d: 'M4 2l4 4-4 4' })]);
-      header.appendChild(chevron);
       item.appendChild(header);
 
-      // Body (expanded with bullet points)
-      var body = el('div', { className: 'rq-body' });
-      var bodyInner = el('div', { className: 'rq-body-inner' });
+      // Answer card (always visible)
+      var card = el('div', { className: 'rq-card' });
 
-      // Answer as bullet list (DOM-safe)
+      // Answer bullets
       var answer = el('div', { className: 'rq-answer' });
       if (Array.isArray(r.a_list)) {
         var ul = el('ul', { className: 'rq-bullets' });
@@ -117,25 +100,16 @@
       } else {
         answer.appendChild(document.createTextNode(r.a));
       }
-      bodyInner.appendChild(answer);
+      card.appendChild(answer);
 
-      // Example
-      var example = el('p', { className: 'rq-example' });
-      example.appendChild(el('strong', {}, 'Example: '));
-      example.appendChild(document.createTextNode(r.e));
-      bodyInner.appendChild(example);
+      // Example box
+      var exWrap = el('div', { className: 'rq-example' });
+      exWrap.appendChild(el('span', { className: 'rq-ex-label' }, 'Example'));
+      var exP = el('p', {}, r.e);
+      exWrap.appendChild(exP);
+      card.appendChild(exWrap);
 
-      body.appendChild(bodyInner);
-      item.appendChild(body);
-
-      // Click to toggle
-      item.addEventListener('click', function () {
-        var wasOpen = this.classList.contains('open');
-        var openItems = document.querySelectorAll('.rq-item.open');
-        for (var j = 0; j < openItems.length; j++) openItems[j].classList.remove('open');
-        if (!wasOpen) this.classList.add('open');
-      });
-
+      item.appendChild(card);
       container.appendChild(item);
     }
 
